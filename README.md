@@ -1,5 +1,6 @@
 Elm-SpaceShooter
 ================
 Authors:
-Joseph Collard
-Zachary O'DonnellEric Gendreau
+* Joseph Collard
+* Zachary O'Donnell
+* Eric Gendreau

@@ -4,3 +4,5 @@ Authors:
 * Joseph Collard
 * Zachary O'Donnell
 * Eric Gendreau
+
+Game Rules:

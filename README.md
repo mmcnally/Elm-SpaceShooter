@@ -7,6 +7,6 @@ Authors:
 * Zachary O'Donnell
 * Eric Gendreau
 
-
+Eric SUCKS!
 Hey guys
 Changed README

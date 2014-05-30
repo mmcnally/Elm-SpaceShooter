@@ -6,3 +6,6 @@ Authors:
 * Eric Gendreau
 
 Game Rules:
+
+
+Changed README

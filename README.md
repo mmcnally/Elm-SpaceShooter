@@ -8,5 +8,6 @@ Authors:
 * Eric Gendreau
 
 Eric SUCKS!
+^that's mean
 Hey guys
 Changed README

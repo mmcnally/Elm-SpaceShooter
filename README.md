@@ -9,5 +9,6 @@ Authors:
 
 Eric SUCKS!
 ^that's mean
+Trollin Eric
 Hey guys
 Changed README

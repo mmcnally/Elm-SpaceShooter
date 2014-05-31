@@ -27,17 +27,32 @@ rotateShip g r =
 
 update: (Input, Time) -> GameState -> GameState
 update (i, t) g = 
-             let g' = { g | time <- g.time + t, shoot <- False }
-                 b = g.bullet
-                 b' = { b | shot <- True, birthTime <- g.time}
+             let tempBullet = g.bullet
+                 resetBullet = { initalBulletState | x <- g.x, y <- g.y, vx <- g.vx, vy <- g.vy}
+                 bShot = { tempBullet | x <- tempBullet.vx + tempBullet.x, y <- tempBullet.vy + tempBullet.y}
+                 b = { tempBullet | x <- g.x, y <- g.y, vx <- g.vx, vy <- g.vy}
+                 b' = { b | shot <- True, birthTime <- g.time, x <- g.x, y <- g.y, vx <- g.vx + 17, vy <- g.vy - 13, angle <- g.angle}
+                 g' = { g | time <- g.time + t, shoot <- False, bullet <- b }
              in
              case i of 
-             Forward -> { g' | x <- g.x + 1 }
-             Backward -> { g' | y <- g.y + 1 }
-             RotCCW -> rotateShip g' (pi/60)
-             RotCW -> rotateShip g' (-pi/60)
-             Shoot -> { g' | shoot <- True, bullet <- b' }
-             NoInput -> g'
+             Forward -> if | b.shot == True && g.time - b.birthTime > 2000 -> { g' | shoot <- False, bullet <- resetBullet, x <- g.x + 1 }
+                           | b.shot == True                                -> { g' | bullet <- bShot, x <- g.x + 1 }
+                           | otherwise -> { g' | x <- g.x + 1 }
+             Backward -> if | b.shot == True && g.time - b.birthTime > 2000 -> { g' | shoot <- False, bullet <- resetBullet, y <- g.y + 1 }
+                            | b.shot == True                                -> { g' | bullet <- bShot, y <- g.y + 1 }
+                            | otherwise -> { g' | y <- g.y + 1 }
+             RotCCW -> if | b.shot == True && g.time - b.birthTime > 2000 -> rotateShip { g' | shoot <- False, bullet <- resetBullet } (pi/60)
+                          | b.shot == True                                -> rotateShip { g' | bullet <- bShot } (pi/60)
+                          | otherwise -> rotateShip g' (pi/60)
+             RotCW -> if | b.shot == True && g.time - b.birthTime > 2000 -> rotateShip { g' | shoot <- False, bullet <- resetBullet } (-pi/60)
+                         | b.shot == True                                -> rotateShip { g' | bullet <- bShot } (-pi/60)
+                         | otherwise -> rotateShip g' (-pi/60)
+             Shoot -> if | b.shot == False                                 -> { g' | shoot <- True, bullet <- b' }
+                         | b.shot == True && g.time - b.birthTime > 2000   -> { g' | shoot <- False, bullet <- resetBullet }
+                         | otherwise                                       -> { g' | shoot <- True, bullet <- bShot }
+             NoInput -> if | b.shot == True && g.time - b.birthTime > 2000 -> { g' | shoot <- False, bullet <- resetBullet }
+                           | b.shot == True                                -> { g' | bullet <- bShot }
+                           | otherwise                                     -> { g' | bullet <- b }
              
 -- foldp : (currentInput -> previousGameState -> currentGameState) -> initalGameState -> Signal userInput -> Signal currentGameState
 
@@ -70,9 +85,3 @@ input (arr, boo) =
 
 main : Signal Element
 main = asText <~ stateSignal
-
-
-
-
-
-

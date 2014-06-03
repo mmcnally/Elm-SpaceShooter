@@ -1,12 +1,12 @@
 module Render where
 
 import GameState (..)
-import Ship (..)
+import Ship
 import Asteroid
 
 render : GameState -> [Form]
 render state = 
-    let ship = state.ship 
-        shipForm = ngon 3 20 |> filled green |> move (ship.x, ship.y)
+    let shipForm = Ship.render state.ship
         asteroidForms = map Asteroid.render state.asteroids
-    in asteroidForms ++ [shipForm]
+        enemyForms = map Ship.render state.enemies
+    in enemyForms ++ asteroidForms ++ [shipForm]

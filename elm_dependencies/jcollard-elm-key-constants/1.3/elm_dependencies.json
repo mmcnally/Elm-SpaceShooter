@@ -1,0 +1,10 @@
+{
+    "version": "1.3",
+    "summary": "Keyboard constants",
+    "description": "Constants refering to keycodes",
+    "license": "BSD3",
+    "exposed-modules": ["Keyboard.keys"],
+    "elm-version": "0.1",
+    "dependencies": {},
+    "repository": "https://github.com/jcollard/elm-key-constants.git"
+}

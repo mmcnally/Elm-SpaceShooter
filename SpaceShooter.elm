@@ -171,8 +171,8 @@ render : GameState -> Element
 render state = 
     let debug = asText state
         form = filled blue (ngon 3 20) |> rotate state.angle |> move (state.x, state.y)
-        display = collage 700 700 [form]
-     in flow down [debug, display]
+        display = collage 500 500 [form]
+     in flow down [display, debug]
 
 main : Signal Element
 main = render <~ stateSignal

@@ -4,14 +4,21 @@ import Keyboard.Keys as Keys
 
 type Ship = { x : Float, y : Float,
               vx : Float, vy : Float,
-              color : Color, speed : Float,
+              color : ShipColor, speed : Float,
               size : Float }
+              
+type ShipColor = { body : Color, window : Color, body2 : Color }
+
+shipColor = { body = blue, window = grey, body2 = green } 
+
+enemyShipColor = { shipColor | body <- red,
+                               body2 <- orange } 
 
 enemy = { x = 0,
           y = 0,
           vx = 0,
           vy = 0,
-          color = red,
+          color = enemyShipColor,
           speed = 1,
           size = 10 }
 
@@ -20,12 +27,14 @@ initialShip = { x = 0,
                 y = 0, 
                 vx = 0, 
                 vy = 0, 
-                color = blue, 
+                color = shipColor, 
                 speed = 2,
                 size = 20 }
 
 render : Ship -> Form
-render {x, y, color, size} = ngon 3 size |> filled color |> move (x, y)
+render {x, y, color, size} = group [ ngon 3 size |> filled color.body |> move (x, y),
+                                     ngon 3 (size * 0.7) |> filled color.window |> move ( (x + (size * 0.1)), y),
+                                     ngon 3 (size * 0.2) |> filled color.body2 |> move (x, y) ]
 
 physics : Ship -> Ship
 physics ship = { ship | x <- ship.x + ship.vx,

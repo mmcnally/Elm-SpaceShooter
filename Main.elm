@@ -6,4 +6,3 @@ import Update (update)
 main = play { initialState = initialState, 
               render = render,
               update = update }
-

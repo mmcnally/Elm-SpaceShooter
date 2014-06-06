@@ -38,9 +38,10 @@ initialShip = { x = 0,
 
 render : Ship -> Form
 render {x, y, color, size, angle} = 
-  group [ ngon 3 size |> filled color.body |> rotate angle |> move (x, y),
-          ngon 3 (size * 0.7) |> filled color.window |> rotate angle |> move ( (x + (size * 0.1)), y),
-          ngon 3 (size * 0.2) |> filled color.body2 |> rotate angle |> move (x, y) ]
+  group [ ngon 3 size |> filled color.body,
+          ngon 3 (size * 0.7) |> filled color.window |> move (size * 0.1, 0),
+          ngon 3 (size * 0.2) |> filled color.body2 ] |> rotate angle |> move (x, y)
+
 
 
 -- accelerates ship if accelerate is true

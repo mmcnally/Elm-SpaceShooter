@@ -53,9 +53,7 @@ accelerate ship =
                                               else ship.speed }
        | otherwise -> { ship | speed <- if ship.speed < 0.1
                                         then 0
-                                        else  ship.speed - (ship.speed * 0.2),
-                               vx <- ship.vx / 2,
-                               vy <- ship.vy / 2 }
+                                        else  ship.speed - (ship.speed * 0.1) }
 
 physics : Ship -> Ship
 physics ship = 
@@ -83,8 +81,7 @@ update input ship =
                                 vy <- sin(ship.angle),
                                 accelerate <- True }
            | key `Keys.equal` Keys.arrowDown -> 
-                      { ship | vx <- ship.vx / 4,
-                                vy <- ship.vy / 4 }
+                      { ship | speed <- ship.speed / 4 }
            | key `Keys.equal` Keys.arrowLeft ->
                                 adjustAngle ship (-1)
            | key `Keys.equal` Keys.arrowRight ->

@@ -26,7 +26,12 @@ adjustAngle ship xChange yChange=
    in if | unAdjustedAngle > 0 && xChange < 0 -> pi - unAdjustedAngle
          | unAdjustedAngle < 0 && xChange < 0 -> pi - unAdjustedAngle
          | otherwise -> unAdjustedAngle
-       
+
+-- slightly moves ship if it has the same coordinates as the player's ship
+correctMovement thingToModify incr playNum = if (thingToModify + incr) == playNum
+                                             then incr + 0.1
+                                             else incr
+
 physics: Ship -> Ship
 physics ship =
  let slopeNumerator = ship.vy - ship.y
@@ -35,8 +40,10 @@ physics ship =
      increment numer denom = if (sqrt (numer ^ 2 + denom ^ 2)) > ship.speed
                                 then increment (numer * 0.95) (denom * 0.95)
                                 else { xInc = denom, yInc = numer }
-     xIncrement = (increment slopeNumerator slopeDenominator).xInc
-     yIncrement = (increment slopeNumerator slopeDenominator).yInc
+     xInc = (increment slopeNumerator slopeDenominator).xInc
+     yInc = (increment slopeNumerator slopeDenominator).yInc
+     xIncrement = (correctMovement ship.x xInc ship.vx)
+     yIncrement = (correctMovement ship.y yInc ship.vy)
  in { ship | x <- ship.x + xIncrement,
              y <- ship.y + yIncrement,
          angle <- (adjustAngle ship xIncrement yIncrement) } 

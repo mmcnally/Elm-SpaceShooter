@@ -9,6 +9,6 @@ type GameState = { ship : Ship,
 initialState = { ship = initialShip,
                  asteroids = [asteroid 200 200 -0.5 -1,
                               asteroid -200 200 0.1 -0.25],
-                 enemies = [ {enemy | x <- 50, y <- 50 },
-                             {enemy | x <- -100, y <- 200 },
-                             {enemy | x <- 100, y <- -150 }] }
+                 enemies = [ {enemy | x <- 50, y <- 50, speed <- 0.6},
+                             {enemy | x <- -100, y <- 200, speed <- 0.4 },
+                             {enemy | x <- 100, y <- -150, speed <- 0.1 }] }

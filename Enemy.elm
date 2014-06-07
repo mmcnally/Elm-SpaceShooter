@@ -25,8 +25,7 @@ enemyAI ship =
     let slopeNumerator = ship.vy - ship.y
         slopeDenominator = ship.vx - ship.x
         slope = slopeNumerator / slopeDenominator
-        increment numer denom = if (sqrt (numer * numer) + 
-                                    sqrt ( denom * denom)) > 0.5
+        increment numer denom = if (sqrt (numer * numer + denom * denom)) > 0.5
                                 then increment (numer * 0.95) (denom * 0.95)
                                 else { xInc = denom, yInc = numer }
         xIncrement = (increment slopeNumerator slopeDenominator).xInc

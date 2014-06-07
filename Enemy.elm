@@ -19,22 +19,34 @@ enemy = { x = 0,
           size = 10,
           angle = 0,
           accelerate = False }
-
-enemyAI: Ship -> Ship
-enemyAI ship =
+adjustAngle: Ship -> Float -> Float -> Float
+adjustAngle ship xChange yChange= 
+   let radius = sqrt (xChange ^ 2 + yChange ^ 2)
+       unAdjustedAngle = asin(yChange / radius)
+   in if | unAdjustedAngle > 0 && xChange < 0 -> pi - unAdjustedAngle
+         | unAdjustedAngle < 0 && xChange < 0 -> pi - unAdjustedAngle
+         | otherwise -> unAdjustedAngle
+       
+physics: Ship -> Ship
+physics ship =
  let slopeNumerator = ship.vy - ship.y
      slopeDenominator = ship.vx - ship.x
      slope = slopeNumerator / slopeDenominator
-     increment numer denom = if (sqrt (numer * numer + denom * denom)) > ship.speed
+     increment numer denom = if (sqrt (numer ^ 2 + denom ^ 2)) > ship.speed
                                 then increment (numer * 0.95) (denom * 0.95)
                                 else { xInc = denom, yInc = numer }
      xIncrement = (increment slopeNumerator slopeDenominator).xInc
      yIncrement = (increment slopeNumerator slopeDenominator).yInc
  in { ship | x <- ship.x + xIncrement,
-             y <- ship.y + yIncrement } 
+             y <- ship.y + yIncrement,
+         angle <- (adjustAngle ship xIncrement yIncrement) } 
+
+shipAI: Ship -> Ship
+shipAI = physics
+
 
 updateAll: [Ship] -> [Ship]
-updateAll = map enemyAI
+updateAll = map shipAI
 
 
 

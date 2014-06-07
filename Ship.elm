@@ -1,6 +1,7 @@
 module Ship where
 import Playground.Input (..)
 import Keyboard.Keys as Keys
+-- import GameState (..)
 
 type Ship = { x : Float, y : Float,
               vx : Float, vy : Float,
@@ -14,13 +15,13 @@ shipColor = { body = blue, window = grey, body2 = green }
 
 enemyShipColor = { shipColor | body <- red,
                                body2 <- orange } 
-
+enemy: Ship
 enemy = { x = 0,
           y = 0,
           vx = 0,
           vy = 0,
           color = enemyShipColor,
-          speed = 1,
+          speed = 2,
           size = 10,
           angle = 0,
           accelerate = False }
@@ -73,8 +74,18 @@ adjustAngle ship num =
                           else ship'.angle + (pi/30) }
 
 
+-- enemyAI: Gamestate -> Ship -> Ship
+-- enemyAI state enemyShip = enemyShip
+
+
+moveEnemies: Float -> Float -> Ship -> Ship
+moveEnemies x y enemyShip = { enemyShip | x <- enemyShip.x + 5,
+                                          y <- enemyShip.y - 5 }
+
 update : Input -> Ship -> Ship
 update input ship =
+  -- let enemyShip' = map moveEnemies ship.x ship.y enemyShip
+  -- in 
     case input of
       Key key ->
         if | key `Keys.equal` Keys.arrowUp -> 
@@ -90,5 +101,5 @@ update input ship =
 
            | otherwise -> ship
       Passive t ->  let ship' = physics ship
-                    in { ship' | accelerate <- False } 
+                    in { ship' | accelerate <- False }
       otherwise -> ship

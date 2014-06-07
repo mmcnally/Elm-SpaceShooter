@@ -22,16 +22,16 @@ enemy = { x = 0,
 
 enemyAI: Ship -> Ship
 enemyAI ship =
-    let slopeNumerator = ship.vy - ship.y
-        slopeDenominator = ship.vx - ship.x
-        slope = slopeNumerator / slopeDenominator
-        increment numer denom = if (sqrt (numer * numer + denom * denom)) > 0.5
+ let slopeNumerator = ship.vy - ship.y
+     slopeDenominator = ship.vx - ship.x
+     slope = slopeNumerator / slopeDenominator
+     increment numer denom = if (sqrt (numer * numer + denom * denom)) > ship.speed
                                 then increment (numer * 0.95) (denom * 0.95)
                                 else { xInc = denom, yInc = numer }
-        xIncrement = (increment slopeNumerator slopeDenominator).xInc
-        yIncrement = (increment slopeNumerator slopeDenominator).yInc
-    in { ship | x <- ship.x + xIncrement,
-                y <- ship.y + yIncrement } 
+     xIncrement = (increment slopeNumerator slopeDenominator).xInc
+     yIncrement = (increment slopeNumerator slopeDenominator).yInc
+ in { ship | x <- ship.x + xIncrement,
+             y <- ship.y + yIncrement } 
 
 updateAll: [Ship] -> [Ship]
 updateAll = map enemyAI

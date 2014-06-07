@@ -8,15 +8,12 @@ import Ship (Ship)
 import Ship
 import Enemy
 
--- update : RealWorld -> Input -> GameState -> GameState
+update : RealWorld -> Input -> GameState -> GameState
 update realWorld input state =
-   -- let  numEnemies = state.enemies.length
-   --     xs = repeat 5 ship'.x
-   --     ys = repeat 5 ship'.y
     let ship' = Ship.update input state.ship
         asteroids' = Asteroid.updateAll state.asteroids
         updateEnemies ship = { ship | vx <- state.ship.x, vy <- state.ship.y }
-        enemies' = Enemy.updateAll (map updateEnemies state.enemies) -- ship'.x state.ship.y --
+        enemies' = Enemy.updateAll (map updateEnemies state.enemies)
     in case input of
          otherwise -> {state | ship <- ship',
                                asteroids <- asteroids',

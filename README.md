@@ -5,5 +5,6 @@ Authors:
 * Zachary O'Donnell
 * Eric Gendreau
 * Patrick Hickey 
+* Matt McNally
 
 Game Rules:

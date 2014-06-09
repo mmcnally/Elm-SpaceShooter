@@ -3,7 +3,7 @@ import Ship (..)
 
 
 
-
+ 
 
 enemyShipColor = { shipColor | body <- red,
                                body2 <- orange } 
@@ -18,9 +18,10 @@ enemy = { x = 0,
           speed = 2,
           size = 10,
           angle = 0,
-          accelerate = False }
+          accelerate = 0 }
 adjustAngle: Ship -> Float -> Float -> Float
 adjustAngle ship xChange yChange= 
+
    let radius = sqrt (xChange ^ 2 + yChange ^ 2)
        unAdjustedAngle = asin(yChange / radius)
    in if | unAdjustedAngle > 0 && xChange < 0 -> pi - unAdjustedAngle

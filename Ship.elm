@@ -7,7 +7,7 @@ type Ship = { x : Float, y : Float,
               vx : Float, vy : Float,
               color : ShipColor, speed : Float,
               size : Float, angle: Float,
-              accelerate: Bool }
+              accelerate: Float }
               
 type ShipColor = { body : Color, window : Color, body2 : Color }
 
@@ -24,7 +24,7 @@ enemy = { x = 0,
           speed = 2,
           size = 10,
           angle = 0,
-          accelerate = False }
+          accelerate = 0 }
 
 initialShip : Ship
 initialShip = { x = 0, 
@@ -35,7 +35,7 @@ initialShip = { x = 0,
                 speed = 0,
                 size = 20,
                 angle = pi/2,
-                accelerate = False }
+                accelerate = 0 }
 
 render : Ship -> Form
 render {x, y, color, size, angle} = 
@@ -44,19 +44,20 @@ render {x, y, color, size, angle} =
           ngon 3 (size * 0.2) |> filled color.body2 ] |> rotate angle |> move (x, y)
 
 
+maxSpeed = 5
 
 -- accelerates ship if accelerate is true
 -- otherwise it slows down ship
 accelerate: Ship -> Ship
 accelerate ship = 
-    if | ship.accelerate && ship.speed < 1 -> { ship | speed <- 1 }
-       | ship.accelerate -> { ship | speed <- if ship.speed < 10 
-                                              then ship.speed + 0.5 
-                                              else ship.speed }
-       | otherwise -> { ship | speed <- if ship.speed < 0.1
-                                        then 0
-                                        else  ship.speed - (ship.speed * 0.1) }
-
+    let dir = ship.speed / (abs ship.speed) in
+    if | (ship.accelerate /= 0) && (abs ship.speed) < (abs ship.accelerate) -> { ship | speed <- ship.accelerate }
+       | (ship.accelerate /= 0) -> { ship | speed <- if (abs ship.speed) < maxSpeed
+                                              then ship.speed + ((abs ship.speed) * ship.accelerate)
+                                              else dir*maxSpeed }
+       | otherwise -> { ship | speed <- if | (abs ship.speed) < 0.025 -> 0
+                             | otherwise -> ship.speed - (ship.speed * 0.005) } 
+ 
 physics : Ship -> Ship
 physics ship = 
      let ship' = accelerate ship
@@ -91,15 +92,18 @@ update input ship =
         if | key `Keys.equal` Keys.arrowUp -> 
                       { ship | vx <- cos(ship.angle),
                                 vy <- sin(ship.angle),
-                                accelerate <- True }
+                                accelerate <- 0.25 }
            | key `Keys.equal` Keys.arrowDown -> 
-                      { ship | speed <- ship.speed / 4 }
-           | key `Keys.equal` Keys.arrowLeft ->
+                      { ship | vx <- cos(ship.angle),
+                               vy <- sin(ship.angle),
+                               accelerate <- (-0.25) }
+           | key `Keys.equal` Keys.arrowLeft -> 
                                 adjustAngle ship (-1)
            | key `Keys.equal` Keys.arrowRight ->
                                 adjustAngle ship (1)
 
            | otherwise -> ship
       Passive t ->  let ship' = physics ship
-                    in { ship' | accelerate <- False }
+                    in { ship' | accelerate <- 0 }
       otherwise -> ship
+  

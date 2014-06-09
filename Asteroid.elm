@@ -17,4 +17,4 @@ updateAll : [Asteroid] -> [Asteroid]
 updateAll = map physics
 
 render : Asteroid -> Form
-render {x, y} = circle 10 |> filled grey |> move (x, y)
+render {x, y} = circle 10 |> filled black |> move (x, y)

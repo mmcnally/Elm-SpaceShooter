@@ -12,4 +12,4 @@ render state =
         forms = enemyForms ++ asteroidForms ++ [shipForm]
         fixAngle = -state.ship.angle + pi/2
         fixPosition = (-state.ship.x, -state.ship.y)
-    in  map (move  fixPosition) forms
+    in  [map (move  fixPosition) forms |> group |> rotate fixAngle]

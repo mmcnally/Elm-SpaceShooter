@@ -12,7 +12,7 @@ update : RealWorld -> Input -> GameState -> GameState
 update realWorld input state =
     let ship' = Ship.update input state.ship
         asteroids' = Asteroid.updateAll state.asteroids
-        updateEnemies ship = { ship | vx <- state.ship.x, vy <- state.ship.y }
+        updateEnemies ship = { ship | playerX <- state.ship.x, playerY <- state.ship.y }
         enemies' = Enemy.updateAll (map updateEnemies state.enemies)
     in case input of
          otherwise -> {state | ship <- ship',

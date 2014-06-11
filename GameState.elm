@@ -1,10 +1,11 @@
 module GameState where
 import Ship (..)
 import Asteroid (..)
+import Enemy (..)
 
 type GameState = { ship : Ship,
                    asteroids : [Asteroid],
-                   enemies : [Ship] }
+                   enemies : [EnemyShip] }
 
 initialState = { ship = initialShip,
                  asteroids = [asteroid 200 200 -0.5 -1,

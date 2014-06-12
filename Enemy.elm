@@ -3,6 +3,7 @@ import Ship (..)
 
 
 
+
  
 
 enemyShipColor = { shipColor | body <- red,
@@ -18,14 +19,14 @@ type EnemyShip = { x: Float,
                    accelerate: Float,
                    playerX: Float,
                    playerY: Float }
-                   
+
 enemy: EnemyShip
 enemy = { x = 0,
           y = 0,
           vx = 0,
           vy = 0,
           color = enemyShipColor,
-          speed = 2,
+          speed = 0.3,
           size = 10,
           angle = 0,
           accelerate = 0,

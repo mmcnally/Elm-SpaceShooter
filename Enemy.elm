@@ -8,32 +8,33 @@ import Ship (..)
 
 enemyShipColor = { shipColor | body <- red,
                                body2 <- orange } 
-type EnemyShip = { x: Float,
-                   y: Float,
-                   vx: Float,
-                   vy: Float,
-                   color: ShipColor,
-                   speed: Float,
-                   size: Float,
-                   angle: Float,
-                   accelerate: Float,
-                   playerX: Float,
-                   playerY: Float }
+-- type EnemyShip = { x: Float,
+--                    y: Float,
+--                    vx: Float,
+--                    vy: Float,
+--                    color: ShipColor,
+--                    speed: Float,
+--                    size: Float,
+--                    angle: Float,
+--                    accelerate: Float,
+--                    playerX: Float,
+--                    playerY: Float }
+type EnemyShip a = Ship { playerX: Float, playerY: Float }
 
-enemy: EnemyShip
+enemy: EnemyShip a
 enemy = { x = 0,
           y = 0,
           vx = 0,
           vy = 0,
           color = enemyShipColor,
-          speed = 0.3,
+          speed = 0,
           size = 10,
           angle = 0,
           accelerate = 0,
           playerX = 0,
           playerY = 0 }
 
-adjustAngle: EnemyShip -> Float -> Float -> Float
+adjustAngle: EnemyShip a -> Float -> Float -> Float
 adjustAngle ship xChange yChange= 
    let radius = sqrt (xChange ^ 2 + yChange ^ 2)
        unAdjustedAngle = asin(yChange / radius)
@@ -46,7 +47,7 @@ correctMovement thingToModify incr playNum = if (thingToModify + incr) == playNu
                                              then incr + 0.1
                                              else incr
 
-physics: EnemyShip -> EnemyShip
+physics: EnemyShip a -> EnemyShip a
 physics ship =
  let slopeNumerator = ship.playerY - ship.y
      slopeDenominator = ship.playerX - ship.x
@@ -62,15 +63,15 @@ physics ship =
              y <- ship.y + yIncrement,
          angle <- (adjustAngle ship xIncrement yIncrement) } 
 
-shipAI: EnemyShip -> EnemyShip
+shipAI: EnemyShip a -> EnemyShip a
 shipAI = physics
 
 
-updateAll: [EnemyShip] -> [EnemyShip]
+updateAll: [EnemyShip a] -> [EnemyShip a]
 updateAll = map shipAI
 
 
-render : EnemyShip -> Form
+render : EnemyShip a -> Form
 render {x, y, color, size, angle} = 
   group [ ngon 3 size |> filled color.body,
           ngon 3 (size * 0.7) |> filled color.window |> move (size * 0.1, 0),

@@ -2,17 +2,21 @@ module Ship where
 import Playground.Input (..)
 import Keyboard.Keys as Keys
 
-type Ship = { x : Float, y : Float,
-              vx : Float, vy : Float,
-              color : ShipColor, speed : Float,
-              size : Float, angle: Float,
-              accelerate: Float }
+type Ship a = { a | x : Float,
+                    y : Float,
+                    vx : Float,
+                    vy : Float,
+                    color : ShipColor,
+                    speed : Float,
+                    size : Float,
+                    angle: Float,
+                    accelerate: Float }
               
 type ShipColor = { body : Color, window : Color, body2 : Color }
 
 shipColor = { body = blue, window = grey, body2 = green } 
 
-initialShip : Ship
+initialShip : Ship {}
 initialShip = { x = 0, 
                 y = 0, 
                 vx = 0, 
@@ -23,7 +27,7 @@ initialShip = { x = 0,
                 angle = pi/2,
                 accelerate = 0 }
 
-render : Ship -> Form
+render : Ship {} -> Form
 render {x, y, color, size, angle} = 
   group [ ngon 3 size |> filled color.body,
           ngon 3 (size * 0.7) |> filled color.window |> move (size * 0.1, 0),
@@ -34,7 +38,7 @@ maxSpeed = 5
 
 -- accelerates ship if accelerate is true
 -- otherwise it slows down ship
-accelerate: Ship -> Ship
+accelerate: Ship {} -> Ship {}
 accelerate ship = 
     let dir = ship.speed / (abs ship.speed) in
     if | (ship.accelerate /= 0) && (abs ship.speed) < (abs ship.accelerate) -> { ship | speed <- ship.accelerate }
@@ -43,15 +47,15 @@ accelerate ship =
                                               else dir*maxSpeed }
        | otherwise -> { ship | speed <- if | (abs ship.speed) < 0.025 -> 0
                              | otherwise -> ship.speed - (ship.speed * 0.005) } 
- 
-physics : Ship -> Ship
+
+physics : Ship {} -> Ship {}
 physics ship = 
      let ship' = accelerate ship
      in { ship' | x <- ship'.x + (ship'.vx * ship'.speed),
                   y <- ship'.y + (ship'.vy * ship'.speed) }
 
 -- adjusts ship angle based on arrow keys pressed
-adjustAngle: Ship -> Float -> Ship
+adjustAngle: Ship {} -> Float -> Ship {}
 adjustAngle ship num = 
     let ship' = { ship | angle <- if | ship.angle > (2 * pi) -> 0
                                      | ship.angle < 0 -> 2 * pi
@@ -61,7 +65,7 @@ adjustAngle ship num =
                           else ship'.angle + (pi/30) }
 
 
-update : Input -> Ship -> Ship
+update : Input -> Ship {} -> Ship {}
 update input ship =
     case input of
       Key key ->

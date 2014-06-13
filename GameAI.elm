@@ -4,9 +4,6 @@ import Enemy (..)
 import GameState (..)
 import Random 
 
-
--- hi = 5
-
 updateState: GameState -> GameState
 updateState state = 
   { state | enemies <- addEnemy state.enemies (length state.enemies) }

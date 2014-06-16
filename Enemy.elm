@@ -19,7 +19,8 @@ enemyShipColor = { shipColor | body <- red,
 --                    accelerate: Float,
 --                    playerX: Float,
 --                    playerY: Float }
-type EnemyShip a = Ship { playerX: Float, playerY: Float }
+
+type EnemyShip a = Ship { a | playerX: Float, playerY: Float }
 
 enemy: EnemyShip a
 enemy = { x = 0,

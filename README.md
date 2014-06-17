@@ -8,3 +8,7 @@ Authors:
 * Matt McNally
 
 Game Rules:
+up arrow: move forward
+down arrow: slow down/move backward
+left arrow: rotate ship counterclockwise
+right arrow: rotate ship clockwise

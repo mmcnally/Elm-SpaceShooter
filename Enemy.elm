@@ -2,27 +2,13 @@ module Enemy where
 import Ship (..)
 
 
-
-
- 
-
 enemyShipColor = { shipColor | body <- red,
                                body2 <- orange } 
--- type EnemyShip = { x: Float,
---                    y: Float,
---                    vx: Float,
---                    vy: Float,
---                    color: ShipColor,
---                    speed: Float,
---                    size: Float,
---                    angle: Float,
---                    accelerate: Float,
---                    playerX: Float,
---                    playerY: Float }
 
-type EnemyShip a = Ship { playerX: Float, playerY: Float }
+type EnemyShip a = Ship { a | playerX: Float, playerY: Float }
 
-enemy: EnemyShip a
+-- initial enemyship
+enemy: EnemyShip {}
 enemy = { x = 0,
           y = 0,
           vx = 0,
@@ -35,6 +21,9 @@ enemy = { x = 0,
           playerX = 0,
           playerY = 0 }
 
+
+-- calculates angle for an enemyship so that
+-- it's facing the player's ship
 adjustAngle: EnemyShip a -> Float -> Float -> Float
 adjustAngle ship xChange yChange= 
    let radius = sqrt (xChange ^ 2 + yChange ^ 2)
@@ -47,7 +36,8 @@ adjustAngle ship xChange yChange=
 correctMovement thingToModify incr playNum = if (thingToModify + incr) == playNum
                                              then incr + 0.1
                                              else incr
-
+-- physics for enemy ships
+-- modifies coordinates and angle
 physics: EnemyShip a -> EnemyShip a
 physics ship =
  let slopeNumerator = ship.playerY - ship.y
@@ -64,14 +54,18 @@ physics ship =
              y <- ship.y + yIncrement,
          angle <- (adjustAngle ship xIncrement yIncrement) } 
 
+
+-- applies physics function to an enemy ship
 shipAI: EnemyShip a -> EnemyShip a
 shipAI = physics
 
-
+-- updates list of enemy ships to orient and move them
 updateAll: [EnemyShip a] -> [EnemyShip a]
 updateAll = map shipAI
 
 
+-- draws an enemy ship to the screen
+-- ship drawn as 3 grouped triangles
 render : EnemyShip a -> Form
 render {x, y, color, size, angle} = 
   group [ ngon 3 size |> filled color.body,

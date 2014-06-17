@@ -5,6 +5,9 @@ import Ship
 import Asteroid
 import Enemy
 
+
+-- note: fixAngle function never seems to be called and game functions
+--       normally when it is commented out
 render : GameState -> [Form]
 render state = 
     let shipForm = Ship.render state.ship

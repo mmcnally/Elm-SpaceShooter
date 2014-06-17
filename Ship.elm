@@ -16,6 +16,7 @@ type ShipColor = { body : Color, window : Color, body2 : Color }
 
 shipColor = { body = blue, window = grey, body2 = green } 
 
+
 initialShip : Ship {}
 initialShip = { x = 0, 
                 y = 0, 
@@ -33,7 +34,7 @@ render {x, y, color, size, angle} =
           ngon 3 (size * 0.7) |> filled color.window |> move (size * 0.1, 0),
           ngon 3 (size * 0.2) |> filled color.body2 ] |> rotate angle |> move (x, y)
 
-
+-- max possible speed of ship
 maxSpeed = 5
 
 -- accelerates ship if accelerate is true
@@ -41,13 +42,17 @@ maxSpeed = 5
 accelerate: Ship {} -> Ship {}
 accelerate ship = 
     let dir = ship.speed / (abs ship.speed) in
-    if | (ship.accelerate /= 0) && (abs ship.speed) < (abs ship.accelerate) -> { ship | speed <- ship.accelerate }
-       | (ship.accelerate /= 0) -> { ship | speed <- if (abs ship.speed) < maxSpeed
-                                              then ship.speed + ((abs ship.speed) * ship.accelerate)
-                                              else dir*maxSpeed }
+    if | (ship.accelerate /= 0) && 
+         (abs ship.speed) < (abs ship.accelerate) -> 
+             { ship | speed <- ship.accelerate }
+       | (ship.accelerate /= 0) -> 
+             { ship | speed <- if (abs ship.speed) < maxSpeed
+                               then ship.speed + ((abs ship.speed) * ship.accelerate)
+                               else dir * maxSpeed }
        | otherwise -> { ship | speed <- if | (abs ship.speed) < 0.025 -> 0
                              | otherwise -> ship.speed - (ship.speed * 0.005) } 
 
+-- applies physics to a ship
 physics : Ship {} -> Ship {}
 physics ship = 
      let ship' = accelerate ship
@@ -71,8 +76,8 @@ update input ship =
       Key key ->
         if | key `Keys.equal` Keys.arrowUp -> 
                       { ship | vx <- cos(ship.angle),
-                                vy <- sin(ship.angle),
-                                accelerate <- 0.25 }
+                               vy <- sin(ship.angle),
+                               accelerate <- 0.25 }
            | key `Keys.equal` Keys.arrowDown -> 
                       { ship | vx <- cos(ship.angle),
                                vy <- sin(ship.angle),

@@ -8,7 +8,7 @@ type Ship = { x : Float, y : Float,
               vx : Float, vy : Float,
               color : ShipColor, speed : Float,
               size : Float, angle: Float,
-              accelerate: Float {-- bullets: [Bullet] --} }
+              accelerate: Float, bullets: [Bullet] }
               
 type ShipColor = { body : Color, window : Color, body2 : Color }
 
@@ -25,8 +25,8 @@ enemy = { x = 0,
           speed = 2,
           size = 10,
           angle = 0,
-          accelerate = 0
-          {-- bullets = [] --} }
+          accelerate = 0,
+          bullets = [] }
 
 initialShip : Ship
 initialShip = { x = 0, 
@@ -37,8 +37,8 @@ initialShip = { x = 0,
                 speed = 0,
                 size = 20,
                 angle = pi/2,
-                accelerate = 0
-                {-- bullets = [] --}  }
+                accelerate = 0,
+                bullets = [] }
 
 render : Ship -> Form
 render {x, y, color, size, angle} = 
@@ -87,8 +87,21 @@ moveEnemies x y enemyShip = { enemyShip | x <- enemyShip.x + 5,
                                           y <- enemyShip.y - 5 }
 
 --Struck out so it works
---addBullet: Ship -> Ship
---addBullet ship = {ship | bullets <- ship.bullets::(Bullet.createBullet ship) }
+addBullet: Ship -> Ship
+addBullet ship = {ship | bullets <- (createBullet ship)::ship.bullets }
+
+
+
+createBullet: Ship -> Bullet
+createBullet ship = { defaultBullet | x <- ship.x, 
+                                      y <- ship.y,
+                                    vx <- ship.vy,
+                                     vy <- ship.vy,
+                                  speed <- ship.speed,
+                                   size <- 5,
+                                  angle <- ship.angle,
+                              birthtime <- 0}
+
 
 update : Input -> Ship -> Ship
 update input ship =
@@ -109,8 +122,8 @@ update input ship =
            | key `Keys.equal` Keys.arrowRight ->
                                 adjustAngle ship (1)
            -- struck out so it works
-           --| key `Keys.equal` Keys.space  ->
-                                --addBullet ship                                
+           | key `Keys.equal` Keys.space  ->
+                                addBullet ship                                
            | otherwise -> ship
       Passive t ->  let ship' = physics ship
                     in { ship' | accelerate <- 0 }

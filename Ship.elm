@@ -1,4 +1,5 @@
 module Ship where
+import Bullet (..)
 import Playground.Input (..)
 import Keyboard.Keys as Keys
 -- import GameState (..)
@@ -7,7 +8,7 @@ type Ship = { x : Float, y : Float,
               vx : Float, vy : Float,
               color : ShipColor, speed : Float,
               size : Float, angle: Float,
-              accelerate: Float }
+              accelerate: Float, bullets: [Bullet] }
               
 type ShipColor = { body : Color, window : Color, body2 : Color }
 
@@ -24,7 +25,8 @@ enemy = { x = 0,
           speed = 2,
           size = 10,
           angle = 0,
-          accelerate = 0 }
+          accelerate = 0,
+          bullets = [] }
 
 initialShip : Ship
 initialShip = { x = 0, 
@@ -35,7 +37,8 @@ initialShip = { x = 0,
                 speed = 0,
                 size = 20,
                 angle = pi/2,
-                accelerate = 0 }
+                accelerate = 0,
+                bullets = [] }
 
 render : Ship -> Form
 render {x, y, color, size, angle} = 
@@ -101,7 +104,8 @@ update input ship =
                                 adjustAngle ship (-1)
            | key `Keys.equal` Keys.arrowRight ->
                                 adjustAngle ship (1)
-
+           | key `Keys.equal` Keys.space  ->
+                              ship
            | otherwise -> ship
       Passive t ->  let ship' = physics ship
                     in { ship' | accelerate <- 0 }

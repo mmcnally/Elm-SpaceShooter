@@ -1,5 +1,6 @@
 module Bullet where
-import Ship (..)
+--import Ship (Ship)
+
 
 type Bullet = { x : Float, y : Float,
                vx : Float, vy : Float,
@@ -8,6 +9,7 @@ type Bullet = { x : Float, y : Float,
                birthtime : Float}
 default: Bullet
 default = {x = 0, y = 0, vx = 0, vy = 0, speed = 0, size = 0, angle = 0, birthtime = 0}
+{--
 
 createBullet: Ship -> Bullet
 createBullet ship = {x = ship.x, 
@@ -21,3 +23,4 @@ createBullet ship = {x = ship.x,
 update : Bullet -> Time -> Bullet
 update bullet time = if | time - bullet.birthtime > 2000 -> bullet
                         | otherwise -> bullet
+                        --}

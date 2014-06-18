@@ -87,14 +87,7 @@ moveEnemies x y enemyShip = { enemyShip | x <- enemyShip.x + 5,
                                           y <- enemyShip.y - 5 }
 
 addBullet: Ship -> Ship
-addBullet ship = {ship | bullets <- bullets::{x = ship.x, 
-                                                y = ship.y,
-                                                vx = ship.vy,
-                                                vy = ship.vy,
-                                                speed = ship.speed,
-                                                size = 5,
-                                                angle = ship.angle,
-                                                birthtime = 0} }
+addBullet ship = {ship | bullets <- ship.bullets::(Bullet.createBullet ship) }
 
 update : Input -> Ship -> Ship
 update input ship =

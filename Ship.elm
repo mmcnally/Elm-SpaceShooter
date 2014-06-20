@@ -4,7 +4,7 @@ import Playground.Input (..)
 import Keyboard.Keys as Keys
 -- import GameState (..)
 
-type Ship = { x : Float, y : Float,
+type Ship a = {a | x : Float, y : Float,
               vx : Float, vy : Float,
               color : ShipColor, speed : Float,
               size : Float, angle: Float,
@@ -16,7 +16,7 @@ shipColor = { body = blue, window = grey, body2 = green }
 
 enemyShipColor = { shipColor | body <- red,
                                body2 <- orange } 
-enemy: Ship
+enemy: Ship {}
 enemy = { x = 0,
           y = 0,
           vx = 0,
@@ -28,7 +28,7 @@ enemy = { x = 0,
           accelerate = 0,
           bullets = [] }
 
-initialShip : Ship
+initialShip : Ship {}
 initialShip = { x = 0, 
                 y = 0, 
                 vx = 0, 
@@ -40,7 +40,7 @@ initialShip = { x = 0,
                 accelerate = 0,
                 bullets = [] }
 
-render : Ship -> Form
+render : Ship {} -> Form
 render {x, y, color, size, angle} = 
   group [ ngon 3 size |> filled color.body,
           ngon 3 (size * 0.7) |> filled color.window |> move (size * 0.1, 0),
@@ -51,24 +51,28 @@ maxSpeed = 5
 
 -- accelerates ship if accelerate is true
 -- otherwise it slows down ship
-accelerate: Ship -> Ship
+accelerate: Ship {} -> Ship {}
 accelerate ship = 
     let dir = ship.speed / (abs ship.speed) in
-    if | (ship.accelerate /= 0) && (abs ship.speed) < (abs ship.accelerate) -> { ship | speed <- ship.accelerate }
-       | (ship.accelerate /= 0) -> { ship | speed <- if (abs ship.speed) < maxSpeed
-                                              then ship.speed + ((abs ship.speed) * ship.accelerate)
-                                              else dir*maxSpeed }
+    if | (ship.accelerate /= 0) && 
+         (abs ship.speed) < (abs ship.accelerate) -> 
+              { ship | speed <- ship.accelerate }
+        | (ship.accelerate /= 0) -> 
+              { ship | speed <- if (abs ship.speed) < maxSpeed
+                                then ship.speed + ((abs ship.speed) * ship.accelerate)
+                                else dir * maxSpeed }
        | otherwise -> { ship | speed <- if | (abs ship.speed) < 0.025 -> 0
                              | otherwise -> ship.speed - (ship.speed * 0.005) } 
  
-physics : Ship -> Ship
+--- applies physics to a ship 
+physics : Ship {} -> Ship {}
 physics ship = 
      let ship' = accelerate ship
      in { ship' | x <- ship'.x + (ship'.vx * ship'.speed),
                   y <- ship'.y + (ship'.vy * ship'.speed) }
 
 -- adjusts ship angle based on arrow keys pressed
-adjustAngle: Ship -> Float -> Ship
+adjustAngle: Ship {} -> Float -> Ship {}
 adjustAngle ship num = 
     let ship' = { ship | angle <- if | ship.angle > (2 * pi) -> 0
                                      | ship.angle < 0 -> 2 * pi
@@ -82,17 +86,17 @@ adjustAngle ship num =
 -- enemyAI state enemyShip = enemyShip
 
 
-moveEnemies: Float -> Float -> Ship -> Ship
+moveEnemies: Float -> Float -> Ship {} -> Ship {}
 moveEnemies x y enemyShip = { enemyShip | x <- enemyShip.x + 5,
                                           y <- enemyShip.y - 5 }
 
 --Struck out so it works
-addBullet: Ship -> Ship
+addBullet: Ship {} -> Ship {}
 addBullet ship = {ship | bullets <- (createBullet ship)::ship.bullets }
 
 
 
-createBullet: Ship -> Bullet
+createBullet: Ship {} -> Bullet
 createBullet ship = { defaultBullet | x <- ship.x, 
                                       y <- ship.y,
                                     vx <- ship.vy,
@@ -103,7 +107,7 @@ createBullet ship = { defaultBullet | x <- ship.x,
                               birthtime <- 0}
 
 
-update : Input -> Ship -> Ship
+update : Input -> Ship {} -> Ship {}
 update input ship =
   -- let enemyShip' = map moveEnemies ship.x ship.y enemyShip
   -- in 

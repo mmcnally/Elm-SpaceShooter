@@ -1,5 +1,6 @@
 module Enemy where
 import Ship (..)
+import Bullet (..)
 
 
 enemyShipColor = { shipColor | body <- red,
@@ -19,7 +20,8 @@ enemy = { x = 0,
           angle = 0,
           accelerate = 0,
           playerX = 0,
-          playerY = 0 }
+          playerY = 0,
+          bullets = [] }
 
 
 -- calculates angle for an enemyship so that

@@ -6,7 +6,7 @@ import Bullet (..)
 enemyShipColor = { shipColor | body <- red,
                                body2 <- orange } 
 
-type EnemyShip a = Ship { a | playerX: Float, playerY: Float }
+type EnemyShip a = Ship { a | playerX: Float, playerY: Float, intel : Float }
 
 -- initial enemyship
 enemy: EnemyShip {}
@@ -22,7 +22,8 @@ enemy = { x = 0,
           playerX = 0,
           playerY = 0,
           damage = 0,
-          bullets = [] }
+          bullets = [],
+          intel = 0 }
 
 
 -- calculates angle for an enemyship so that

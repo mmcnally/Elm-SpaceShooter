@@ -56,11 +56,12 @@ render {x, y, color, size, angle} =
 
 renderHealth : Ship {} -> Form
 renderHealth {x, y, color, size, angle, damage} =
-    
+   
     if(damage == 0)
-    {
-        collage 400 400 [outlined (dashed red) (rect 200 200)] 
-    }
+    then
+        (outlined (dashed red) (rect 200 200))
+    else
+        (outlined (dashed red) (rect 200 200))
 
 -- max possible speed of ship
 

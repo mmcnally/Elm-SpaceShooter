@@ -46,18 +46,20 @@ initialShip = { x = 0,
                 size = 20,
                 angle = pi/2,
                 accelerate = 0,
-
                 damage = 0, 
                 bullets = [] }
 
-render : Ship {} -> Form
-render {x, y, color, size, angle} = 
-  group [ ngon 3 size |> filled color.body,
-          ngon 3 (size * 0.7) |> filled color.window |> move (size * 0.1, 0),
-          ngon 3 (size * 0.2) |> filled color.body2 ] |> rotate angle |> move (x, y)
+render : Ship a -> Form
+render ship = 
+  let healthMeter = renderHealth ship
+  in
+  group [ ngon 3 ship.size |> filled ship.color.body,
+          ngon 3 (ship.size * 0.7) |> filled ship.color.window |> move (ship.size * 0.1, 0),
+          ngon 3 (ship.size * 0.2) |> filled ship.color.body2,
+          healthMeter ] |> rotate ship.angle |> move (ship.x, ship.y)
 
-renderHealth : Ship {} -> Form
-renderHealth {x, y, color, size, angle, damage} =
+renderHealth : Ship a -> Form
+renderHealth {damage} =
    
     if(damage == 0)
     then

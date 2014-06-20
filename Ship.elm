@@ -32,6 +32,7 @@ enemy = { x = 0,
           size = 10,
           angle = 0,
           accelerate = 0,
+          damage = 0,
           bullets = [] }
 
 initialShip : Ship {}
@@ -54,13 +55,13 @@ render {x, y, color, size, angle} =
           ngon 3 (size * 0.7) |> filled color.window |> move (size * 0.1, 0),
           ngon 3 (size * 0.2) |> filled color.body2 ] |> rotate angle |> move (x, y)
 
-renderHealth : Ship {} -> Form
-renderHealth {x, y, color, size, angle, damage} =
-    
-    if(damage == 0)
-    {
-        collage 400 400 [outlined (dashed red) (rect 200 200)] 
-    }
+-- renderHealth : Ship {} -> Form
+-- renderHealth {x, y, color, size, angle, damage} =
+--     
+--     if(damage == 0)
+--     {
+--         collage 400 400 [outlined (dashed red) (rect 200 200)] 
+--     }
 
 -- max possible speed of ship
 

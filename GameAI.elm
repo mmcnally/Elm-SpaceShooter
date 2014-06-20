@@ -16,7 +16,8 @@ addEnemy: GameState -> [EnemyShip {}]
 addEnemy state = if (length state.enemies) < 20 
                         then { enemy | x <- (head state.enemies).x * 1.5,
                                        y <- (head state.enemies).y + 100,
-                                       speed <- randomNum state }::state.enemies
+                                       speed <- randomNum state, 
+                                       intel <- 50 }::state.enemies
                         else state.enemies
 
 -- generates a random float between 0 and 1

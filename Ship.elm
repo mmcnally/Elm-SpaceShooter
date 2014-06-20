@@ -4,11 +4,17 @@ import Playground.Input (..)
 import Keyboard.Keys as Keys
 -- import GameState (..)
 
-type Ship a = {a | x : Float, y : Float,
-              vx : Float, vy : Float,
-              color : ShipColor, speed : Float,
-              size : Float, angle: Float,
-              accelerate: Float, bullets: [Bullet] }
+type Ship a = { a | x : Float,
+                    y : Float,
+                    vx : Float,
+                    vy : Float,
+                    color : ShipColor,
+                    speed : Float,
+                    size : Float,
+                    angle: Float,
+                    accelerate: Float,
+                    damage : Int, 
+                    bullets: [Bullet]}
               
 type ShipColor = { body : Color, window : Color, body2 : Color }
 
@@ -38,6 +44,8 @@ initialShip = { x = 0,
                 size = 20,
                 angle = pi/2,
                 accelerate = 0,
+
+                damage = 0, 
                 bullets = [] }
 
 render : Ship {} -> Form
@@ -46,6 +54,15 @@ render {x, y, color, size, angle} =
           ngon 3 (size * 0.7) |> filled color.window |> move (size * 0.1, 0),
           ngon 3 (size * 0.2) |> filled color.body2 ] |> rotate angle |> move (x, y)
 
+renderHealth : Ship {} -> Form
+renderHealth {x, y, color, size, angle, damage} =
+    
+    if(damage == 0)
+    {
+        collage 400 400 [outlined (dashed red) (rect 200 200)] 
+    }
+
+-- max possible speed of ship
 
 maxSpeed = 5
 

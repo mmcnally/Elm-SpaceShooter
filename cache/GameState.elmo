@@ -1,0 +1,71 @@
+Elm.GameState = Elm.GameState || {};
+Elm.GameState.make = function (_elm) {
+   "use strict";
+   _elm.GameState = _elm.GameState || {};
+   if (_elm.GameState.values)
+   return _elm.GameState.values;
+   var _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   _A = _N.Array.make(_elm),
+   _E = _N.Error.make(_elm),
+   $moduleName = "GameState";
+   var Asteroid = Elm.Asteroid.make(_elm);
+   var Basics = Elm.Basics.make(_elm);
+   var Color = Elm.Color.make(_elm);
+   var Enemy = Elm.Enemy.make(_elm);
+   var Graphics = Graphics || {};
+   Graphics.Collage = Elm.Graphics.Collage.make(_elm);
+   var Graphics = Graphics || {};
+   Graphics.Element = Elm.Graphics.Element.make(_elm);
+   var List = Elm.List.make(_elm);
+   var Maybe = Elm.Maybe.make(_elm);
+   var Native = Native || {};
+   Native.Json = Elm.Native.Json.make(_elm);
+   var Native = Native || {};
+   Native.Ports = Elm.Native.Ports.make(_elm);
+   var Ship = Elm.Ship.make(_elm);
+   var Signal = Elm.Signal.make(_elm);
+   var String = Elm.String.make(_elm);
+   var Text = Elm.Text.make(_elm);
+   var Time = Elm.Time.make(_elm);
+   var _op = {};
+   var initialState = {_: {}
+                      ,asteroids: _L.fromArray([A4(Asteroid.asteroid,
+                                               200,
+                                               200,
+                                               -0.5,
+                                               -1)
+                                               ,A4(Asteroid.asteroid,
+                                               -200,
+                                               200,
+                                               0.1,
+                                               -0.25)])
+                      ,enemies: _L.fromArray([_U.replace([["x"
+                                                          ,50]
+                                                         ,["y",50]
+                                                         ,["speed",1.0]
+                                                         ,["playerX",50]],
+                                             Enemy.enemy)
+                                             ,_U.replace([["x",-100]
+                                                         ,["y",200]
+                                                         ,["speed",0.4]],
+                                             Enemy.enemy)
+                                             ,_U.replace([["x",100]
+                                                         ,["y",-150]
+                                                         ,["speed",0.1]],
+                                             Enemy.enemy)])
+                      ,ship: Ship.initialShip};
+   var GameState = F3(function (a,
+   b,
+   c) {
+      return {_: {}
+             ,asteroids: b
+             ,enemies: c
+             ,ship: a};
+   });
+   _elm.GameState.values = {_op: _op
+                           ,initialState: initialState
+                           ,GameState: GameState};
+   return _elm.GameState.values;
+};

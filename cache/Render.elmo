@@ -1,0 +1,58 @@
+Elm.Render = Elm.Render || {};
+Elm.Render.make = function (_elm) {
+   "use strict";
+   _elm.Render = _elm.Render || {};
+   if (_elm.Render.values)
+   return _elm.Render.values;
+   var _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   _A = _N.Array.make(_elm),
+   _E = _N.Error.make(_elm),
+   $moduleName = "Render";
+   var Asteroid = Elm.Asteroid.make(_elm);
+   var Basics = Elm.Basics.make(_elm);
+   var Color = Elm.Color.make(_elm);
+   var Enemy = Elm.Enemy.make(_elm);
+   var GameState = Elm.GameState.make(_elm);
+   var Graphics = Graphics || {};
+   Graphics.Collage = Elm.Graphics.Collage.make(_elm);
+   var Graphics = Graphics || {};
+   Graphics.Element = Elm.Graphics.Element.make(_elm);
+   var List = Elm.List.make(_elm);
+   var Maybe = Elm.Maybe.make(_elm);
+   var Native = Native || {};
+   Native.Json = Elm.Native.Json.make(_elm);
+   var Native = Native || {};
+   Native.Ports = Elm.Native.Ports.make(_elm);
+   var Ship = Elm.Ship.make(_elm);
+   var Signal = Elm.Signal.make(_elm);
+   var String = Elm.String.make(_elm);
+   var Text = Elm.Text.make(_elm);
+   var Time = Elm.Time.make(_elm);
+   var _op = {};
+   var render = function (state) {
+      return function () {
+         var fixPosition = {ctor: "_Tuple2"
+                           ,_0: 0 - state.ship.x
+                           ,_1: 0 - state.ship.y};
+         var fixAngle = 0 - state.ship.angle + Basics.pi / 2;
+         var enemyForms = A2(List.map,
+         Enemy.render,
+         state.enemies);
+         var asteroidForms = A2(List.map,
+         Asteroid.render,
+         state.asteroids);
+         var shipForm = Ship.render(state.ship);
+         var forms = _L.append(enemyForms,
+         _L.append(asteroidForms,
+         _L.fromArray([shipForm])));
+         return A2(List.map,
+         Graphics.Collage.move(fixPosition),
+         forms);
+      }();
+   };
+   _elm.Render.values = {_op: _op
+                        ,render: render};
+   return _elm.Render.values;
+};

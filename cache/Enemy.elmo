@@ -1,0 +1,139 @@
+Elm.Enemy = Elm.Enemy || {};
+Elm.Enemy.make = function (_elm) {
+   "use strict";
+   _elm.Enemy = _elm.Enemy || {};
+   if (_elm.Enemy.values)
+   return _elm.Enemy.values;
+   var _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   _A = _N.Array.make(_elm),
+   _E = _N.Error.make(_elm),
+   $moduleName = "Enemy";
+   var Basics = Elm.Basics.make(_elm);
+   var Bullet = Elm.Bullet.make(_elm);
+   var Color = Elm.Color.make(_elm);
+   var Graphics = Graphics || {};
+   Graphics.Collage = Elm.Graphics.Collage.make(_elm);
+   var Graphics = Graphics || {};
+   Graphics.Element = Elm.Graphics.Element.make(_elm);
+   var List = Elm.List.make(_elm);
+   var Maybe = Elm.Maybe.make(_elm);
+   var Native = Native || {};
+   Native.Json = Elm.Native.Json.make(_elm);
+   var Native = Native || {};
+   Native.Ports = Elm.Native.Ports.make(_elm);
+   var Ship = Elm.Ship.make(_elm);
+   var Signal = Elm.Signal.make(_elm);
+   var String = Elm.String.make(_elm);
+   var Text = Elm.Text.make(_elm);
+   var Time = Elm.Time.make(_elm);
+   var _op = {};
+   var render = function (_v0) {
+      return function () {
+         return Graphics.Collage.move({ctor: "_Tuple2"
+                                      ,_0: _v0.x
+                                      ,_1: _v0.y})(Graphics.Collage.rotate(_v0.angle)(Graphics.Collage.group(_L.fromArray([Graphics.Collage.filled(_v0.color.body)(A2(Graphics.Collage.ngon,
+                                                                                                                          3,
+                                                                                                                          _v0.size))
+                                                                                                                          ,Graphics.Collage.move({ctor: "_Tuple2"
+                                                                                                                                                 ,_0: _v0.size * 0.1
+                                                                                                                                                 ,_1: 0})(Graphics.Collage.filled(_v0.color.window)(A2(Graphics.Collage.ngon,
+                                                                                                                          3,
+                                                                                                                          _v0.size * 0.7)))
+                                                                                                                          ,Graphics.Collage.filled(_v0.color.body2)(A2(Graphics.Collage.ngon,
+                                                                                                                          3,
+                                                                                                                          _v0.size * 0.2))]))));
+      }();
+   };
+   var correctMovement = F3(function (thingToModify,
+   incr,
+   playNum) {
+      return _U.eq(thingToModify + incr,
+      playNum) ? incr + 0.1 : incr;
+   });
+   var adjustAngle = F3(function (ship,
+   xChange,
+   yChange) {
+      return function () {
+         var radius = Basics.sqrt(Math.pow(xChange,
+         2) + Math.pow(yChange,2));
+         var unAdjustedAngle = Basics.asin(yChange / radius);
+         return _U.cmp(unAdjustedAngle,
+         0) > 0 && _U.cmp(xChange,
+         0) < 0 ? Basics.pi - unAdjustedAngle : _U.cmp(unAdjustedAngle,
+         0) < 0 && _U.cmp(xChange,
+         0) < 0 ? Basics.pi - unAdjustedAngle : unAdjustedAngle;
+      }();
+   });
+   var physics = function (ship) {
+      return function () {
+         var increment = F2(function (numer,
+         denom) {
+            return _U.cmp(Basics.sqrt(Math.pow(numer,
+            2) + Math.pow(denom,2)),
+            ship.speed) > 0 ? A2(increment,
+            numer * 0.95,
+            denom * 0.95) : {_: {}
+                            ,xInc: denom
+                            ,yInc: numer};
+         });
+         var slopeDenominator = ship.playerX - ship.x;
+         var slopeNumerator = ship.playerY - ship.y;
+         var slope = slopeNumerator / slopeDenominator;
+         var xInc = A2(increment,
+         slopeNumerator,
+         slopeDenominator).xInc;
+         var xIncrement = A3(correctMovement,
+         ship.x,
+         xInc,
+         ship.playerX);
+         var yInc = A2(increment,
+         slopeNumerator,
+         slopeDenominator).yInc;
+         var yIncrement = A3(correctMovement,
+         ship.y,
+         yInc,
+         ship.playerY);
+         return _U.replace([["x"
+                            ,ship.x + xIncrement]
+                           ,["y",ship.y + yIncrement]
+                           ,["angle"
+                            ,A3(adjustAngle,
+                            ship,
+                            xIncrement,
+                            yIncrement)]],
+         ship);
+      }();
+   };
+   var shipAI = physics;
+   var updateAll = List.map(shipAI);
+   var enemyShipColor = _U.replace([["body"
+                                    ,Color.red]
+                                   ,["body2",Color.orange]],
+   Ship.shipColor);
+   var enemy = {_: {}
+               ,accelerate: 0
+               ,angle: 0
+               ,bullets: _L.fromArray([])
+               ,color: enemyShipColor
+               ,damage: 0
+               ,playerX: 0
+               ,playerY: 0
+               ,size: 10
+               ,speed: 0
+               ,vx: 0
+               ,vy: 0
+               ,x: 0
+               ,y: 0};
+   _elm.Enemy.values = {_op: _op
+                       ,enemyShipColor: enemyShipColor
+                       ,enemy: enemy
+                       ,adjustAngle: adjustAngle
+                       ,correctMovement: correctMovement
+                       ,physics: physics
+                       ,shipAI: shipAI
+                       ,updateAll: updateAll
+                       ,render: render};
+   return _elm.Enemy.values;
+};

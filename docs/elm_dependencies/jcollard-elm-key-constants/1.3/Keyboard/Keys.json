@@ -1,0 +1,776 @@
+{
+  "name": "Keyboard.Keys",
+  "document": "Standard keyboard constants.\n\n# Data types\n@docs Key\n\n# Functions\n@docs directionKeys, isKeyDown\n\n# Constants\n## Function keys\nNote: undefined function keys have a conflict with the default keybindings of a well known browser.\n\n@docs f2, f4, f8, f9, f10\n\n## Modifiers\n@docs ctrl, shift, super, meta, windows, commandLeft, commandRight\n\n## Movement\n@docs arrowRight, arrowLeft, arrowUp, arrowDown, end, home, pageUp, pageDown\n\n## Editing keys\n@docs tab, space, backspace, delete, insert, enter\n\n## Special keys\n@docs escape\n\n## Numbers\n@docs one, two, three, four, five, six, seven, eight, nine, zero\n\n## Letters\n@docs a, b, c, d, e, f, g, h, i, j, k, l, m, n, o, p, q, r, s, t, u, v, w, x, y, z",
+  "aliases": [
+    {
+      "name": "Key",
+      "comment": "Type alias to make it clearer what integers are supposed to represent.",
+      "raw": "type Key =\n {keyCode: Keyboard.KeyCode\n ,name: String}",
+      "typeVariables": [],
+      "type": {
+        "tag": "record",
+        "fields": [
+          [
+            "keyCode",
+            {
+              "tag": "adt",
+              "name": "Keyboard.KeyCode",
+              "args": []
+            }
+          ],
+          [
+            "name",
+            {
+              "tag": "adt",
+              "name": "String",
+              "args": []
+            }
+          ]
+        ],
+        "extension": null
+      }
+    }
+  ],
+  "datatypes": [],
+  "values": [
+    {
+      "name": "a",
+      "comment": "",
+      "raw": "a: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "arrowDown",
+      "comment": "",
+      "raw": "arrowDown: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "arrowLeft",
+      "comment": "",
+      "raw": "arrowLeft: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "arrowRight",
+      "comment": "",
+      "raw": "arrowRight: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "arrowUp",
+      "comment": "",
+      "raw": "arrowUp: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "b",
+      "comment": "",
+      "raw": "b: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "backspace",
+      "comment": "",
+      "raw": "backspace: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "c",
+      "comment": "",
+      "raw": "c: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "commandLeft",
+      "comment": "A key on mac keyboards. The same keycode as the windows/super/meta keys",
+      "raw": "commandLeft: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "commandRight",
+      "comment": "A key on mac keyboards.",
+      "raw": "commandRight: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "ctrl",
+      "comment": "",
+      "raw": "ctrl: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "d",
+      "comment": "",
+      "raw": "d: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "delete",
+      "comment": "",
+      "raw": "delete: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "directionKeys",
+      "comment": "",
+      "raw": "directionKeys: Key -\u003e Key -\u003e Key -\u003e Key -\u003e Signal { x:Int, y:Int }",
+      "type": {
+        "tag": "function",
+        "args": [
+          {
+            "tag": "adt",
+            "name": "Key",
+            "args": []
+          },
+          {
+            "tag": "adt",
+            "name": "Key",
+            "args": []
+          },
+          {
+            "tag": "adt",
+            "name": "Key",
+            "args": []
+          },
+          {
+            "tag": "adt",
+            "name": "Key",
+            "args": []
+          }
+        ],
+        "result": {
+          "tag": "adt",
+          "name": "Signal",
+          "args": [
+            {
+              "tag": "record",
+              "fields": [
+                [
+                  "x",
+                  {
+                    "tag": "adt",
+                    "name": "Int",
+                    "args": []
+                  }
+                ],
+                [
+                  "y",
+                  {
+                    "tag": "adt",
+                    "name": "Int",
+                    "args": []
+                  }
+                ]
+              ],
+              "extension": null
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "e",
+      "comment": "",
+      "raw": "e: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "eight",
+      "comment": "",
+      "raw": "eight: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "end",
+      "comment": "",
+      "raw": "end: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "enter",
+      "comment": "",
+      "raw": "enter: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "equal",
+      "comment": "Two Keys are equal if their keyCodes are equal",
+      "raw": "equal : Key -\u003e Key -\u003e Bool",
+      "type": {
+        "tag": "function",
+        "args": [
+          {
+            "tag": "adt",
+            "name": "Key",
+            "args": []
+          },
+          {
+            "tag": "adt",
+            "name": "Key",
+            "args": []
+          }
+        ],
+        "result": {
+          "tag": "adt",
+          "name": "Bool",
+          "args": []
+        }
+      }
+    },
+    {
+      "name": "escape",
+      "comment": "",
+      "raw": "escape: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "f",
+      "comment": "",
+      "raw": "f: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "f10",
+      "comment": "",
+      "raw": "f10: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "f2",
+      "comment": "",
+      "raw": "f2: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "f4",
+      "comment": "",
+      "raw": "f4: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "f8",
+      "comment": "",
+      "raw": "f8: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "f9",
+      "comment": "",
+      "raw": "f9: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "five",
+      "comment": "",
+      "raw": "five: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "four",
+      "comment": "",
+      "raw": "four: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "g",
+      "comment": "",
+      "raw": "g: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "h",
+      "comment": "",
+      "raw": "h: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "home",
+      "comment": "",
+      "raw": "home: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "i",
+      "comment": "",
+      "raw": "i: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "insert",
+      "comment": "",
+      "raw": "insert: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "isKeyDown",
+      "comment": "",
+      "raw": "isKeyDown : Key -\u003e Signal Bool",
+      "type": {
+        "tag": "function",
+        "args": [
+          {
+            "tag": "adt",
+            "name": "Key",
+            "args": []
+          }
+        ],
+        "result": {
+          "tag": "adt",
+          "name": "Signal",
+          "args": [
+            {
+              "tag": "adt",
+              "name": "Bool",
+              "args": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "j",
+      "comment": "",
+      "raw": "j: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "k",
+      "comment": "",
+      "raw": "k: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "l",
+      "comment": "",
+      "raw": "l: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "m",
+      "comment": "",
+      "raw": "m: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "meta",
+      "comment": "super,meta,windows are all the same",
+      "raw": "meta: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "n",
+      "comment": "",
+      "raw": "n: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "nine",
+      "comment": "",
+      "raw": "nine: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "o",
+      "comment": "",
+      "raw": "o: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "one",
+      "comment": "",
+      "raw": "one: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "p",
+      "comment": "",
+      "raw": "p: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "pageDown",
+      "comment": "",
+      "raw": "pageDown: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "pageUp",
+      "comment": "",
+      "raw": "pageUp: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "q",
+      "comment": "",
+      "raw": "q: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "r",
+      "comment": "",
+      "raw": "r: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "s",
+      "comment": "",
+      "raw": "s: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "seven",
+      "comment": "",
+      "raw": "seven: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "shift",
+      "comment": "",
+      "raw": "shift: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "six",
+      "comment": "",
+      "raw": "six: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "space",
+      "comment": "",
+      "raw": "space: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "super",
+      "comment": "super,meta,windows are all the same",
+      "raw": "super: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "t",
+      "comment": "",
+      "raw": "t: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "tab",
+      "comment": "",
+      "raw": "tab: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "three",
+      "comment": "",
+      "raw": "three: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "two",
+      "comment": "",
+      "raw": "two: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "u",
+      "comment": "",
+      "raw": "u: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "v",
+      "comment": "",
+      "raw": "v: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "w",
+      "comment": "",
+      "raw": "w: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "windows",
+      "comment": "super,meta,windows are all the same",
+      "raw": "windows: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "x",
+      "comment": "",
+      "raw": "x: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "y",
+      "comment": "",
+      "raw": "y: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "z",
+      "comment": "",
+      "raw": "z: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    },
+    {
+      "name": "zero",
+      "comment": "",
+      "raw": "zero: Key",
+      "type": {
+        "tag": "adt",
+        "name": "Key",
+        "args": []
+      }
+    }
+  ]
+}

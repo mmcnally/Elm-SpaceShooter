@@ -1,0 +1,110 @@
+Elm.Examples = Elm.Examples || {};
+Elm.Examples.Demo = Elm.Examples.Demo || {};
+Elm.Examples.Demo.make = function (_elm) {
+   "use strict";
+   _elm.Examples = _elm.Examples || {};
+   _elm.Examples.Demo = _elm.Examples.Demo || {};
+   if (_elm.Examples.Demo.values)
+   return _elm.Examples.Demo.values;
+   var _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   _A = _N.Array.make(_elm),
+   _E = _N.Error.make(_elm),
+   $moduleName = "Examples.Demo";
+   var Basics = Elm.Basics.make(_elm);
+   var Color = Elm.Color.make(_elm);
+   var Graphics = Graphics || {};
+   Graphics.Collage = Elm.Graphics.Collage.make(_elm);
+   var Graphics = Graphics || {};
+   Graphics.Element = Elm.Graphics.Element.make(_elm);
+   var Keyboard = Keyboard || {};
+   Keyboard.Keys = Elm.Keyboard.Keys.make(_elm);
+   var List = Elm.List.make(_elm);
+   var Maybe = Elm.Maybe.make(_elm);
+   var Native = Native || {};
+   Native.Json = Elm.Native.Json.make(_elm);
+   var Native = Native || {};
+   Native.Ports = Elm.Native.Ports.make(_elm);
+   var Playground = Elm.Playground.make(_elm);
+   var Playground = Playground || {};
+   Playground.Input = Elm.Playground.Input.make(_elm);
+   var Signal = Elm.Signal.make(_elm);
+   var String = Elm.String.make(_elm);
+   var Text = Elm.Text.make(_elm);
+   var Time = Elm.Time.make(_elm);
+   var _op = {};
+   var update = F3(function (rw,
+   input,
+   state) {
+      return function () {
+         switch (input.ctor)
+         {case "Key":
+            return A2(Keyboard.Keys.equal,
+              input._0,
+              Keyboard.Keys.arrowLeft) ? _U.replace([["x"
+                                                     ,state.x - 5]],
+              state) : A2(Keyboard.Keys.equal,
+              input._0,
+              Keyboard.Keys.arrowRight) ? _U.replace([["x"
+                                                      ,state.x + 5]],
+              state) : A2(Keyboard.Keys.equal,
+              input._0,
+              Keyboard.Keys.arrowDown) ? _U.replace([["y"
+                                                     ,state.y - 5]],
+              state) : A2(Keyboard.Keys.equal,
+              input._0,
+              Keyboard.Keys.arrowUp) ? _U.replace([["y"
+                                                   ,state.y + 5]],
+              state) : state;
+            case "Tap":
+            return A2(Keyboard.Keys.equal,
+              input._0,
+              Keyboard.Keys.one) ? _U.replace([["c"
+                                               ,Color.blue]],
+              state) : A2(Keyboard.Keys.equal,
+              input._0,
+              Keyboard.Keys.two) ? _U.replace([["c"
+                                               ,Color.red]],
+              state) : A2(Keyboard.Keys.equal,
+              input._0,
+              Keyboard.Keys.three) ? _U.replace([["c"
+                                                 ,Color.green]],
+              state) : state;}
+         return state;
+      }();
+   });
+   var render = function (state) {
+      return function () {
+         var shape = Graphics.Collage.move({ctor: "_Tuple2"
+                                           ,_0: state.x
+                                           ,_1: state.y})(Graphics.Collage.filled(state.c)(Graphics.Collage.circle(50)));
+         return _L.fromArray([shape]);
+      }();
+   };
+   var initialState = {_: {}
+                      ,c: Color.blue
+                      ,x: 0
+                      ,y: 0};
+   var playground = {_: {}
+                    ,initialState: initialState
+                    ,render: render
+                    ,update: update};
+   var main = Playground.play(playground);
+   var State = F3(function (a,
+   b,
+   c) {
+      return {_: {}
+             ,c: c
+             ,x: a
+             ,y: b};
+   });
+   _elm.Examples.Demo.values = {_op: _op
+                               ,initialState: initialState
+                               ,render: render
+                               ,update: update
+                               ,playground: playground
+                               ,main: main
+                               ,State: State};
+   return _elm.Examples.Demo.values;
+};

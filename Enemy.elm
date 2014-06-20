@@ -21,6 +21,7 @@ enemy = { x = 0,
           accelerate = 0,
           playerX = 0,
           playerY = 0,
+          damage = 0,
           bullets = [] }
 
 

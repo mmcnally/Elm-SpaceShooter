@@ -32,6 +32,7 @@ enemy = { x = 0,
           size = 10,
           angle = 0,
           accelerate = 0,
+          damage = 0,
           bullets = [] }
 
 initialShip : Ship {}

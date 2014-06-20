@@ -1,3 +1,4 @@
+--TEST
 module Ship where
 import Bullet (..)
 import Playground.Input (..)

@@ -4,6 +4,9 @@ module Keyboard.Keys where
 # Data types
 @docs Key
 
+## Equality
+@docs equals
+
 # Functions
 @docs directionKeys, isKeyDown
 
@@ -43,8 +46,8 @@ type Key =
  ,name: String}
 
 {-| Two Keys are equal if their keyCodes are equal -}
-equal : Key -> Key -> Bool
-equal k0 k1 = k0.keyCode == k1.keyCode
+equals : Key -> Key -> Bool
+equals k0 k1 = k0.keyCode == k1.keyCode
 
 directionKeys: Key -> Key -> Key -> Key -> Signal { x:Int, y:Int }
 directionKeys up down right left = Keyboard.directions up.keyCode down.keyCode right.keyCode left.keyCode

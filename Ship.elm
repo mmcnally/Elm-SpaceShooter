@@ -134,20 +134,20 @@ update input ship =
   -- in 
     case input of
       Key key ->
-        if | key `Keys.equal` Keys.arrowUp -> 
+        if | key `Keys.equals` Keys.arrowUp -> 
                       { ship | vx <- cos(ship.angle),
                                 vy <- sin(ship.angle),
                                 accelerate <- 0.25 }
-           | key `Keys.equal` Keys.arrowDown -> 
+           | key `Keys.equals` Keys.arrowDown -> 
                       { ship | vx <- cos(ship.angle),
                                vy <- sin(ship.angle),
                                accelerate <- (-0.25) }
-           | key `Keys.equal` Keys.arrowLeft -> 
+           | key `Keys.equals` Keys.arrowLeft -> 
                                 adjustAngle ship (-1)
-           | key `Keys.equal` Keys.arrowRight ->
+           | key `Keys.equals` Keys.arrowRight ->
                                 adjustAngle ship (1)
            -- struck out so it works
-           | key `Keys.equal` Keys.space  ->
+           | key `Keys.equals` Keys.space  ->
                                 addBullet ship                                
            | otherwise -> ship
       Passive t ->  let ship' = physics ship

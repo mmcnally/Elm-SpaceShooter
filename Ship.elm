@@ -2,7 +2,6 @@ module Ship where
 import Bullet (..)
 import Playground.Input (..)
 import Keyboard.Keys as Keys
--- import GameState (..)
 
 type Ship a = { a | x : Float,
                     y : Float,
@@ -67,7 +66,6 @@ renderHealth {damage} =
         (outlined (dashed red) (rect 200 200))
 
 -- max possible speed of ship
-
 maxSpeed = 5
 
 -- accelerates ship if accelerate is true
@@ -103,13 +101,6 @@ adjustAngle ship num =
                           else ship'.angle + (pi/30) }
 
 
--- enemyAI: Gamestate -> Ship -> Ship
--- enemyAI state enemyShip = enemyShip
-
-
-moveEnemies: Float -> Float -> Ship {} -> Ship {}
-moveEnemies x y enemyShip = { enemyShip | x <- enemyShip.x + 5,
-                                          y <- enemyShip.y - 5 }
 
 --Struck out so it works
 addBullet: Ship {} -> Ship {}
@@ -130,8 +121,6 @@ createBullet ship = { defaultBullet | x <- ship.x,
 
 update : Input -> Ship {} -> Ship {}
 update input ship =
-  -- let enemyShip' = map moveEnemies ship.x ship.y enemyShip
-  -- in 
     case input of
       Key key ->
         if | key `Keys.equals` Keys.arrowUp -> 

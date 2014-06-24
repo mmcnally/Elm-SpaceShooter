@@ -11,6 +11,6 @@ render state =
     let shipForm = Ship.render state.ship
         asteroidForms = map Asteroid.render state.asteroids
         enemyForms = (map Enemy.render) state.enemies
-        forms = enemyForms ++ asteroidForms ++ [shipForm]
+        forms = enemyForms ++ asteroidForms ++ shipForm
         fixPosition = (-state.ship.x, -state.ship.y)
     in  map (move  fixPosition) forms

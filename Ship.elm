@@ -47,21 +47,28 @@ initialShip = { x = 0,
                 damage = 0, 
                 bullets = [] }
 
-render : Ship a -> Form
+render : Ship a -> [Form]
 render ship = 
   let healthMeter = renderHealth ship
   in
-  group [ ngon 3 ship.size |> filled ship.color.body,
+  [group [ ngon 3 ship.size |> filled ship.color.body,
           ngon 3 (ship.size * 0.7) |> filled ship.color.window |> move (ship.size * 0.1, 0),
-          ngon 3 (ship.size * 0.2) |> filled ship.color.body2,
-          healthMeter ] |> rotate ship.angle |> move (ship.x, ship.y)
+          ngon 3 (ship.size * 0.2) |> filled ship.color.body2 ] |> rotate ship.angle |> move (ship.x, ship.y),
+  healthMeter |> move (ship.x, ship.y) ]
 
 renderHealth : Ship a -> Form
 renderHealth {damage} =
    
     if(damage == 0)
     then
-        (outlined (dashed red) (rect 200 200))
+        let barSegment = outlined (dashed red) (rect 100 15)
+            bar = group [barSegment,
+                         move (110,0) barSegment,
+                         move (220, 0) barSegment,
+                         move (330, 0) barSegment,
+                         move (440, 0) barSegment ]
+        in
+        (move (-230, -300) bar)
     else
         (outlined (dashed red) (rect 200 200))
 

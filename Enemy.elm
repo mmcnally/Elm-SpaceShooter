@@ -23,7 +23,7 @@ enemy = { x = 0,
           playerY = 0,
           damage = 0,
           bullets = [],
-          intel = 0 }
+          intel = 10 }
 
 
 -- calculates angle for an enemyship so that
@@ -31,15 +31,31 @@ enemy = { x = 0,
 adjustAngle: EnemyShip a -> Float -> Float -> Float
 adjustAngle ship xChange yChange= 
    let radius = sqrt (xChange ^ 2 + yChange ^ 2)
-       unAdjustedAngle = asin(yChange / radius)
-   in if | unAdjustedAngle > 0 && xChange < 0 -> pi - unAdjustedAngle
-         | unAdjustedAngle < 0 && xChange < 0 -> pi - unAdjustedAngle
-         | otherwise -> unAdjustedAngle
+       angle = abs (asin(yChange / radius))
+      -- angle' = if unAdjustedAngle < 0 
+      --          then (2 * pi) - unAdjustedAngle 
+      --          else unAdjustedAngle
+   in if | yChange < 0 && xChange < 0 -> pi + angle
+         | yChange > 0 && xChange < 0 -> pi - angle
+         | yChange < 0 && xChange > 0 -> (2 * pi) - angle
+         | otherwise -> angle
 
 -- slightly moves ship if it has the same coordinates as the player's ship
 correctMovement thingToModify incr playNum = if (thingToModify + incr) == playNum
                                              then incr + 0.1
                                              else incr
+
+-- makes sure that the angle is between 0 and 2 * pi
+clamp angle = if | angle > (2 * pi) -> angle - (2 * pi)
+                 | angle < 0 -> (2 * pi) - angle
+                 | otherwise -> angle
+
+slowAngle newAngle ship = 
+  let newAngle' = newAngle
+  in if (newAngle' - ship.angle) < pi && (newAngle' - ship.angle) > (-pi)
+     then ship.angle + (ship.intel * (newAngle' - ship.angle) / 10000)
+     else ship.angle + (ship.intel * (newAngle' - (ship.angle + (2 * pi))) / 10000)
+
 -- physics for enemy ships
 -- modifies coordinates and angle
 physics: EnemyShip a -> EnemyShip a
@@ -56,7 +72,7 @@ physics ship =
      yIncrement = (correctMovement ship.y yInc ship.playerY)
  in { ship | x <- ship.x + xIncrement,
              y <- ship.y + yIncrement,
-         angle <- (adjustAngle ship xIncrement yIncrement) } 
+         angle <- slowAngle (adjustAngle ship xIncrement yIncrement) ship } 
 
 
 -- applies physics function to an enemy ship

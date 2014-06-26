@@ -1,0 +1,70 @@
+Elm.Update = Elm.Update || {};
+Elm.Update.make = function (_elm) {
+   "use strict";
+   _elm.Update = _elm.Update || {};
+   if (_elm.Update.values)
+   return _elm.Update.values;
+   var _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   _A = _N.Array.make(_elm),
+   _E = _N.Error.make(_elm),
+   $moduleName = "Update";
+   var Asteroid = Elm.Asteroid.make(_elm);
+   var Basics = Elm.Basics.make(_elm);
+   var Color = Elm.Color.make(_elm);
+   var Enemy = Elm.Enemy.make(_elm);
+   var GameAI = Elm.GameAI.make(_elm);
+   var GameState = Elm.GameState.make(_elm);
+   var Graphics = Graphics || {};
+   Graphics.Collage = Elm.Graphics.Collage.make(_elm);
+   var Graphics = Graphics || {};
+   Graphics.Element = Elm.Graphics.Element.make(_elm);
+   var Keyboard = Keyboard || {};
+   Keyboard.Keys = Elm.Keyboard.Keys.make(_elm);
+   var List = Elm.List.make(_elm);
+   var Maybe = Elm.Maybe.make(_elm);
+   var Native = Native || {};
+   Native.Json = Elm.Native.Json.make(_elm);
+   var Native = Native || {};
+   Native.Ports = Elm.Native.Ports.make(_elm);
+   var Playground = Elm.Playground.make(_elm);
+   var Playground = Playground || {};
+   Playground.Input = Elm.Playground.Input.make(_elm);
+   var Ship = Elm.Ship.make(_elm);
+   var Signal = Elm.Signal.make(_elm);
+   var String = Elm.String.make(_elm);
+   var Text = Elm.Text.make(_elm);
+   var Time = Elm.Time.make(_elm);
+   var _op = {};
+   var update = F3(function (realWorld,
+   input,
+   state) {
+      return function () {
+         var state$ = GameAI.updateState(state);
+         var ship$ = A2(Ship.update,
+         input,
+         state$.ship);
+         var asteroids$ = Asteroid.updateAll(state$.asteroids);
+         var updateEnemies = function (ship) {
+            return _U.replace([["playerX"
+                               ,state$.ship.x]
+                              ,["playerY",state$.ship.y]],
+            ship);
+         };
+         var enemies$ = Enemy.updateAll(A2(List.map,
+         updateEnemies,
+         state$.enemies));
+         return function () {
+            return _U.replace([["ship"
+                               ,ship$]
+                              ,["asteroids",asteroids$]
+                              ,["enemies",enemies$]],
+            state$);
+         }();
+      }();
+   });
+   _elm.Update.values = {_op: _op
+                        ,update: update};
+   return _elm.Update.values;
+};

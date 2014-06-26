@@ -113,7 +113,8 @@ adjustAngle ship num =
 addBullet: Ship {} -> Ship {}
 addBullet ship = {ship | bullets <- (createBullet ship)::ship.bullets }
 
-
+getBullets: Ship {} -> [Bullet]
+getBullets s = s.bullets
 
 createBullet: Ship {} -> Bullet
 createBullet ship = { defaultBullet | x <- ship.x, 

@@ -1,0 +1,128 @@
+Elm.Generator = Elm.Generator || {};
+Elm.Generator.Standard = Elm.Generator.Standard || {};
+Elm.Generator.Standard.make = function (_elm) {
+   "use strict";
+   _elm.Generator = _elm.Generator || {};
+   _elm.Generator.Standard = _elm.Generator.Standard || {};
+   if (_elm.Generator.Standard.values)
+   return _elm.Generator.Standard.values;
+   var _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   _A = _N.Array.make(_elm),
+   _E = _N.Error.make(_elm),
+   $moduleName = "Generator.Standard";
+   var Basics = Elm.Basics.make(_elm);
+   var Color = Elm.Color.make(_elm);
+   var Generator = Elm.Generator.make(_elm);
+   var Graphics = Graphics || {};
+   Graphics.Collage = Elm.Graphics.Collage.make(_elm);
+   var Graphics = Graphics || {};
+   Graphics.Element = Elm.Graphics.Element.make(_elm);
+   var List = Elm.List.make(_elm);
+   var Maybe = Elm.Maybe.make(_elm);
+   var Native = Native || {};
+   Native.Json = Elm.Native.Json.make(_elm);
+   var Native = Native || {};
+   Native.Ports = Elm.Native.Ports.make(_elm);
+   var Signal = Elm.Signal.make(_elm);
+   var String = Elm.String.make(_elm);
+   var Text = Elm.Text.make(_elm);
+   var Time = Elm.Time.make(_elm);
+   var _op = {};
+   var magicNum8 = 2147483562;
+   var stdRange = function (_v0) {
+      return function () {
+         return {ctor: "_Tuple2"
+                ,_0: 0
+                ,_1: magicNum8};
+      }();
+   };
+   var magicNum7 = 2137383399;
+   var magicNum6 = 2147483563;
+   var magicNum5 = 3791;
+   var magicNum4 = 40692;
+   var magicNum3 = 52774;
+   var magicNum2 = 12211;
+   var magicNum1 = 53668;
+   var magicNum0 = 40014;
+   var Standard = F2(function (a,
+   b) {
+      return {ctor: "Standard"
+             ,_0: a
+             ,_1: b};
+   });
+   var mkStdGen = function (s$) {
+      return function () {
+         var s = A2(Basics.max,
+         s$,
+         0 - s$);
+         var q = s / (magicNum6 - 1) | 0;
+         var s2 = A2(Basics.mod,
+         q,
+         magicNum7 - 1);
+         var s1 = A2(Basics.mod,
+         s,
+         magicNum6 - 1);
+         return A2(Standard,
+         s1 + 1,
+         s2 + 1);
+      }();
+   };
+   var stdNext = function (_v2) {
+      return function () {
+         switch (_v2.ctor)
+         {case "Standard":
+            return function () {
+                 var k$ = _v2._1 / magicNum3 | 0;
+                 var s2$ = magicNum4 * (_v2._1 - k$ * magicNum3) - k$ * magicNum5;
+                 var s2$$ = _U.cmp(s2$,
+                 0) < 0 ? s2$ + magicNum7 : s2$;
+                 var k = _v2._0 / magicNum1 | 0;
+                 var s1$ = magicNum0 * (_v2._0 - k * magicNum1) - k * magicNum2;
+                 var s1$$ = _U.cmp(s1$,
+                 0) < 0 ? s1$ + magicNum6 : s1$;
+                 var z = s1$$ - s2$$;
+                 var z$ = _U.cmp(z,
+                 1) < 0 ? z + magicNum8 : z;
+                 return {ctor: "_Tuple2"
+                        ,_0: z$
+                        ,_1: A2(Standard,s1$$,s2$$)};
+              }();}
+         _E.Case($moduleName,
+         "between lines 58 and 66");
+      }();
+   };
+   var stdSplit = function (_v6) {
+      return function () {
+         switch (_v6.ctor)
+         {case "Standard":
+            return function () {
+                 var _raw = Basics.snd(stdNext(_v6)),
+                 $ = _raw.ctor === "Standard" ? _raw : _E.Case($moduleName,
+                 "on line 72, column 28 to 44"),
+                 t1 = $._0,
+                 t2 = $._1;
+                 var new_s2 = _U.eq(_v6._1,
+                 1) ? magicNum7 - 1 : _v6._1 - 1;
+                 var new_s1 = _U.eq(_v6._0,
+                 magicNum6 - 1) ? 1 : _v6._0 + 1;
+                 return {ctor: "_Tuple2"
+                        ,_0: A2(Standard,new_s1,t2)
+                        ,_1: A2(Standard,t1,new_s2)};
+              }();}
+         _E.Case($moduleName,
+         "between lines 70 and 73");
+      }();
+   };
+   var generator = function (seed) {
+      return A4(Generator.Generator,
+      mkStdGen(seed),
+      stdNext,
+      stdSplit,
+      stdRange);
+   };
+   _elm.Generator.Standard.values = {_op: _op
+                                    ,generator: generator};
+   return _elm.Generator.Standard.values;
+};

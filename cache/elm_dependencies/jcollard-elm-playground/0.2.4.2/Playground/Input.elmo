@@ -1,0 +1,66 @@
+Elm.Playground = Elm.Playground || {};
+Elm.Playground.Input = Elm.Playground.Input || {};
+Elm.Playground.Input.make = function (_elm) {
+   "use strict";
+   _elm.Playground = _elm.Playground || {};
+   _elm.Playground.Input = _elm.Playground.Input || {};
+   if (_elm.Playground.Input.values)
+   return _elm.Playground.Input.values;
+   var _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   _A = _N.Array.make(_elm),
+   _E = _N.Error.make(_elm),
+   $moduleName = "Playground.Input";
+   var Basics = Elm.Basics.make(_elm);
+   var Color = Elm.Color.make(_elm);
+   var Graphics = Graphics || {};
+   Graphics.Collage = Elm.Graphics.Collage.make(_elm);
+   var Graphics = Graphics || {};
+   Graphics.Element = Elm.Graphics.Element.make(_elm);
+   var Keyboard = Keyboard || {};
+   Keyboard.Keys = Elm.Keyboard.Keys.make(_elm);
+   var List = Elm.List.make(_elm);
+   var Maybe = Elm.Maybe.make(_elm);
+   var Native = Native || {};
+   Native.Json = Elm.Native.Json.make(_elm);
+   var Native = Native || {};
+   Native.Ports = Elm.Native.Ports.make(_elm);
+   var Signal = Elm.Signal.make(_elm);
+   var String = Elm.String.make(_elm);
+   var Text = Elm.Text.make(_elm);
+   var Time = Elm.Time.make(_elm);
+   var _op = {};
+   var Passive = function (a) {
+      return {ctor: "Passive"
+             ,_0: a};
+   };
+   var MouseDown = {ctor: "MouseDown"};
+   var Click = {ctor: "Click"};
+   var Key = function (a) {
+      return {ctor: "Key",_0: a};
+   };
+   var Tap = function (a) {
+      return {ctor: "Tap",_0: a};
+   };
+   var RealWorld = F5(function (a,
+   b,
+   c,
+   d,
+   e) {
+      return {_: {}
+             ,bottom: c
+             ,left: d
+             ,mouse: e
+             ,right: b
+             ,top: a};
+   });
+   _elm.Playground.Input.values = {_op: _op
+                                  ,Tap: Tap
+                                  ,Key: Key
+                                  ,Click: Click
+                                  ,MouseDown: MouseDown
+                                  ,Passive: Passive
+                                  ,RealWorld: RealWorld};
+   return _elm.Playground.Input.values;
+};

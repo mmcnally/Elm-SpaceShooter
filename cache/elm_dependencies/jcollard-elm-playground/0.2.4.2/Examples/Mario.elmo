@@ -1,0 +1,183 @@
+Elm.Examples = Elm.Examples || {};
+Elm.Examples.Mario = Elm.Examples.Mario || {};
+Elm.Examples.Mario.make = function (_elm) {
+   "use strict";
+   _elm.Examples = _elm.Examples || {};
+   _elm.Examples.Mario = _elm.Examples.Mario || {};
+   if (_elm.Examples.Mario.values)
+   return _elm.Examples.Mario.values;
+   var _N = Elm.Native,
+   _U = _N.Utils.make(_elm),
+   _L = _N.List.make(_elm),
+   _A = _N.Array.make(_elm),
+   _E = _N.Error.make(_elm),
+   $moduleName = "Examples.Mario";
+   var Basics = Elm.Basics.make(_elm);
+   var Color = Elm.Color.make(_elm);
+   var Graphics = Graphics || {};
+   Graphics.Collage = Elm.Graphics.Collage.make(_elm);
+   var Graphics = Graphics || {};
+   Graphics.Element = Elm.Graphics.Element.make(_elm);
+   var Keyboard = Keyboard || {};
+   Keyboard.Keys = Elm.Keyboard.Keys.make(_elm);
+   var List = Elm.List.make(_elm);
+   var Maybe = Elm.Maybe.make(_elm);
+   var Native = Native || {};
+   Native.Json = Elm.Native.Json.make(_elm);
+   var Native = Native || {};
+   Native.Ports = Elm.Native.Ports.make(_elm);
+   var Playground = Elm.Playground.make(_elm);
+   var Playground = Playground || {};
+   Playground.Input = Elm.Playground.Input.make(_elm);
+   var Signal = Elm.Signal.make(_elm);
+   var String = Elm.String.make(_elm);
+   var Text = Elm.Text.make(_elm);
+   var Time = Elm.Time.make(_elm);
+   var _op = {};
+   var jump = function (mario) {
+      return _U.eq(mario.y,
+      0) ? _U.replace([["vy",5]],
+      mario) : mario;
+   };
+   var physics = F2(function (t,
+   mario) {
+      return _U.replace([["x"
+                         ,mario.x + t * mario.vx]
+                        ,["y"
+                         ,A2(Basics.max,
+                         0,
+                         mario.y + t * mario.vy)]
+                        ,["vx",0]],
+      mario);
+   });
+   var gravity = F2(function (t,
+   mario) {
+      return _U.cmp(mario.y,
+      0) > 0 ? _U.replace([["vy"
+                           ,mario.vy - t / 4]],
+      mario) : mario;
+   });
+   var update = F3(function (realworld,
+   input,
+   _v0) {
+      return function () {
+         return function () {
+            var mario$ = function () {
+               switch (input.ctor)
+               {case "Key":
+                  return A2(Keyboard.Keys.equals,
+                    input._0,
+                    Keyboard.Keys.arrowLeft) ? _U.replace([["vx"
+                                                           ,_v0.mario.vx - 2]
+                                                          ,["dir","left"]],
+                    _v0.mario) : A2(Keyboard.Keys.equals,
+                    input._0,
+                    Keyboard.Keys.arrowRight) ? _U.replace([["vx"
+                                                            ,_v0.mario.vx + 2]
+                                                           ,["dir","right"]],
+                    _v0.mario) : _v0.mario;
+                  case "Passive":
+                  return A2(gravity,
+                    input._0 / 20,
+                    A2(physics,
+                    input._0 / 20,
+                    _v0.mario));
+                  case "Tap":
+                  return A2(Keyboard.Keys.equals,
+                    input._0,
+                    Keyboard.Keys.arrowUp) ? jump(_v0.mario) : _v0.mario;}
+               return _v0.mario;
+            }();
+            return {_: {}
+                   ,background: {_: {}
+                                ,h: realworld.top - realworld.bottom
+                                ,w: realworld.right - realworld.left}
+                   ,mario: mario$};
+         }();
+      }();
+   });
+   var render = function (_v6) {
+      return function () {
+         return function () {
+            var verb = _U.cmp(_v6.mario.y,
+            0) > 0 ? "jump" : !_U.eq(_v6.mario.vx,
+            0) ? "walk" : "stand";
+            var src = _L.append("http://elm-lang.org/imgs/mario/",
+            _L.append(verb,
+            _L.append("/",
+            _L.append(_v6.mario.dir,
+            ".gif"))));
+            var $ = {ctor: "_Tuple2"
+                    ,_0: _v6.background.w
+                    ,_1: _v6.background.h},
+            w = $._0,
+            h = $._1;
+            return _L.fromArray([Graphics.Collage.filled(A3(Color.rgb,
+                                174,
+                                238,
+                                238))(A2(Graphics.Collage.rect,
+                                w,
+                                h))
+                                ,Graphics.Collage.move({ctor: "_Tuple2"
+                                                       ,_0: 0
+                                                       ,_1: 24 - h / 2})(Graphics.Collage.filled(A3(Color.rgb,
+                                74,
+                                163,
+                                41))(A2(Graphics.Collage.rect,
+                                w,
+                                50)))
+                                ,Graphics.Collage.move({ctor: "_Tuple2"
+                                                       ,_0: _v6.mario.x
+                                                       ,_1: _v6.mario.y + 62 - h / 2})(Graphics.Collage.toForm(A3(Graphics.Element.image,
+                                35,
+                                35,
+                                src)))]);
+         }();
+      }();
+   };
+   var initialState = {_: {}
+                      ,background: {_: {},h: 0,w: 0}
+                      ,mario: {_: {}
+                              ,dir: "right"
+                              ,vx: 0
+                              ,vy: 0
+                              ,x: 0
+                              ,y: 0}};
+   var main = Playground.play({_: {}
+                              ,initialState: initialState
+                              ,render: render
+                              ,update: update});
+   var Mario = F5(function (a,
+   b,
+   c,
+   d,
+   e) {
+      return {_: {}
+             ,dir: e
+             ,vx: c
+             ,vy: d
+             ,x: a
+             ,y: b};
+   });
+   var Background = F2(function (a,
+   b) {
+      return {_: {},h: b,w: a};
+   });
+   var State = F2(function (a,b) {
+      return {_: {}
+             ,background: b
+             ,mario: a};
+   });
+   _elm.Examples.Mario.values = {_op: _op
+                                ,initialState: initialState
+                                ,render: render
+                                ,gravity: gravity
+                                ,physics: physics
+                                ,jump: jump
+                                ,update: update
+                                ,main: main
+                                ,State: State
+                                ,Background: Background
+                                ,Mario: Mario};
+   return _elm.Examples.Mario.values;
+};

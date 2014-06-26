@@ -1,0 +1,146 @@
+{
+  "name": "Playground",
+  "document": "\nThe Playground Library is a layer that abstracts away the need to write explicit\nSignals. To get started, one provides a `Playground` record and then passes that\nrecord to `play`. \n\n## Quick Demo\n\nThe following is a quick Demo of a program that increments a number\nrepeatedly. When the space bar is pressed, the number is reset to 0.\n\n```\nimport Playground(..)\nimport Playground.Input(..)\n-- Increases an Int ~60 times per second. When the space bar is pressed, the Int\n-- resets\nupdate input state = \n  case input of\n    Key Space -\u003e 0\n    otherwise -\u003e state + 1\n\nrender (w, h) state = asText state\n\nmain = play { render = render, update = update, initialState = 0 }\n```\n\n## Playground Record\n\n@docs Playground\n\n## Playing a Playground\n\n@docs play, playWithRate\n\n## Examples\n* Increment\n  - [Demo](http://people.cs.umass.edu/~jcollard/examples/Playground/build/Increment.html)\n  - [Source](https://github.com/jcollard/Playground/blob/master/Examples/Increment.elm)\n* Ball\n  - [Demo](http://people.cs.umass.edu/~jcollard/examples/Playground/build/Demo.html)\n  - [Source](https://github.com/jcollard/Playground/blob/master/Examples/Demo.elm)\n* Mario\n  - [Demo](http://people.cs.umass.edu/~jcollard/examples/Playground/build/Mario.html)\n  - [Source](https://github.com/jcollard/Playground/blob/master/Examples/Mario.elm)",
+  "aliases": [
+    {
+      "name": "Playground",
+      "comment": "\nA Playground record defines the execution path for a program. To create one, you\nmust specify three fields: initialState, render, and update.\n\n* The `initialState` field describes the state of the Playground after it has\n  been loaded.\n\n* The `render` field is a function which describes how your state should be\n  transformed into a set of Forms that can be displayed.\n\n* The `update` field is a function that takes in the RealWorld, an Input event,\n  a State to update, and returns the updated State. All possible Inputs are \n  defined in Playground.Input. The RealWorld is defined in Playground.Input.",
+      "raw": "type Playground state = { render : state -\u003e [Form],\n                          initialState : state,\n                          update : RealWorld -\u003e Input -\u003e state -\u003e state }",
+      "typeVariables": [
+        "state"
+      ],
+      "type": {
+        "tag": "record",
+        "fields": [
+          [
+            "render",
+            {
+              "tag": "function",
+              "args": [
+                {
+                  "tag": "var",
+                  "name": "state"
+                }
+              ],
+              "result": {
+                "tag": "adt",
+                "name": "_List",
+                "args": [
+                  {
+                    "tag": "adt",
+                    "name": "Form",
+                    "args": []
+                  }
+                ]
+              }
+            }
+          ],
+          [
+            "initialState",
+            {
+              "tag": "var",
+              "name": "state"
+            }
+          ],
+          [
+            "update",
+            {
+              "tag": "function",
+              "args": [
+                {
+                  "tag": "adt",
+                  "name": "RealWorld",
+                  "args": []
+                },
+                {
+                  "tag": "adt",
+                  "name": "Input",
+                  "args": []
+                },
+                {
+                  "tag": "var",
+                  "name": "state"
+                }
+              ],
+              "result": {
+                "tag": "var",
+                "name": "state"
+              }
+            }
+          ]
+        ],
+        "extension": null
+      }
+    }
+  ],
+  "datatypes": [],
+  "values": [
+    {
+      "name": "play",
+      "comment": "\nPlays a Playground record at 60 frames per second.",
+      "raw": "play : Playground state -\u003e Signal Element",
+      "type": {
+        "tag": "function",
+        "args": [
+          {
+            "tag": "adt",
+            "name": "Playground",
+            "args": [
+              {
+                "tag": "var",
+                "name": "state"
+              }
+            ]
+          }
+        ],
+        "result": {
+          "tag": "adt",
+          "name": "Signal",
+          "args": [
+            {
+              "tag": "adt",
+              "name": "Element",
+              "args": []
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "playWithRate",
+      "comment": "\nPlays a Playground at the specified number of frames per second.",
+      "raw": "playWithRate : Time -\u003e Playground state -\u003e Signal Element",
+      "type": {
+        "tag": "function",
+        "args": [
+          {
+            "tag": "adt",
+            "name": "Time",
+            "args": []
+          },
+          {
+            "tag": "adt",
+            "name": "Playground",
+            "args": [
+              {
+                "tag": "var",
+                "name": "state"
+              }
+            ]
+          }
+        ],
+        "result": {
+          "tag": "adt",
+          "name": "Signal",
+          "args": [
+            {
+              "tag": "adt",
+              "name": "Element",
+              "args": []
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

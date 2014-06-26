@@ -109,7 +109,7 @@ adjustAngle ship num =
 
 
 
---Struck out so it works
+--Adds a bullet to the ships bullets
 addBullet: Ship {} -> Ship {}
 addBullet ship = {ship | bullets <- (createBullet ship)::ship.bullets }
 
@@ -142,7 +142,6 @@ update input ship =
                                 adjustAngle ship (-1)
            | key `Keys.equals` Keys.arrowRight ->
                                 adjustAngle ship (1)
-           -- struck out so it works
            | key `Keys.equals` Keys.space  ->
                                 addBullet ship                                
            | otherwise -> ship

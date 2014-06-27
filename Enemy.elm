@@ -47,16 +47,16 @@ correctMovement thingToModify incr playNum = if (thingToModify + incr) == playNu
 
 -- makes sure that angle is between 0 and 2 * pi
 clampify angle = if | angle > (2 * pi) -> angle - (2 * pi)
-                 | angle < 0        -> (2 * pi) - angle
-                 | otherwise        -> angle
+                    | angle < 0        -> (2 * pi) - angle
+                    | otherwise        -> angle
 
 -- incorporates intelligence into angle
 slowAngle newAngle ship = 
-  let newAngle' = clampify newAngle
+  let newAngle' = newAngle
       diff = newAngle' - ship.angle
-  in if diff < pi && diff > (-pi)
-     then ship.angle + (ship.intel * diff / 10000)
-     else ship.angle + (ship.intel * (diff + (2 * pi)) / 10000)
+  in if | diff < pi && diff > (-pi) -> ship.angle + (ship.intel * diff / 10000)
+        | diff > 0 -> ship.angle + (ship.intel * (diff - (2 * pi)) / 10000)
+        | otherwise -> ship.angle + (ship.intel * (diff + (2 * pi)) / 10000)
 
 -- physics for enemy ships
 -- modifies coordinates and angle

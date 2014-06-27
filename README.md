@@ -1,11 +1,13 @@
 Elm-SpaceShooter
 
 Authors:
-* Joseph Collard
 * Zachary O'Donnell
 * Eric Gendreau
 * Patrick Hickey 
 * Matt McNally
+
+Project Leader:
+*Joseph Collard
 
 Game Rules:
 up arrow: move forward

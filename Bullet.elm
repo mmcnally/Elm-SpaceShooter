@@ -47,7 +47,7 @@ updateAll = map physics
 -- determines whether a bullet is young enough to be kept
 -- predicate in filter function in checkBulletTime
 youngEnough: Bullet -> Bool
-youngEnough bullet = bullet.birthtime < 100
+youngEnough bullet = bullet.birthtime < 150
 
 -- filters a list of bullets based on birthtime
 -- eliminates old bullets

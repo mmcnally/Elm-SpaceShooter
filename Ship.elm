@@ -108,6 +108,7 @@ adjustAngle ship num =
                           else ship'.angle + (pi/30) }
 
 
+-- COMMENTED OUT CODE BELOW NOW IN BULLET.ELM 
 
 -- Adds a bullet to the ships bullets
 -- addBullet: Ship {} -> Ship {}
@@ -143,6 +144,7 @@ update input ship =
                                 adjustAngle ship (-1)
            | key `Keys.equals` Keys.arrowRight ->
                                 adjustAngle ship (1)
+           --MOVED TO BULLET.ELM
            -- | key `Keys.equals` Keys.space  ->
            --                      addBullet ship                                
            | otherwise -> ship

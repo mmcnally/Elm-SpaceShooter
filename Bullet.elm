@@ -33,7 +33,7 @@ bullet x y vx vy speed size angle birthtime = { x = x,
                                         birthtime = birthtime }
 
 physics : Bullet -> Bullet
-physics b = if |  b.birthtime > 1 -> {b | size <- 0}
+physics b = if |  b.birthtime > 200 -> {b | size <- 0}
                |        otherwise -> { b | x <- b.x + b.vx,
                                            y <- b.y + b.vy,
                                    birthtime <- b.birthtime + 1}
@@ -55,28 +55,19 @@ render : Bullet -> Form
 render {x, y, size} = circle size |> filled green |> move (x,y)
 
 
---
---
---
---
---
---
---
---
--- COPIED FROM SHIP
 
---Adds a bullet to the ships bullets
+
+--Adds a bullet to the list of bullets
 addBullet: [Bullet] -> Ship {} -> [Bullet]
 addBullet bullets ship = (createBullet ship)::bullets
 
--- getBullets: GameState -> [Bullet]
--- getBullets s = s.bullets
 
+--creates a new bullet
 createBullet: Ship {} -> Bullet
 createBullet ship  = { defaultBullet | x <- ship.x, 
                                        y <- ship.y,
-                                       vx <- ship.vy * 2,
-                                       vy <- ship.vy * 2,
+                                       vx <- ship.vy * 5,
+                                       vy <- ship.vy * 5,
                                     speed <- ship.speed,
                                      size <- 5,
                                     angle <- ship.angle,

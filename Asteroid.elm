@@ -35,29 +35,36 @@ createRoid: Asteroid -> Ship {} -> Float -> Asteroid
 createRoid roid ship time = 
     let x = randomNum (ship.x - 100) (ship.x + 100) (time * 2.432)
         y = randomNum (ship.y - 100) (ship.y + 100) (time * 432.11)
-        vx = randomNum (-3) (3) (time * 121.321)
-        vy = randomNum (-3) (3) (time * 234.1)
+        vx = randomNum (-1) (1) (time * 121.321)
+        vy = randomNum (-1) (1) (time * 234.1)
     in { roid | x <- x,
                 y <- y,
                 vx <- vx,
                 vy <- vy}
 
 -- will create a random number based on given seed
--- NOT IMPLEMENTED PROPERLY YET
 randomNum: Float -> Float -> Float -> Float
 randomNum lower upper seed =
     fst <| floatRange (lower, upper) (generator <| floor seed)
 
 -- adds a new asteroid to the list
 addRoid: [Asteroid] -> Ship {} -> Float -> [Asteroid]
-addRoid roids ship time = (createRoid (head roids) ship time)::roids
+addRoid roids ship time = if (length roids) < 10
+                          then (createRoid (head roids) ship time)::roids
+                          else roids
+
+-- closeEnough: Asteroid -> Bool
+-- closeEnough roid= 
+
+-- deleteOldRoids: [Asteroid] -> Ship -> [Asteroid]
+-- deleteOldRoids roids ship = filter (abs (shi
+
 
 -- updates all asteroids
 update: [Asteroid] -> Ship {} -> Float -> [Asteroid]
 update roids ship time =
-    let roids' = if (length roids) < 10
-                 then addRoid roids ship time
-                 else roids
+    let roids' = addRoid roids ship time
+        --roids'' = deleteOldRoids roids ship
     in updateAll roids'
 
 render : Asteroid -> Form

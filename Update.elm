@@ -16,7 +16,7 @@ update : RealWorld -> Input -> GameState -> GameState
 update realWorld input state =
     let state' = GameAI.updateState state
         ship' = Ship.update input state'.ship
-        asteroids' = Asteroid.updateAll state'.asteroids
+        asteroids' = Asteroid.update state'.asteroids
 
         -- updates an enemy ship to give it the current
         -- coordinates of the player's ship

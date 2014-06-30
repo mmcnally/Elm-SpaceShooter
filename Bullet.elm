@@ -34,8 +34,8 @@ bullet x y vx vy speed size angle birthtime = { x = x,
 
 physics : Bullet -> Bullet
 physics b = if |  b.birthtime > 200 -> {b | size <- 0}
-               |        otherwise -> { b | x <- b.x + b.vx,
-                                           y <- b.y + b.vy,
+               |        otherwise -> { b | x <- b.x + (b.vx * b.speed),
+                                           y <- b.y + (b.vy * b.speed),
                                    birthtime <- b.birthtime + 1}
 updateAll: [Bullet] -> [Bullet]
 updateAll = map physics
@@ -66,9 +66,9 @@ addBullet bullets ship = (createBullet ship)::bullets
 createBullet: Ship {} -> Bullet
 createBullet ship  = { defaultBullet | x <- ship.x, 
                                        y <- ship.y,
-                                       vx <- ship.vy * 5,
-                                       vy <- ship.vy * 5,
-                                    speed <- ship.speed,
+                                       vx <- cos(ship.angle),
+                                       vy <- sin(ship.angle),
+                                    speed <- 15,
                                      size <- 5,
                                     angle <- ship.angle,
                                 birthtime <- 0}

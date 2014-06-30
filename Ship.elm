@@ -134,16 +134,16 @@ update input ship =
       Key key ->
         if | key `Keys.equals` Keys.arrowUp -> 
                       { ship | vx <- cos(ship.angle),
-                                vy <- sin(ship.angle),
-                                accelerate <- 0.25 }
+                               vy <- sin(ship.angle),
+                               accelerate <- 0.25 }
            | key `Keys.equals` Keys.arrowDown -> 
                       { ship | vx <- cos(ship.angle),
                                vy <- sin(ship.angle),
                                accelerate <- (-0.25) }
            | key `Keys.equals` Keys.arrowLeft -> 
-                                adjustAngle ship (-1)
+                               adjustAngle ship (-1)
            | key `Keys.equals` Keys.arrowRight ->
-                                adjustAngle ship (1)
+                               adjustAngle ship (1)
            --MOVED TO BULLET.ELM
            -- | key `Keys.equals` Keys.space  ->
            --                      addBullet ship                                

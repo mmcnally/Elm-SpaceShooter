@@ -8,10 +8,11 @@ import Ship (Ship)
 import Ship
 import Enemy
 import GameAI
+import Bullet
 
 
 
--- update : RealWorld -> Input -> GameState -> GameState
+update : RealWorld -> Input -> GameState -> GameState
 update realWorld input state =
     let state' = GameAI.updateState state
         ship' = Ship.update input state'.ship
@@ -22,8 +23,10 @@ update realWorld input state =
         updateEnemies ship = { ship | playerX <- state'.ship.x,
                                       playerY <- state'.ship.y }
         enemies' = Enemy.updateAll (map updateEnemies state'.enemies)
+        bullets' = Bullet.update input state'.bullets state.ship
         time' = state'.time + 1
     in {state' | ship <- ship',
                  asteroids <- asteroids',
                  enemies <- enemies',
-                 time <- time' }
+                 time <- time',
+                 bullets <- bullets'}

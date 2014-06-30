@@ -1,6 +1,6 @@
 module Enemy where
 import Ship (..)
-import Bullet (..)
+--import Bullet (..)
 
 
 enemyShipColor = { shipColor | body <- red,
@@ -22,7 +22,7 @@ enemy = { x = 0,
           playerX = 0,
           playerY = 0,
           damage = 0,
-          bullets = [],
+          --bullets = [],
           intel = 10 }
 
 

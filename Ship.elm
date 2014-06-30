@@ -1,5 +1,5 @@
 module Ship where
-import Bullet (..)
+--import Bullet (..)
 import Playground.Input (..)
 import Keyboard.Keys as Keys
 
@@ -12,8 +12,8 @@ type Ship a = { a | x : Float,
                     size : Float,
                     angle: Float,
                     accelerate: Float,
-                    damage : Int, 
-                    bullets: [Bullet]}
+                    damage : Int }
+                   -- bullets: [Bullet]}
               
 type ShipColor = { body : Color, window : Color, body2 : Color }
 
@@ -31,8 +31,8 @@ enemy = { x = 0,
           size = 10,
           angle = 0,
           accelerate = 0,
-          damage = 0,
-          bullets = [] }
+          damage = 0 }
+          -- bullets = [] }
 
 initialShip : Ship {}
 initialShip = { x = 0, 
@@ -44,8 +44,8 @@ initialShip = { x = 0,
                 size = 20,
                 angle = pi/2,
                 accelerate = 0,
-                damage = 0, 
-                bullets = [] }
+                damage = 0 }
+                -- bullets = [] }
 
 render : Ship a -> [Form]
 render ship = 
@@ -109,22 +109,22 @@ adjustAngle ship num =
 
 
 
---Adds a bullet to the ships bullets
-addBullet: Ship {} -> Ship {}
-addBullet ship = {ship | bullets <- (createBullet ship)::ship.bullets }
+-- Adds a bullet to the ships bullets
+-- addBullet: Ship {} -> Ship {}
+-- addBullet ship = {ship | bullets <- (createBullet ship)::ship.bullets }
 
-getBullets: Ship {} -> [Bullet]
-getBullets s = s.bullets
+-- getBullets: Ship {} -> [Bullet]
+-- getBullets s = s.bullets
 
-createBullet: Ship {} -> Bullet
-createBullet ship = { defaultBullet | x <- ship.x, 
-                                      y <- ship.y,
-                                    vx <- ship.vy,
-                                     vy <- ship.vy,
-                                  speed <- ship.speed,
-                                   size <- 5,
-                                  angle <- ship.angle,
-                              birthtime <- 0}
+-- createBullet: Ship {} -> Bullet
+-- createBullet ship = { defaultBullet | x <- ship.x, 
+--                                       y <- ship.y,
+--                                     vx <- ship.vy * 2,
+--                                      vy <- ship.vy * 2,
+--                                   speed <- ship.speed,
+--                                    size <- 5,
+--                                   angle <- ship.angle,
+--                               birthtime <- 0}
 
 
 update : Input -> Ship {} -> Ship {}
@@ -143,8 +143,8 @@ update input ship =
                                 adjustAngle ship (-1)
            | key `Keys.equals` Keys.arrowRight ->
                                 adjustAngle ship (1)
-           | key `Keys.equals` Keys.space  ->
-                                addBullet ship                                
+           -- | key `Keys.equals` Keys.space  ->
+           --                      addBullet ship                                
            | otherwise -> ship
       Passive t ->  let ship' = physics ship
                     in { ship' | accelerate <- 0 }

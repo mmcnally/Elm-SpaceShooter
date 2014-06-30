@@ -59,7 +59,7 @@ update : Input -> [Bullet] -> Ship {} -> [Bullet]
 update input bullets ship = 
     let bullets' = checkBulletTime bullets
     in case input of
-      Key key ->
+      Tap key ->
           if | key `Keys.equals` Keys.space ->
                                    addBullet bullets' ship
              | otherwise -> bullets'
@@ -84,7 +84,7 @@ createBullet ship  = { defaultBullet | x <- ship.x,
                                        y <- ship.y,
                                        vx <- cos(ship.angle),
                                        vy <- sin(ship.angle),
-                                    speed <- 15,
+                                    speed <- 10,
                                      size <- 5,
                                     angle <- ship.angle,
                                 birthtime <- 0}

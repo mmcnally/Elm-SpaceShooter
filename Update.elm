@@ -22,6 +22,10 @@ update realWorld input state =
         -- coordinates of the player's ship
         updateEnemies ship = { ship | playerX <- state'.ship.x,
                                       playerY <- state'.ship.y }
+        frameRate' = case input of
+                      Passive t -> floor <| 1000 / t
+                      otherwise -> state.frameRate
+
         enemies' = Enemy.updateAll (map updateEnemies state'.enemies)
         bullets' = Bullet.update input state'.bullets state.ship
         time' = state'.time + 1
@@ -29,4 +33,5 @@ update realWorld input state =
                  asteroids <- asteroids',
                  enemies <- enemies',
                  time <- time',
-                 bullets <- bullets'}
+                 bullets <- bullets',
+                 frameRate <- frameRate'}

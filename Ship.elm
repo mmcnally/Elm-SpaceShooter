@@ -42,7 +42,7 @@ initialShip = { x = 0,
                 color = shipColor, 
                 speed = 0,
                 size = 20,
-                angle = pi/2,
+                angle = 0,
                 accelerate = 0,
                 damage = 0 }
                 -- bullets = [] }
@@ -50,11 +50,17 @@ initialShip = { x = 0,
 render : Ship a -> [Form]
 render ship = 
   let healthMeter = renderHealth ship
+      size = ship.size
+      bodySize = ship.size
+      windowSize = ship.size * 0.7
+      body2Size = ship.size * 0.2
   in
-  [group [ ngon 3 ship.size |> filled ship.color.body,
-          ngon 3 (ship.size * 0.7) |> filled ship.color.window |> move (ship.size * 0.1, 0),
-          ngon 3 (ship.size * 0.2) |> filled ship.color.body2 ] |> rotate ship.angle |> move (ship.x, ship.y),
-  healthMeter |> move (ship.x, ship.y) ]
+  [group [ polygon [(-bodySize, bodySize), (-bodySize, -bodySize), (bodySize, 0)] |> filled ship.color.body,
+           polygon [(-windowSize, windowSize), (-windowSize, -windowSize), (windowSize, 0)] |> filled ship.color.window,
+           polygon [(-body2Size, body2Size), (-body2Size, -body2Size), (body2Size, 0)] |> filled ship.color.body2 ] |> rotate ship.angle |> move (ship.x, ship.y),
+   healthMeter |> move (ship.x, ship.y) ]
+
+-- ngon 3 (ship.size * 0.7)
 
 renderHealth : Ship a -> Form
 renderHealth {damage} =

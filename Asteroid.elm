@@ -25,12 +25,6 @@ physics asteroid frameRate =
     { asteroid | x <- asteroid.x + asteroid.vx,
                  y <- asteroid.y + asteroid.vy }
 
-
---uncurry: (a -> b -> c) -> (a, b) -> c
-
--- uncurriedPhysics: (Asteroid, Float) -> Asteroid
--- uncurriedPhysics = uncurry physics
-
 -- applies physics to each asteroid
 updateAll : [Asteroid] -> Float -> [Asteroid]
 updateAll roids frameRate = map (flip physics frameRate) roids
@@ -54,12 +48,12 @@ randomNum lower upper seed =
 
 -- adds a new asteroid to the list
 addRoid: [Asteroid] -> Ship {} -> Float -> [Asteroid]
-addRoid roids ship time = if (length roids) < 10
+addRoid roids ship time = if (length roids) < 500
                           then (createRoid (head roids) ship time)::roids
                           else roids
 
 -- closeEnough: Asteroid -> Bool
--- closeEnough roid= 
+-- closeEnough roid = 
 
 -- deleteOldRoids: [Asteroid] -> Ship -> [Asteroid]
 -- deleteOldRoids roids ship = filter (abs (shi
@@ -73,7 +67,6 @@ update roids ship time frameRate =
     let roids' = addRoid roids ship time
         --roids'' = deleteOldRoids roids ship
     in  updateAll roids' frameRate
-   -- in addRate roids''' frameRate
 
 render : Asteroid -> Form
 render {x, y} = circle 10 |> filled black |> move (x, y)

@@ -60,8 +60,8 @@ slowAngle newAngle ship =
 
 -- physics for enemy ships
 -- modifies coordinates and angle
-physics: EnemyShip a -> EnemyShip a
-physics ship =
+physics: EnemyShip a -> Float -> EnemyShip a
+physics ship frameRate=
  let slopeNumerator = ship.playerY - ship.y
      slopeDenominator = ship.playerX - ship.x
      slope = slopeNumerator / slopeDenominator
@@ -70,20 +70,15 @@ physics ship =
                                 else { xInc = denom, yInc = numer }
      xInc = (increment slopeNumerator slopeDenominator).xInc
      yInc = (increment slopeNumerator slopeDenominator).yInc
-     xIncrement = (correctMovement ship.x xInc ship.playerX)
-     yIncrement = (correctMovement ship.y yInc ship.playerY)
+     xIncrement = frameRate * (correctMovement ship.x xInc ship.playerX)
+     yIncrement = frameRate * (correctMovement ship.y yInc ship.playerY)
  in { ship | x <- ship.x + xIncrement,
              y <- ship.y + yIncrement,
          angle <- slowAngle (adjustAngle ship xIncrement yIncrement) ship } 
 
-
--- applies physics function to an enemy ship
-shipAI: EnemyShip a -> EnemyShip a
-shipAI = physics
-
 -- updates list of enemy ships to orient and move them
-updateAll: [EnemyShip a] -> [EnemyShip a]
-updateAll = map shipAI
+updateAll: [EnemyShip a] -> Float -> [EnemyShip a]
+updateAll enemies frameRate = map (flip physics frameRate) enemies
 
 
 -- draws an enemy ship to the screen

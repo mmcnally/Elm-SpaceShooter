@@ -100,8 +100,8 @@ accelerate ship =
 physics : Ship {} -> Float -> Ship {}
 physics ship frameRate = 
      let ship' = accelerate ship
-     in { ship' | x <- frameRate * (ship'.x + (ship'.vx * ship'.speed)),
-                  y <- frameRate * (ship'.y + (ship'.vy * ship'.speed)) }
+     in { ship' | x <-  ship'.x + frameRate * (ship'.vx * ship'.speed),
+                  y <-  ship'.y + frameRate * (ship'.vy * ship'.speed) }
 
 -- adjusts ship angle based on arrow keys pressed
 adjustAngle: Ship {} -> Float -> Ship {}

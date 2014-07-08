@@ -25,10 +25,10 @@ update realWorld input state =
         frameRate' = case input of
                        Passive t -> 1 / (1000 / (60 * t))
                       -- Passive t -> floor <| 1000 / t --
-                       otherwise -> state.frameRate
+                       otherwise -> state'.frameRate
 
-        enemies' = Enemy.updateAll (map updateEnemies state'.enemies)
-        bullets' = Bullet.update input state'.bullets state.ship
+        enemies' = Enemy.updateAll (map updateEnemies state'.enemies) state'.frameRate
+        bullets' = Bullet.update input state'.bullets state'.ship
         time' = state'.time + 1
     in {state' | ship <- ship',
                  asteroids <- asteroids',

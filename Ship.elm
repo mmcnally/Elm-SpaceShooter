@@ -91,11 +91,11 @@ accelerate ship =
                              | otherwise -> ship.speed - (ship.speed * 0.005) } 
  
 --- applies physics to a ship 
-physics : Ship {} -> Ship {}
-physics ship = 
+physics : Ship {} -> Float -> Ship {}
+physics ship frameRate = 
      let ship' = accelerate ship
-     in { ship' | x <- ship'.x + (ship'.vx * ship'.speed),
-                  y <- ship'.y + (ship'.vy * ship'.speed) }
+     in { ship' | x <- frameRate * (ship'.x + (ship'.vx * ship'.speed)),
+                  y <- frameRate * (ship'.y + (ship'.vy * ship'.speed)) }
 
 -- adjusts ship angle based on arrow keys pressed
 adjustAngle: Ship {} -> Float -> Ship {}
@@ -107,29 +107,8 @@ adjustAngle ship num =
                           then ship'.angle - (pi/30)
                           else ship'.angle + (pi/30) }
 
-
--- COMMENTED OUT CODE BELOW NOW IN BULLET.ELM 
-
--- Adds a bullet to the ships bullets
--- addBullet: Ship {} -> Ship {}
--- addBullet ship = {ship | bullets <- (createBullet ship)::ship.bullets }
-
--- getBullets: Ship {} -> [Bullet]
--- getBullets s = s.bullets
-
--- createBullet: Ship {} -> Bullet
--- createBullet ship = { defaultBullet | x <- ship.x, 
---                                       y <- ship.y,
---                                     vx <- ship.vy * 2,
---                                      vy <- ship.vy * 2,
---                                   speed <- ship.speed,
---                                    size <- 5,
---                                   angle <- ship.angle,
---                               birthtime <- 0}
-
-
-update : Input -> Ship {} -> Ship {}
-update input ship =
+update : Input -> Ship {} -> Float ->  Ship {}
+update input ship frameRate =
     case input of
       Key key ->
         if | key `Keys.equals` Keys.arrowUp -> 
@@ -143,11 +122,8 @@ update input ship =
            | key `Keys.equals` Keys.arrowLeft -> 
                                adjustAngle ship (-1)
            | key `Keys.equals` Keys.arrowRight ->
-                               adjustAngle ship (1)
-           --MOVED TO BULLET.ELM
-           -- | key `Keys.equals` Keys.space  ->
-           --                      addBullet ship                                
+                               adjustAngle ship (1)                        
            | otherwise -> ship
-      Passive t ->  let ship' = physics ship
+      Passive t ->  let ship' = physics ship frameRate
                     in { ship' | accelerate <- 0 }
       otherwise -> ship

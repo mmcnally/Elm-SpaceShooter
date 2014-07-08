@@ -9,7 +9,7 @@ type GameState = { ship : Ship {},
                    enemies : [EnemyShip {}],
                    bullets : [Bullet],
                    time: Float,
-                   frameRate: Int }
+                   frameRate: Float }
 
 initialState: GameState
 initialState = { ship = initialShip,
@@ -20,4 +20,4 @@ initialState = { ship = initialShip,
                              {enemy | x <- 100, y <- -150, speed <- 0.1 }],
                  bullets = [bullet 200 200 0 0 0 0 0 0],
                  time = 0,
-                 frameRate = 0 }
+                 frameRate = 0.0 }

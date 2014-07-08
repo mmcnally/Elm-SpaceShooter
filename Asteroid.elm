@@ -22,8 +22,8 @@ initialAsteroid = { x = 0,
 -- applies physics to one asteroid
 physics : Asteroid -> Float -> Asteroid
 physics asteroid frameRate =
-    { asteroid | x <- asteroid.x + asteroid.vx,
-                 y <- asteroid.y + asteroid.vy }
+    { asteroid | x <- asteroid.x + frameRate * asteroid.vx,
+                 y <- asteroid.y + frameRate * asteroid.vy }
 
 -- applies physics to each asteroid
 updateAll : [Asteroid] -> Float -> [Asteroid]
@@ -48,7 +48,7 @@ randomNum lower upper seed =
 
 -- adds a new asteroid to the list
 addRoid: [Asteroid] -> Ship {} -> Float -> [Asteroid]
-addRoid roids ship time = if (length roids) < 500
+addRoid roids ship time = if (length roids) < 10
                           then (createRoid (head roids) ship time)::roids
                           else roids
 

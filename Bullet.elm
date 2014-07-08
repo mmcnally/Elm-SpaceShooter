@@ -33,15 +33,15 @@ bullet x y vx vy speed size angle birthtime = { x = x,
                                         birthtime = birthtime }
 
 -- applies physics to a bullet
-physics : Bullet -> Bullet
-physics b = if |  b.birthtime > 200 -> {b | size <- 0}
-               |        otherwise -> { b | x <- b.x + (b.vx * b.speed),
-                                           y <- b.y + (b.vy * b.speed),
+physics : Bullet -> Float -> Bullet
+physics b frameRate = if |  b.birthtime > 200 -> {b | size <- 0}
+               |        otherwise -> { b | x <- b.x + frameRate * (b.vx * b.speed),
+                                           y <- b.y + frameRate * (b.vy * b.speed),
                                    birthtime <- b.birthtime + 1}
 
 -- applied physics to each bullet in list
-updateAll: [Bullet] -> [Bullet]
-updateAll = map physics
+updateAll: [Bullet] -> Float -> [Bullet]
+updateAll bullets frameRate = map (flip  physics frameRate) bullets
 
 
 -- determines whether a bullet is young enough to be kept
@@ -55,15 +55,15 @@ checkBulletTime: [Bullet] -> [Bullet]
 checkBulletTime bullets = filter youngEnough bullets
 
 -- updates all bullets
-update : Input -> [Bullet] -> Ship {} -> [Bullet]
-update input bullets ship = 
+update : Input -> [Bullet] -> Ship {} -> Float ->  [Bullet]
+update input bullets ship frameRate = 
     let bullets' = checkBulletTime bullets
     in case input of
       Tap key ->
           if | key `Keys.equals` Keys.space ->
                                    addBullet bullets' ship
              | otherwise -> bullets'
-      Passive t -> updateAll bullets'
+      Passive t -> updateAll bullets' frameRate
       otherwise -> bullets'
 
 

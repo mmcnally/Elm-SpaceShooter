@@ -28,8 +28,8 @@ update realWorld input state =
                        otherwise -> state'.frameRate
 
         enemies' = Enemy.updateAll (map updateEnemies state'.enemies) state'.frameRate
-        bullets' = Bullet.update input state'.bullets state'.ship
-        time' = state'.time + 1
+        bullets' = Bullet.update input state'.bullets state'.ship state'.frameRate
+        time' = state'.time + 1 * frameRate'
     in {state' | ship <- ship',
                  asteroids <- asteroids',
                  enemies <- enemies',

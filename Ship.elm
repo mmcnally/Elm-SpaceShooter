@@ -126,9 +126,9 @@ update input ship frameRate =
                                vy <- sin(ship.angle),
                                accelerate <- (-0.25) }
            | key `Keys.equals` Keys.arrowLeft -> 
-                               adjustAngle ship (-1)
+                               adjustAngle ship ((-1) * frameRate)
            | key `Keys.equals` Keys.arrowRight ->
-                               adjustAngle ship (1)                        
+                               adjustAngle ship (1 * frameRate)  
            | otherwise -> ship
       Passive t ->  let ship' = physics ship frameRate
                     in { ship' | accelerate <- 0 }

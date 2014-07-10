@@ -82,9 +82,13 @@ updateAll enemies frameRate = map (flip physics frameRate) enemies
 
 
 -- draws an enemy ship to the screen
--- ship drawn as 3 grouped triangles
+-- ship drawn as 3 grouped polygons
 render : EnemyShip a -> Form
 render {x, y, color, size, angle} = 
-  group [ ngon 3 size |> filled color.body,
-          ngon 3 (size * 0.7) |> filled color.window |> move (size * 0.1, 0),
-          ngon 3 (size * 0.2) |> filled color.body2 ] |> rotate angle |> move (x, y)
+  let bodySize = size
+      windowSize = size * 0.7
+      body2Size = size * 0.2
+  in
+  group [ polygon [(-bodySize, bodySize), (-bodySize, -bodySize), (bodySize, 0)] |> filled color.body,
+          polygon [(-windowSize, windowSize), (-windowSize, -windowSize), (windowSize, 0)] |> filled color.window |> move (size * 0.1, 0),
+          polygon [(-body2Size, body2Size), (-body2Size, -body2Size), (body2Size, 0)] |> filled color.body2 ] |> rotate angle |> move (x, y)

@@ -64,8 +64,6 @@ physics ship frameRate=
                                 else { xInc = denom, yInc = numer }
      xInc = (increment slopeNumerator slopeDenominator).xInc
      yInc = (increment slopeNumerator slopeDenominator).yInc
-     -- xIncrement = frameRate * (correctMovement ship.x xInc ship.playerX)
-     -- yIncrement = frameRate * (correctMovement ship.y yInc ship.playerY)
      xIncrement = (correctMovement ship.x xInc ship.playerX)
      yIncrement = (correctMovement ship.y yInc ship.playerY)
      angle = slowAngle (adjustAngle ship xIncrement yIncrement) ship

@@ -52,11 +52,14 @@ addRoid roids ship time = if (length roids) < 10
                           then (createRoid (head roids) ship time)::roids
                           else roids
 
--- closeEnough: Asteroid -> Bool
--- closeEnough roid = 
+closeEnough: Asteroid -> Ship {} -> Bool
+closeEnough roid ship = 
+    if (abs (ship.x - roid.x)) < 200 && (abs (ship.y - roid.y)) < 200
+    then True
+    else False
 
--- deleteOldRoids: [Asteroid] -> Ship -> [Asteroid]
--- deleteOldRoids roids ship = filter (abs (shi
+deleteOldRoids: [Asteroid] -> Ship {} -> [Asteroid]
+deleteOldRoids roids ship = filter (flip closeEnough ship) roids
 
 -- addRate: 
 
@@ -65,8 +68,8 @@ addRoid roids ship time = if (length roids) < 10
 update: [Asteroid] -> Ship {} -> Float -> Float -> [Asteroid]
 update roids ship time frameRate =
     let roids' = addRoid roids ship time
-        --roids'' = deleteOldRoids roids ship
-    in  updateAll roids' frameRate
+        roids'' = deleteOldRoids roids' ship
+    in  updateAll roids'' frameRate
 
 render : Asteroid -> Form
 render {x, y} = 

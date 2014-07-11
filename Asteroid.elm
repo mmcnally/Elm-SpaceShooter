@@ -30,12 +30,23 @@ updateAll : [Asteroid] -> Float -> [Asteroid]
 updateAll roids frameRate = map (flip physics frameRate) roids
 
 -- creates a new random asteroid
-createRoid: Asteroid -> Ship {} -> Float -> Asteroid
-createRoid roid ship time = 
-    let x = randomNum (ship.x - 100) (ship.x + 100) (time * 2.432)
-        y = randomNum (ship.y - 100) (ship.y + 100) (time * 432.11)
-        vx = randomNum (-1) (1) (time * 121.321)
-        vy = randomNum (-1) (1) (time * 234.1)
+createRoid: Ship {} -> Float -> Asteroid
+createRoid ship time = 
+    let numX = randomNum (0) (1) (time)
+        numY = randomNum (0) (1) (time * 4.987)
+        xLeft = randomNum (ship.x - 900) (ship.x - 700) (time * 6.08)
+        xRight = randomNum (ship.x + 700) (ship.x + 900) (time * 2.43)
+        yUp = randomNum (ship.y - 900) (ship.y - 700) (time * 8.87)
+        yDown = randomNum (ship.y + 700) (ship.y + 900) (time * 1.54)
+        x = if numX < 0.5 
+            then xLeft 
+            else xRight
+        y = if numY < 0.5 
+            then yUp 
+            else yDown
+        vx = randomNum (-1) (1) (time * 4.97)
+        vy = randomNum (-1) (1) (time * 1.34)
+        roid = initialAsteroid
     in { roid | x <- x,
                 y <- y,
                 vx <- vx,
@@ -48,16 +59,22 @@ randomNum lower upper seed =
 
 -- adds a new asteroid to the list
 addRoid: [Asteroid] -> Ship {} -> Float -> [Asteroid]
-addRoid roids ship time = if (length roids) < 10
-                          then (createRoid (head roids) ship time)::roids
+addRoid roids ship time = if (length roids) < 30
+                          then (createRoid ship time)::roids
                           else roids
 
+-- predicate for filter function in deleteOldRoids
+--
+-- decides if an asteroid is close enough to player's
+-- ship to not be deleted
 closeEnough: Asteroid -> Ship {} -> Bool
 closeEnough roid ship = 
-    if (abs (ship.x - roid.x)) < 200 && (abs (ship.y - roid.y)) < 200
+    if (abs (ship.x - roid.x)) < 1200 && (abs (ship.y - roid.y)) < 1200
     then True
     else False
 
+-- deletes asteroids that are too far from the
+-- player's ship
 deleteOldRoids: [Asteroid] -> Ship {} -> [Asteroid]
 deleteOldRoids roids ship = filter (flip closeEnough ship) roids
 

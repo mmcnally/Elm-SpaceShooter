@@ -1,6 +1,5 @@
 module Enemy where
 import Ship (..)
---import Bullet (..)
 
 
 enemyShipColor = { shipColor | body <- red,
@@ -17,7 +16,7 @@ enemy = { x = 0,
           color = enemyShipColor,
           speed = 0,
           size = 10,
-          angle = 0,
+          angle = 1000 * (2 * pi),
           accelerate = 0,
           playerX = 0,
           playerY = 0,
@@ -32,27 +31,22 @@ adjustAngle: EnemyShip a -> Float -> Float -> Float
 adjustAngle ship xChange yChange= 
    let radius = sqrt (xChange ^ 2 + yChange ^ 2)
        angle = abs (asin(yChange / radius))
-      -- angle' = if unAdjustedAngle < 0 
-      --          then (2 * pi) - unAdjustedAngle 
-      --          else unAdjustedAngle
    in if | yChange < 0 && xChange < 0 -> pi + angle
          | yChange > 0 && xChange < 0 -> pi - angle
          | yChange < 0 && xChange > 0 -> (2 * pi) - angle
          | otherwise -> angle
 
 -- slightly moves ship if it has the same coordinates as the player's ship
+correctMovement: Float -> Float -> Float -> Float
 correctMovement thingToModify incr playNum = if (thingToModify + incr) == playNum
                                              then incr + 0.1
                                              else incr
 
--- makes sure that angle is between 0 and 2 * pi
-clampify angle = if | angle > (2 * pi) -> angle - (2 * pi)
-                    | angle < 0        -> (2 * pi) - angle
-                    | otherwise        -> angle
-
 -- incorporates intelligence into angle
+slowAngle: Float -> EnemyShip {} -> Float
 slowAngle newAngle ship = 
-  let newAngle' = newAngle
+  let extraAngleness = ship.angle - (ship.angle - (2 * pi) * (toFloat (floor (ship.angle / (2 * pi)))))
+      newAngle' = newAngle + extraAngleness
       diff = newAngle' - ship.angle
   in if | diff < pi && diff > (-pi) -> ship.angle + (ship.intel * diff / 10000)
         | diff > 0 -> ship.angle + (ship.intel * (diff - (2 * pi)) / 10000)
@@ -70,11 +64,17 @@ physics ship frameRate=
                                 else { xInc = denom, yInc = numer }
      xInc = (increment slopeNumerator slopeDenominator).xInc
      yInc = (increment slopeNumerator slopeDenominator).yInc
-     xIncrement = frameRate * (correctMovement ship.x xInc ship.playerX)
-     yIncrement = frameRate * (correctMovement ship.y yInc ship.playerY)
- in { ship | x <- ship.x + xIncrement,
-             y <- ship.y + yIncrement,
-         angle <- slowAngle (adjustAngle ship xIncrement yIncrement) ship } 
+     -- xIncrement = frameRate * (correctMovement ship.x xInc ship.playerX)
+     -- yIncrement = frameRate * (correctMovement ship.y yInc ship.playerY)
+     xIncrement = (correctMovement ship.x xInc ship.playerX)
+     yIncrement = (correctMovement ship.y yInc ship.playerY)
+     angle = slowAngle (adjustAngle ship xIncrement yIncrement) ship
+     ship' = { ship |  angle <- angle,
+                          vx <- cos(angle),
+                          vy <- sin(angle) }
+ in { ship' | x <- ship'.x + ship'.vx,
+              y <- ship'.y + ship'.vy }
+               
 
 -- updates list of enemy ships to orient and move them
 updateAll: [EnemyShip a] -> Float -> [EnemyShip a]

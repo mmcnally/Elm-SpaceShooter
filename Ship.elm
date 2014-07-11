@@ -1,5 +1,4 @@
 module Ship where
---import Bullet (..)
 import Playground.Input (..)
 import Keyboard.Keys as Keys
 

@@ -72,8 +72,8 @@ physics ship frameRate=
      ship' = { ship |  angle <- angle,
                           vx <- cos(angle),
                           vy <- sin(angle) }
- in { ship' | x <- ship'.x + ship'.vx,
-              y <- ship'.y + ship'.vy }
+ in { ship' | x <- ship'.x + frameRate * (ship'.vx * ship'.speed),
+              y <- ship'.y + frameRate * (ship'.vy * ship'.speed) }
                
 
 -- updates list of enemy ships to orient and move them

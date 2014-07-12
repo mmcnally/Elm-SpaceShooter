@@ -3,6 +3,7 @@ import Bullet (..)
 import Ship (..)
 import Generator (..)
 import Generator.Standard(..)
+import GameAI (..)
 
 type Asteroid = { x : Float,
                   y : Float,
@@ -32,18 +33,18 @@ updateAll roids frameRate = map (flip physics frameRate) roids
 -- creates a new random asteroid
 createRoid: Ship {} -> Float -> Asteroid
 createRoid ship time = 
-    let numX = randomNum (0) (1) (time)
-        numY = randomNum (0) (1) (time * 4.987)
-        xLeft = randomNum (ship.x - 900) (ship.x - 700) (time * 6.08)
-        xRight = randomNum (ship.x + 700) (ship.x + 900) (time * 2.43)
-        yUp = randomNum (ship.y - 900) (ship.y - 700) (time * 8.87)
-        yDown = randomNum (ship.y + 700) (ship.y + 900) (time * 1.54)
+    let numX = randomFloat time
+        numY = randomFloat (time * 4.987)
+        xL = xLeft ship.x (time * 6.08)
+        xR = xRight ship.x (time * 2.43)
+        yU = yUp ship.y (time * 8.87)
+        yD = yDown ship.y (time * 1.54)
         x = if numX < 0.5 
-            then xLeft 
-            else xRight
+            then xL 
+            else xR
         y = if numY < 0.5 
-            then yUp 
-            else yDown
+            then yU
+            else yD
         vx = randomNum (-1) (1) (time * 4.97)
         vy = randomNum (-1) (1) (time * 1.34)
         roid = initialAsteroid
@@ -52,10 +53,7 @@ createRoid ship time =
                 vx <- vx,
                 vy <- vy}
 
--- will create a random number based on given seed
-randomNum: Float -> Float -> Float -> Float
-randomNum lower upper seed =
-    fst <| floatRange (lower, upper) (generator <| floor seed)
+
 
 -- adds a new asteroid to the list
 addRoid: [Asteroid] -> Ship {} -> Float -> [Asteroid]

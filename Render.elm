@@ -5,6 +5,7 @@ import Ship
 import Asteroid
 import Enemy
 import Bullet
+import Background
 
 
 render : GameState -> [Form]
@@ -14,6 +15,7 @@ render state =
         enemyForms = (map Enemy.render) state.enemies
         bulletForms = (map Bullet.render) state.bullets
         frameRate = [toForm <| asText <| state.frameRate]
+        background = [Background.render]
         forms = enemyForms ++ asteroidForms ++ shipForm ++ bulletForms
         fixPosition = (-state.ship.x, -state.ship.y)
-    in  map (move  fixPosition) forms ++ frameRate
+    in  background ++ (map (move  fixPosition) forms) ++ frameRate

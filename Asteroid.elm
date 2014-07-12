@@ -57,7 +57,7 @@ createRoid ship time =
 
 -- adds a new asteroid to the list
 addRoid: [Asteroid] -> Ship {} -> Float -> [Asteroid]
-addRoid roids ship time = if (length roids) < 30
+addRoid roids ship time = if (length roids) < 50
                           then (createRoid ship time)::roids
                           else roids
 

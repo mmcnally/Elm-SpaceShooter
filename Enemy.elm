@@ -76,7 +76,7 @@ physics ship frameRate=
               y <- ship'.y + frameRate * (ship'.vy * ship'.speed) }
                
 -- max number of enemies allowed on screen
-maxEnemies = 50
+maxEnemies = 25
 
 -- predicate for filter function in deleteOldEnemies
 --
@@ -89,7 +89,8 @@ closeEnough enemy ship =
     else False
 
 -- deletes far away enemies
-deleteOldEnemies enemies ship = filter (closeEnough ship) enemies
+deleteOldEnemies: [EnemyShip {}] -> Ship {} -> [EnemyShip {}]
+deleteOldEnemies enemies ship = filter (flip closeEnough ship) enemies
 
 -- adds one enemy with random speed
 addEnemy: [EnemyShip {}] -> Float -> Ship{} -> [EnemyShip {}]
@@ -114,7 +115,8 @@ addEnemy enemies time ship =
 updateAll: [EnemyShip {}] -> Float -> Float -> Ship {} -> [EnemyShip {}]
 updateAll enemies frameRate time ship= 
     let enemies' = addEnemy enemies time ship
-    in  map (flip physics frameRate) enemies'
+        enemies'' = deleteOldEnemies enemies' ship
+    in  map (flip physics frameRate) enemies''
         
 
 

@@ -1,5 +1,7 @@
 module Enemy where
 import Ship (..)
+import GameAI (..)
+import Asteroid
 
 
 enemyShipColor = { shipColor | body <- red,
@@ -27,7 +29,7 @@ enemy = { x = 0,
 
 -- calculates angle for an enemyship so that
 -- it's facing the player's ship
-adjustAngle: EnemyShip a -> Float -> Float -> Float
+adjustAngle: EnemyShip {} -> Float -> Float -> Float
 adjustAngle ship xChange yChange= 
    let radius = sqrt (xChange ^ 2 + yChange ^ 2)
        angle = abs (asin(yChange / radius))
@@ -48,13 +50,13 @@ slowAngle newAngle ship =
   let extraAngleness = ship.angle - (ship.angle - (2 * pi) * (toFloat (floor (ship.angle / (2 * pi)))))
       newAngle' = newAngle + extraAngleness
       diff = newAngle' - ship.angle
-  in if | diff < pi && diff > (-pi) -> ship.angle + (ship.intel * diff / 10000)
-        | diff > 0 -> ship.angle + (ship.intel * (diff - (2 * pi)) / 10000)
-        | otherwise -> ship.angle + (ship.intel * (diff + (2 * pi)) / 10000)
+  in if | diff < pi && diff > (-pi) -> ship.angle + (ship.intel * diff / 1000)
+        | diff > 0 -> ship.angle + (ship.intel * (diff - (2 * pi)) / 1000)
+        | otherwise -> ship.angle + (ship.intel * (diff + (2 * pi)) / 1000)
 
 -- physics for enemy ships
 -- modifies coordinates and angle
-physics: EnemyShip a -> Float -> EnemyShip a
+physics: EnemyShip {} -> Float -> EnemyShip {}
 physics ship frameRate=
  let slopeNumerator = ship.playerY - ship.y
      slopeDenominator = ship.playerX - ship.x
@@ -73,15 +75,52 @@ physics ship frameRate=
  in { ship' | x <- ship'.x + frameRate * (ship'.vx * ship'.speed),
               y <- ship'.y + frameRate * (ship'.vy * ship'.speed) }
                
+-- max number of enemies allowed on screen
+maxEnemies = 50
+
+-- predicate for filter function in deleteOldEnemies
+--
+-- decides if an enemy is close enough to player's
+-- ship to not be deleted
+closeEnough: EnemyShip {} -> Ship {} -> Bool
+closeEnough enemy ship = 
+    if (abs (ship.x - enemy.x)) < 1200 && (abs (ship.y - enemy.y)) < 1200
+    then True
+    else False
+
+-- deletes far away enemies
+deleteOldEnemies enemies ship = filter (closeEnough ship) enemies
+
+-- adds one enemy with random speed
+addEnemy: [EnemyShip {}] -> Float -> Ship{} -> [EnemyShip {}]
+addEnemy enemies time ship = 
+    let numX = randomFloat (time * 3.54)
+        numY = randomFloat (time * 7.23)
+        newX = if numX < 0.5
+               then xLeft ship.x (time * 5.22)
+               else xRight ship.x (time * 9.24)
+        newY = if numY < 0.5
+               then yUp ship.y (time * 4.56)
+               else yDown ship.y (time * 65.34)
+    in if | (length enemies) < maxEnemies ->
+              { enemy | x <- newX,
+                        y <- newY,
+                    speed <- randomFloat (time * 0.34), 
+                    intel <- randomNum 1 100 (time * 4.12) }::enemies
+          | otherwise -> enemies
+
 
 -- updates list of enemy ships to orient and move them
-updateAll: [EnemyShip a] -> Float -> [EnemyShip a]
-updateAll enemies frameRate = map (flip physics frameRate) enemies
+updateAll: [EnemyShip {}] -> Float -> Float -> Ship {} -> [EnemyShip {}]
+updateAll enemies frameRate time ship= 
+    let enemies' = addEnemy enemies time ship
+    in  map (flip physics frameRate) enemies'
+        
 
 
 -- draws an enemy ship to the screen
 -- ship drawn as 3 grouped polygons
-render : EnemyShip a -> Form
+render : EnemyShip {} -> Form
 render {x, y, color, size, angle} = 
   let bodySize = size
       windowSize = size * 0.7

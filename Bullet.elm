@@ -10,7 +10,8 @@ type Bullet = { x : Float,
             speed : Float,
              size : Float,
              angle: Float, 
-        birthtime : Float}
+        birthtime : Float, 
+           center : (Float, Float) }
 
 defaultBullet: Bullet
 defaultBullet = {x = 0, 
@@ -18,26 +19,33 @@ defaultBullet = {x = 0,
                 vx = 0, 
                 vy = 0,
              speed = 0,
-              size = 0,
+              size = 7.5,
              angle = 0,
-         birthtime = 0}
+         birthtime = 0,
+         center = (0, -2.5) }
 
-bullet : Float -> Float -> Float -> Float -> Float -> Float -> Float -> Float -> Bullet
-bullet x y vx vy speed size angle birthtime = { x = x, 
-                                                y = y,
-                                               vx = vx,
-                                               vy = vy,
-                                            speed = speed,
-                                             size = size,
-                                            angle = angle,
-                                        birthtime = birthtime }
+bullet : Float -> Float -> Float -> Float -> Float -> Float -> Float -> Float -> (Float, Float) -> Bullet
+bullet x y vx vy speed size angle birthtime center =
+                                               { x = x, 
+                                                 y = y,
+                                                vx = vx,
+                                                vy = vy,
+                                             speed = speed,
+                                              size = size,
+                                             angle = angle,
+                                         birthtime = birthtime, 
+                                            center = center }
 
 -- applies physics to a bullet
 physics : Bullet -> Float -> Bullet
-physics b frameRate = if |  b.birthtime > 200 -> {b | size <- 0}
-               |        otherwise -> { b | x <- b.x + frameRate * (b.vx * b.speed),
-                                           y <- b.y + frameRate * (b.vy * b.speed),
-                                   birthtime <- b.birthtime + 1}
+physics b frameRate = let moveX = b.x + frameRate * (b.vx * b.speed)
+                          moveY = b.y + frameRate * (b.vy * b.speed)
+                      in
+                      if | b.birthtime > 200 -> {b | size <- 0}
+                         | otherwise -> { b | x <- moveX,
+                                           y <- moveY,
+                                   birthtime <- b.birthtime + 1, 
+                                      center <- (0 + moveX, -2.5 + moveY) }
 
 -- applied physics to each bullet in list
 updateAll: [Bullet] -> Float -> [Bullet]
@@ -68,7 +76,10 @@ update input bullets ship frameRate =
 
 
 render : Bullet -> Form
-render {x, y, size} = circle size |> filled green |> move (x,y)
+render {x, y, size} = 
+    let halfSize = size / 2 
+    in
+    polygon [(-2.5,0), (-5, -2.5), (-5, -5), (-2.5, -size), (2.5, -size), (5, -5), (5, -2.5), (2.5,0)] |> filled green |> move (x,y)
 
 
 
@@ -85,6 +96,7 @@ createBullet ship  = { defaultBullet | x <- ship.x,
                                        vx <- cos(ship.angle),
                                        vy <- sin(ship.angle),
                                     speed <- 10,
-                                     size <- 5,
+                                     size <- 7.5,
                                     angle <- ship.angle,
-                                birthtime <- 0}
+                                birthtime <- 0, 
+                                   center <- (0 + ship.x, -2.5 + ship.y) }

@@ -7,24 +7,31 @@ import GameAI (..)
 
 type Asteroid = { x : Float,
                   y : Float,
-                  vx : Float,
-                  vy : Float }
+                 vx : Float,
+                 vy : Float,
+             center : (Float, Float) }
 
 -- creates an asteroid based on parameters
-asteroid : Float -> Float -> Float -> Float -> Asteroid
-asteroid x y vx vy = { x = x, y = y, vx = vx, vy = vy }
+asteroid : Float -> Float -> Float -> Float -> (Float, Float) -> Asteroid
+asteroid x y vx vy center = { x = x, y = y, vx = vx, vy = vy, center = center }
 
 initialAsteroid: Asteroid
 initialAsteroid = { x = 0,
                     y = 0,
                     vx = 0,
-                    vy = 0 }
+                    vy = 0,
+                    center = (0, -5) }
 
 -- applies physics to one asteroid
 physics : Asteroid -> Float -> Asteroid
 physics asteroid frameRate =
-    { asteroid | x <- asteroid.x + frameRate * asteroid.vx,
-                 y <- asteroid.y + frameRate * asteroid.vy }
+
+    let moveX = asteroid.x + frameRate * asteroid.vx
+        moveY = asteroid.y + frameRate * asteroid.vy
+    in
+    { asteroid | x <- moveX,
+                 y <- moveY,
+                 center <- (0 + moveX, -5 + moveY) }
 
 -- applies physics to each asteroid
 updateAll : [Asteroid] -> Float -> [Asteroid]
@@ -50,8 +57,9 @@ createRoid ship time =
         roid = initialAsteroid
     in { roid | x <- x,
                 y <- y,
-                vx <- vx,
-                vy <- vy}
+               vx <- vx,
+               vy <- vy, 
+           center <- (0 + x, -5 + y)}
 
 
 
@@ -88,6 +96,4 @@ update roids ship time frameRate =
 
 render : Asteroid -> Form
 render {x, y} = 
-    let size = 10
-    in
     polygon [(-5,0), (-10, -5), (-10, -10), (-5, -15), (5, -15), (10, -10), (10, -5), (5,0)] |> filled black |> move (x, y)

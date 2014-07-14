@@ -90,4 +90,4 @@ render : Asteroid -> Form
 render {x, y} = 
     let size = 10
     in
-    polygon [(-5,0), (-10, -5), (-10, -10), (-5, -15), (5, -15), (10, -10), (10, -5), (5,0)] |> filled black |> move (x, y)
+    polygon [(-5,0), (-10, -5), (-10, -10), (-5, -15), (5, -15), (10, -10), (10, -5), (5,0)] |> filled gray |> move (x, y)

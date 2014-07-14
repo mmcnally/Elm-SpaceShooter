@@ -9,6 +9,7 @@ import Ship
 import Enemy
 import GameAI
 import Bullet
+import Background
 
 
 
@@ -25,14 +26,15 @@ update realWorld input state =
         frameRate' = case input of
                        Passive t -> 1 / (1000 / (60 * t))
                        otherwise -> state.frameRate
-
+        stars' = Background.update state.stars state.ship state.time
         enemies' = 
             Enemy.updateAll (map updateEnemies state.enemies) state.frameRate state.time state.ship
         bullets' = Bullet.update input state.bullets state.ship state.frameRate
         time' = state.time + 1 * frameRate'
     in {state | ship <- ship',
-                 asteroids <- asteroids',
-                 enemies <- enemies',
-                 time <- time',
-                 bullets <- bullets',
-                 frameRate <- frameRate'}
+                asteroids <- asteroids',
+                enemies <- enemies',
+                time <- time',
+                bullets <- bullets',
+                frameRate <- frameRate',
+                stars <- stars' }

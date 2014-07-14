@@ -3,13 +3,15 @@ import Ship (..)
 import Asteroid (..)
 import Enemy (..)
 import Bullet (..)
+import Background (..)
 
 type GameState = { ship : Ship {},
                    asteroids : [Asteroid],
                    enemies : [EnemyShip {}],
                    bullets : [Bullet],
                    time: Float,
-                   frameRate: Float }
+                   frameRate: Float,
+                   stars: [Star] }
 
 initialState: GameState
 initialState = { ship = initialShip,
@@ -19,4 +21,5 @@ initialState = { ship = initialShip,
                              {enemy | x <- 100, y <- -150, speed <- 0.1 }],
                  bullets = [bullet 200 200 0 0 0 0 0 0],
                  time = 0,
-                 frameRate = 0.0 }
+                 frameRate = 0.0,
+                 stars = [initialStar] }

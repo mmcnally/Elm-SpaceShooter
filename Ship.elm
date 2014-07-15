@@ -54,9 +54,17 @@ render ship =
       windowSize = ship.size * 0.7
       body2Size = ship.size * 0.2
   in
-  [group [ polygon [(-bodySize, bodySize), (-bodySize, -bodySize), (bodySize, 0)] |> filled ship.color.body,
-           polygon [(-windowSize, windowSize), (-windowSize, -windowSize), (windowSize, 0)] |> filled ship.color.window,
-           polygon [(-body2Size, body2Size), (-body2Size, -body2Size), (body2Size, 0)] |> filled ship.color.body2 ] |> rotate ship.angle |> move (ship.x, ship.y) ]
+  [group [ polygon [(-bodySize, bodySize),
+                    (-bodySize, -bodySize), 
+                    (bodySize, 0)] |> filled ship.color.body,
+           polygon [(-windowSize, windowSize),
+                    (-windowSize, -windowSize), 
+                    (windowSize, 0)] |> filled ship.color.window,
+           polygon [(-body2Size, body2Size),
+                    (-body2Size, -body2Size),
+                    (body2Size, 0)] |> filled ship.color.body2 ] 
+                                    |> rotate ship.angle 
+                                    |> move (ship.x, ship.y) ]
 
 renderHealth : Ship a -> Form
 renderHealth {damage} =

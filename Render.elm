@@ -15,7 +15,8 @@ render state =
         enemyForms = (map Enemy.render) state.enemies
         bulletForms = (map Bullet.render) state.bullets
         frameRate = [toForm <| asText <| state.frameRate]
-        background = [Background.render]
-        forms = enemyForms ++ asteroidForms ++ shipForm ++ bulletForms
+        background = [Background.renderBackground]
+        stars = (map Background.renderStars) state.stars
+        forms = stars ++ enemyForms ++ asteroidForms ++ shipForm ++ bulletForms
         fixPosition = (-state.ship.x, -state.ship.y)
     in  background ++ (map (move  fixPosition) forms) ++ frameRate

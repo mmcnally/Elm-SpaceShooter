@@ -9,6 +9,7 @@ import Ship
 import Enemy
 import GameAI
 import Bullet
+import Background
 
 
 
@@ -27,7 +28,7 @@ update realWorld input state =
         frameRate' = case input of
                        Passive t -> 1 / (1000 / (60 * t))
                        otherwise -> state.frameRate
-
+        stars' = Background.update state.stars state.ship state.time
         enemies' = 
             Enemy.updateAll (map updateEnemies state.enemies) state.frameRate state.time state.ship
 
@@ -40,6 +41,7 @@ update realWorld input state =
                 enemies <- enemies',
                 time <- time',
                 bullets <- bullets',
+<<<<<<< HEAD
                 frameRate <- frameRate'}
 
      --collisionDetection state
@@ -52,3 +54,7 @@ update realWorld input state =
 --collisionDetection bullet asteroids = 
     
     
+=======
+                frameRate <- frameRate',
+                stars <- stars' }
+>>>>>>> FETCH_HEAD

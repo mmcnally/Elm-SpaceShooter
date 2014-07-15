@@ -41,20 +41,14 @@ update realWorld input state =
                 enemies <- enemies',
                 time <- time',
                 bullets <- bullets',
-<<<<<<< HEAD
-                frameRate <- frameRate'}
-
+                frameRate <- frameRate',
+--
      --collisionDetection state
-
+--
 --detectCollision: GameState -> GameState
 --detectCollision state = 
 --    map collisionDetection state.bullets
-
+--
 --collisionDetection: Bullet -> [Asteroid] -> GameState
 --collisionDetection bullet asteroids = 
-    
-    
-=======
-                frameRate <- frameRate',
                 stars <- stars' }
->>>>>>> FETCH_HEAD

@@ -40,7 +40,7 @@ updateAll roids frameRate = map (flip physics frameRate) roids
 -- creates a new random asteroid
 createRoid: Ship {} -> Float -> [Float] -> Asteroid
 createRoid ship time randoms = 
-    let xy = randomOutOfScreen time ship randoms
+    let xy = randomOutOfScreen 700 1500 300 1500 time ship randoms
         x = xy.x
         y = xy.y
         vx = (randomNum (-1000) (1000) (time * 4.97)) / 1000

@@ -96,7 +96,7 @@ deleteOldEnemies enemies ship = filter (flip closeEnough ship) enemies
 -- adds one enemy with random speed
 addEnemy: [EnemyShip {}] -> Float -> Ship{} -> [Float] -> [EnemyShip {}]
 addEnemy enemies time ship randoms = 
-    let xy = randomOutOfScreen time ship randoms
+    let xy = randomOutOfScreen 700 1500 300 1500 time ship randoms
         x = xy.x
         y = xy.y
     in if | (length enemies) < maxEnemies ->

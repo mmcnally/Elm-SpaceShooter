@@ -4,6 +4,9 @@ import Asteroid (..)
 import Enemy (..)
 import Bullet (..)
 import Background (..)
+import Generator (..)
+import Generator.Standard (..)
+import Randoms (..)
 
 type GameState = { ship : Ship {},
                    asteroids : [Asteroid],
@@ -11,7 +14,8 @@ type GameState = { ship : Ship {},
                    bullets : [Bullet],
                    time: Float,
                    frameRate: Float,
-                   stars: [Star] }
+                   stars: [Star],
+                   randoms: ([Float], Generator Standard) }
 
 initialState: GameState
 initialState = { ship = initialShip,
@@ -22,4 +26,5 @@ initialState = { ship = initialShip,
                  bullets = [],
                  time = 0,
                  frameRate = 0.0,
-                 stars = [initialStar] }
+                 stars = [initialStar],
+                 randoms = initialRandoms }

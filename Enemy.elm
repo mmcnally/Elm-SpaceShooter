@@ -2,6 +2,7 @@ module Enemy where
 import Ship (..)
 import GameAI (..)
 import Asteroid
+import Randoms (..)
 
 
 enemyShipColor = { shipColor | body <- red,
@@ -93,28 +94,22 @@ deleteOldEnemies: [EnemyShip {}] -> Ship {} -> [EnemyShip {}]
 deleteOldEnemies enemies ship = filter (flip closeEnough ship) enemies
 
 -- adds one enemy with random speed
-addEnemy: [EnemyShip {}] -> Float -> Ship{} -> [EnemyShip {}]
-addEnemy enemies time ship = 
-    let numX = randomFloat (time * 3.54)
-        numY = randomFloat (time * 7.23)
-        newX = if numX < 0.5
-               then xLeft ship.x (time * 5.22)
-               else xRight ship.x (time * 9.24)
-        newY = if numY < 0.5
-               then yUp ship.y (time * 4.56)
-               else yDown ship.y (time * 65.34)
+addEnemy: [EnemyShip {}] -> Float -> Ship{} -> [Float] -> [EnemyShip {}]
+addEnemy enemies time ship randoms = 
+    let xy = randomOutOfScreen time ship randoms
+        x = xy.x
+        y = xy.y
     in if | (length enemies) < maxEnemies ->
-              { enemy | x <- newX,
-                        y <- newY,
+              { enemy | x <- x,
+                        y <- y,
                     speed <- randomFloat (time * 0.34), 
                     intel <- randomNum 1 100 (time * 4.12) }::enemies
           | otherwise -> enemies
 
-
 -- updates list of enemy ships to orient and move them
-updateAll: [EnemyShip {}] -> Float -> Float -> Ship {} -> [EnemyShip {}]
-updateAll enemies frameRate time ship= 
-    let enemies' = addEnemy enemies time ship
+updateAll: [EnemyShip {}] -> Float -> Float -> Ship {} -> [Float] -> [EnemyShip {}]
+updateAll enemies frameRate time ship randoms = 
+    let enemies' = addEnemy enemies time ship randoms
         enemies'' = deleteOldEnemies enemies' ship
     in  map (flip physics frameRate) enemies''
         

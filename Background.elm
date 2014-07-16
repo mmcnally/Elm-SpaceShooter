@@ -16,7 +16,7 @@ initialStar = { x = 0,
 -- makes some stars
 addStars: [Star] -> Ship {} -> Float -> [Float] -> [Star]
 addStars stars ship time randoms = 
-    if (length stars) < 15 || (floor time) `mod` 5 == 0
+    if (length stars) < 200
     then (createStar ship time randoms)::stars
     else stars
 

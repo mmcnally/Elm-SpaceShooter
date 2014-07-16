@@ -38,24 +38,14 @@ updateAll : [Asteroid] -> Float -> [Asteroid]
 updateAll roids frameRate = map (flip physics frameRate) roids
 
 -- creates a new random asteroid
-createRoid: Ship {} -> Float -> Asteroid
-createRoid ship time = 
-    let numX = randomFloat time
-        numY = randomFloat (time * 4.987)
-        xL = xLeft ship.x (time * 6.08)
-        xR = xRight ship.x (time * 2.43)
-        yU = yUp ship.y (time * 8.87)
-        yD = yDown ship.y (time * 1.54)
-        x = if numX < 0.5 
-            then xL 
-            else xR
-        y = if numY < 0.5 
-            then yU
-            else yD
-        vx = randomNum (-1) (1) (time * 4.97)
-        vy = randomNum (-1) (1) (time * 1.34)
-        roid = initialAsteroid
-    in { roid | x <- x,
+createRoid: Ship {} -> Float -> [Float] -> Asteroid
+createRoid ship time randoms = 
+    let xy = randomOutOfScreen time ship randoms
+        x = xy.x
+        y = xy.y
+        vx = (randomNum (-1000) (1000) (time * 4.97)) / 1000
+        vy = (randomNum (-1000) (1000) (time * 1.34)) / 1000
+    in { initialAsteroid | x <- x,
                 y <- y,
                vx <- vx,
                vy <- vy, 
@@ -64,9 +54,9 @@ createRoid ship time =
 
 
 -- adds a new asteroid to the list
-addRoid: [Asteroid] -> Ship {} -> Float -> [Asteroid]
-addRoid roids ship time = if (length roids) < 50
-                          then (createRoid ship time)::roids
+addRoid: [Asteroid] -> Ship {} -> Float -> [Float] -> [Asteroid]
+addRoid roids ship time randoms = if (length roids) < 50
+                          then (createRoid ship time randoms)::roids
                           else roids
 
 -- predicate for filter function in deleteOldRoids
@@ -84,13 +74,11 @@ closeEnough roid ship =
 deleteOldRoids: [Asteroid] -> Ship {} -> [Asteroid]
 deleteOldRoids roids ship = filter (flip closeEnough ship) roids
 
--- addRate: 
-
 
 -- updates all asteroids
-update: [Asteroid] -> Ship {} -> Float -> Float -> [Asteroid]
-update roids ship time frameRate =
-    let roids' = addRoid roids ship time
+update: [Asteroid] -> Ship {} -> Float -> Float -> [Float] -> [Asteroid]
+update roids ship time frameRate randoms =
+    let roids' = addRoid roids ship time randoms
         roids'' = deleteOldRoids roids' ship
     in  updateAll roids'' frameRate
 

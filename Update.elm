@@ -28,7 +28,7 @@ update realWorld input state =
 
         frameRate' = case input of
                        Passive t -> 1 / (1000 / (60 * t))
-                       oth'erwise -> state.frameRate
+                       otherwise -> state.frameRate
         stars' = 
             Background.update state.stars state.ship state.time (fst state.randoms)
         enemies' = 

@@ -26,5 +26,5 @@ initialState = { ship = initialShip,
                  bullets = [],
                  time = 0,
                  frameRate = 0.0,
-                 stars = [],
+                 stars = initialStars,
                  randoms = initialRandoms }

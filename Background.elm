@@ -22,7 +22,10 @@ initialStars  =
 initialHelper: Float -> [Star] -> [Float] -> Float -> [Star]
 initialHelper num stars randoms time = 
     if num > 0
-    then (initialHelper (num - 1) ((createStarOnScreen time randoms)::stars) (tail randoms) (time + 1))
+    then (initialHelper (num - 1) 
+                        ((createStarOnScreen time randoms)::stars) 
+                        (tail randoms) 
+                        (time + 1))
     else stars
 
 createStarOnScreen: Float -> [Float] -> Star

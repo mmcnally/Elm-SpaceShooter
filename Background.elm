@@ -31,11 +31,13 @@ createStar ship time randoms =
                        y <- y }
 
 
+maxDistance = 2000
 
 --decides if star is too far away
 closeEnough: Star -> Ship {} -> Bool
 closeEnough star ship =
-    if (abs (ship.x - star.x)) < 500 && (abs (ship.y - star.y)) < 250
+    if (abs (ship.x - star.x)) < maxDistance && 
+       (abs (ship.y - star.y)) < maxDistance
     then True
     else False
 

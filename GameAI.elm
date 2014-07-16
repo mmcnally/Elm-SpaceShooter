@@ -53,31 +53,31 @@ randomOutOfScreen seed ship randoms =
         two = head (tail randoms)
         initial = randomNum 0 1000 one
         newSeed = randomNum 0 1000 two
-    in if | initial < 250                    -> leftOfScreen ship newSeed
-          | initial < 500 && initial > 0.24  -> rightOfScreen ship newSeed
-          | initial < 750 && initial > 0.49  -> aboveScreen ship newSeed
-          | otherwise                        -> belowScreen ship newSeed
+    in if | initial < 250   -> leftOfScreen ship newSeed
+          | initial < 500   -> rightOfScreen ship newSeed
+          | initial < 750   -> aboveScreen ship newSeed
+          | otherwise       -> belowScreen ship newSeed
 
 leftOfScreen: Ship {} -> Float -> { x: Float, y: Float }
 leftOfScreen ship seed = 
-    let x = randomNum (ship.x - 500) (ship.x) seed
-        y = randomNum (ship.y - 200) (ship.y + 200) (seed * 32.44)
+    let x = randomNum (ship.x - 1500) (ship.x - 700) seed
+        y = randomNum (ship.y - 1500) (ship.y + 1500) (seed * 32.44)
     in { x = x, y = y }
 
 rightOfScreen: Ship {} -> Float -> { x: Float, y: Float }
 rightOfScreen ship seed = 
-    let x = randomNum (ship.x) (ship.x + 400) seed
-        y = randomNum (ship.y - 200) (ship.y + 200) (seed * 85.24)
+    let x = randomNum (ship.x + 700) (ship.x + 1500) seed
+        y = randomNum (ship.y - 1500) (ship.y + 1500) (seed * 85.24)
     in { x = x, y = y }
 
 aboveScreen: Ship {} -> Float -> { x: Float, y: Float }
 aboveScreen ship seed =
-    let x = randomNum (ship.x - 400) (ship.x + 400) seed
-        y = randomNum (ship.y) (ship.y + 200) (seed * 4.64)
+    let x = randomNum (ship.x - 1500) (ship.x + 1500) seed
+        y = randomNum (ship.y + 300) (ship.y + 1500) (seed * 4.64)
     in { x = x, y = y }
 
 belowScreen: Ship {} -> Float -> { x: Float, y: Float }
 belowScreen ship seed =
-    let x = randomNum (ship.x - 400) (ship.x + 400) seed
-        y = randomNum (ship.y - 200) (ship.y) (seed * 9.20)
+    let x = randomNum (ship.x - 1500) (ship.x + 1500) seed
+        y = randomNum (ship.y - 1500) (ship.y - 300) (seed * 9.20)
     in { x = x, y = y }

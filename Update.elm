@@ -11,6 +11,7 @@ import GameAI
 import Bullet
 import Background
 import Randoms
+import Star
 
 
 
@@ -30,7 +31,7 @@ update realWorld input state =
                        Passive t -> 1 / (1000 / (60 * t))
                        otherwise -> state.frameRate
         stars' = 
-            Background.update state.stars state.ship state.time (fst state.randoms)
+            Star.update state.stars state.ship state.time (fst state.randoms)
         enemies' = 
             Enemy.updateAll (map updateEnemies state.enemies) state.frameRate state.time state.ship (fst state.randoms)
 

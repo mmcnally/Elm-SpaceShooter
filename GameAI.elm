@@ -4,75 +4,59 @@ import Generator.Standard (..)
 import Ship (..)
 
 
--- will create a random number between
+-- creates a random number between
 -- given range with given seed
 randomNum: Float -> Float -> Float -> Float
 randomNum lower upper seed =
     fst <| floatRange (lower, upper) (generator <| floor seed)
 
--- randomWithGenerator : Float -> Float -> Float -> (Float, Generator)
-randomWithGenerator lower upper seed =
-    floatRange (lower, upper) (generator <| floor seed)
 
-
--- random number between 0 and 1 based
--- on given seed
-randomFloat seed = randomNum (0) (1) (seed)
-
--- generates starting x-coordinate
--- off left side of the screen
-xLeft shipX seed = randomNum (shipX - 900) (shipX - 700) seed
-
-
--- generates starting x-coordinate
--- off right side of screen
-xRight shipX seed = randomNum (shipX + 700) (shipX + 900) seed
-
--- generates starting y-coordinate above screen
-yUp shipY seed = randomNum (shipY - 900) (shipY - 700) seed
-
--- generates starting y-coordinate below screen
-yDown shipY seed = randomNum (shipY + 700) (shipY + 900) seed
+-- creates a random number between 0 and 1
+randomFloat: Float -> Float
+randomFloat seed = (randomNum 0 1000 seed) / 1000
 
 
 
---
--- New version to replace above functions
---
+-- returns random pair (x, y) 
+randomOutOfScreen: Float -> Float -> Float -> Float -> Float -> Ship {} -> [Float] -> { x: Float, y: Float }
+randomOutOfScreen xMin xMax yMin yMax seed ship randoms = 
+    let one = head randoms
+        two = head (tail randoms)
+        initial = randomNum 0 1000 one
+        newSeed = randomNum 0 1000 two
+    in if | initial < 250   -> leftOfScreen xMin xMax yMin yMax ship newSeed
+          | initial < 500   -> rightOfScreen xMin xMax yMin yMax ship newSeed
+          | initial < 750   -> aboveScreen xMin xMax yMin yMax ship newSeed
+          | otherwise       -> belowScreen xMin xMax yMin yMax ship newSeed
 
+-- helper function for randomOutOfScreen
+-- creates x, y coordinates off left side of screen
+leftOfScreen: Float -> Float -> Float -> Float -> Ship {} -> Float -> { x: Float, y: Float }
+leftOfScreen xMin xMax yMin yMax ship seed = 
+    let x = randomNum (ship.x - xMax) (ship.x - xMin) seed
+        y = randomNum (ship.y - yMax) (ship.y + yMax) (seed * 32.44)
+    in { x = x, y = y }
 
--- rand lower upper gen = fst <| floatRange lower upper gen
+-- helper function for randomOutOfScreen
+-- creates x, y coordinates off right side of screen
+rightOfScreen: Float -> Float -> Float -> Float -> Ship {} -> Float -> { x: Float, y: Float }
+rightOfScreen xMin xMax yMin yMax ship seed = 
+    let x = randomNum (ship.x + xMin) (ship.x + xMax) seed
+        y = randomNum (ship.y - yMax) (ship.y + yMax) (seed * 85.24)
+    in { x = x, y = y }
 
+-- helper function for randomOutOfScreen
+-- creates x, y coordinates above the screen
+aboveScreen: Float -> Float -> Float -> Float -> Ship {} -> Float -> { x: Float, y: Float }
+aboveScreen xMin xMax yMin yMax ship seed =
+    let x = randomNum (ship.x - xMax) (ship.x + xMax) seed
+        y = randomNum (ship.y + yMin) (ship.y + yMax) (seed * 4.64)
+    in { x = x, y = y }
 
-randomOutOfScreen: Float -> Ship {} -> (Float, Float)
-randomOutOfScreen seed ship = 
-    let initial = randomNum  0 1 seed
-        leftSeed = randomNum 0 1 initial
-        rightSeed = randomNum 0 1 leftSeed
-        aboveSeed = randomNum 0 1 rightSeed
-        belowSeed = randomNum 0 1 aboveSeed
-    in if | initial < 0.25 -> leftOfScreen ship leftSeed
-          | initial < 0.5  -> rightOfScreen ship rightSeed
-          | initial < 0.75 -> aboveScreen ship aboveSeed
-          | otherwise      -> belowScreen ship belowSeed
-
-leftOfScreen: Ship {} -> Float -> (Float, Float)
-leftOfScreen ship seed = 
-    let x = randomNum (ship.x - 1500) (ship.x - 700) seed
-        y = randomNum (ship.y - 1500) (ship.y + 1500) x
-    in (x, y)
-
-rightOfScreen ship seed = 
-    let x = randomNum (ship.x + 700) (ship.x + 1500) seed
-        y = randomNum (ship.y - 1500) (ship.y + 1500) x
-    in (x, y)
-
-aboveScreen ship seed =
-    let x = randomNum (ship.x - 1500) (ship.x + 1500) seed
-        y = randomNum (ship.y + 700) (ship.y + 1500) x
-    in (x, y)
-
-belowScreen ship seed =
-    let x = randomNum (ship.x - 1500) (ship.x + 1500) seed
-        y = randomNum (ship.y + 700) (ship.y + 1500) x
-    in (x, y)
+-- helper function for randomOutOfScreen
+-- creates x, y coordinates below the screen
+belowScreen: Float -> Float -> Float -> Float -> Ship {} -> Float -> { x: Float, y: Float }
+belowScreen xMin xMax yMin yMax ship seed =
+    let x = randomNum (ship.x - xMax) (ship.x + xMax) seed
+        y = randomNum (ship.y - yMax) (ship.y - yMin) (seed * 9.20)
+    in { x = x, y = y }

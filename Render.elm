@@ -1,10 +1,10 @@
 module Render where
-
 import GameState (..)
 import Ship
 import Asteroid
 import Enemy
 import Bullet
+import Star
 import Background
 
 
@@ -16,7 +16,7 @@ render state =
         bulletForms = (map Bullet.render) state.bullets
         frameRate = [toForm <| asText <| state.frameRate]
         background = [Background.renderBackground]
-        stars = (map Background.renderStars) state.stars
+        stars = (map Star.renderStars) state.stars
         forms = stars ++ enemyForms ++ asteroidForms ++ shipForm ++ bulletForms
         fixPosition = (-state.ship.x, -state.ship.y)
     in  background ++ (map (move  fixPosition) forms) ++ frameRate

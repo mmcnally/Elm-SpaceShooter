@@ -79,7 +79,14 @@ render : Bullet -> Form
 render {x, y, size} = 
     let halfSize = size / 2 
     in
-    polygon [(-2.5,0), (-5, -2.5), (-5, -5), (-2.5, -size), (2.5, -size), (5, -5), (5, -2.5), (2.5,0)] |> filled green |> move (x,y)
+    polygon [(-2.5,0), 
+             (-5, -2.5), 
+             (-5, -5), 
+             (-2.5, -size), 
+             (2.5, -size), 
+             (5, -5), 
+             (5, -2.5), 
+             (2.5,0)] |> filled green |> move (x,y)
 
 
 

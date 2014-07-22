@@ -12,6 +12,8 @@ import GameAI
 import Bullet (Bullet)
 import Bullet
 import Background
+import Randoms
+import Star
 
 
 
@@ -20,7 +22,7 @@ update realWorld input state =
     let ship' = Ship.update input state.ship state.frameRate
         
         asteroids' = 
-            Asteroid.update state.asteroids state.ship state.time state.frameRate
+            Asteroid.update state.asteroids state.ship state.time state.frameRate (fst state.randoms)
 
         -- updates an enemy ship to give it the current
         -- coordinates of the player's ship
@@ -30,13 +32,15 @@ update realWorld input state =
         frameRate' = case input of
                        Passive t -> 1 / (1000 / (60 * t))
                        otherwise -> state.frameRate
-        stars' = Background.update state.stars state.ship state.time
+        stars' = 
+            Star.update state.stars state.ship state.time (fst state.randoms)
         enemies' = 
-            Enemy.updateAll (map updateEnemies state.enemies) state.frameRate state.time state.ship
+            Enemy.updateAll (map updateEnemies state.enemies) state.frameRate state.time state.ship (fst state.randoms)
 
         bullets' = Bullet.update input state.bullets state.ship state.frameRate
 
         time' = state.time + 1 * frameRate'
+        randoms' = Randoms.update state.randoms
        
     in {state | ship <- ship',
                 asteroids <- asteroids',
@@ -44,7 +48,8 @@ update realWorld input state =
                 time <- time',
                 bullets <- bullets',
                 frameRate <- frameRate',
-                stars <- stars' }
+                stars <- stars',
+                randoms <- randoms'}
 
     --collisionDetection state
 
@@ -52,5 +57,3 @@ update realWorld input state =
 -- a: Bullet
 -- (collisionDetection bullet): function' [Asteroids] -> Gamestate
 -- map collisitonDetection
-
-

@@ -19,6 +19,11 @@ render state =
         background = [Background.renderBackground]
         stars = (map Star.renderStars) state.stars
         farAsteroids = (map Asteroid.renderFarAway) state.farAsteroids
-        forms = stars ++ enemyForms ++ asteroidForms ++ farAsteroids ++ shipForm ++ bulletForms
+        forms = stars ++ 
+                enemyForms ++ 
+                asteroidForms ++ 
+                farAsteroids ++ 
+                shipForm ++ 
+                bulletForms
         fixPosition = (-state.ship.x, -state.ship.y)
     in  background ++ (map (move  fixPosition) forms) ++ frameRate

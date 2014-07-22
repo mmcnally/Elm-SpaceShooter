@@ -54,8 +54,8 @@ createRoid ship time randoms =
 maxRoids = 25
 
 -- adds a new asteroid to the list
-addRoid: [Asteroid] -> Ship {} -> Float -> [Float] -> [Asteroid] -> [Asteroid]
-addRoid roids ship time randoms farAways= if ((length roids) + (length farAways)) < maxRoids
+addRoid: [Asteroid] -> Ship {} -> Float -> [Float] -> [Asteroid]
+addRoid roids ship time randoms = if (length roids) < maxRoids
                           then (createRoid ship time randoms)::roids
                           else roids
 
@@ -74,22 +74,21 @@ closeEnough ship roid =
 deleteOldRoids: [Asteroid] -> Ship {} -> [Asteroid]
 deleteOldRoids roids ship = filter (closeEnough ship) roids
 
-tooFar: Ship {} -> Asteroid -> Bool
-tooFar ship roid = 
-    if (abs (ship.x - roid.x)) < 200 && (abs (ship.y - roid.y)) < 200
-    then True
-    else False
+--tooFar: Ship {} -> Asteroid -> Bool
+--tooFar ship roid = 
+--    if (abs (ship.x - roid.x)) < 200 && (abs (ship.y - roid.y)) < 200
+--    then True
+--    else False
 
 --filterFarAways: Ship {} -> [Asteroid] -> [Asteroid]
 --filterFarAways ship roids = filter (tooFar ship) roids
 
 -- updates all asteroids
-update: [Asteroid] -> Ship {} -> Float -> Float -> [Float] -> [Asteroid] -> [Asteroid]
-update roids ship time frameRate randoms farAways =
-    let --newRoids = filterFarAways ship farAways
-        roids' = deleteOldRoids roids ship
+update: [Asteroid] -> Ship {} -> Float -> Float -> [Float] -> [Asteroid]
+update roids ship time frameRate randoms =
+    let roids' = deleteOldRoids roids ship
         --roids' = (filterFarAways ship roids) ++ newRoids
-        roids'' = addRoid roids' ship time randoms farAways
+        roids'' = addRoid roids' ship time randoms
     in  updateAll roids'' frameRate
 
 render : Asteroid -> Form

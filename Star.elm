@@ -38,10 +38,12 @@ createStarOnScreen time randoms =
     in { initialStar | x <- xy.x,
                        y <- xy.y }
 
+maxStars = 100
+
 -- adds a random star if there aren't enough
 addStars: [Star] -> Ship {} -> Float -> [Float] -> [Star]
 addStars stars ship time randoms = 
-    if (length stars) < 200 || (floor time) `mod` 15 == 0
+    if (length stars) < maxStars
     then (createStar ship time randoms)::stars
     else stars
 

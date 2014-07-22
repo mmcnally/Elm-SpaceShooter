@@ -77,7 +77,7 @@ physics ship frameRate=
               y <- ship'.y + frameRate * (ship'.vy * ship'.speed) }
                
 -- max number of enemies allowed on screen
-maxEnemies = 25
+maxEnemies = 10
 
 -- predicate for filter function in deleteOldEnemies
 --

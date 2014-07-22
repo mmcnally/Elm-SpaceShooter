@@ -25,7 +25,6 @@ initialAsteroid = { x = 0,
 -- applies physics to one asteroid
 physics : Asteroid -> Float -> Asteroid
 physics asteroid frameRate =
-
     let moveX = asteroid.x + frameRate * asteroid.vx
         moveY = asteroid.y + frameRate * asteroid.vy
     in
@@ -52,10 +51,11 @@ createRoid ship time randoms =
            center <- (0 + x, -5 + y)}
 
 
+maxRoids = 25
 
 -- adds a new asteroid to the list
 addRoid: [Asteroid] -> Ship {} -> Float -> [Float] -> [Asteroid]
-addRoid roids ship time randoms = if (length roids) < 50
+addRoid roids ship time randoms = if (length roids) < maxRoids
                           then (createRoid ship time randoms)::roids
                           else roids
 

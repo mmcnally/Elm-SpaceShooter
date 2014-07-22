@@ -7,12 +7,9 @@ renderFilter state =
         asteroids' = filter pred state.asteroids
         enemies' = filter pred state.enemies
         stars' = filter pred state.stars
-        farAsteroids' = filter pred state.farAsteroids
     in { state | asteroids    <- asteroids',
                  enemies      <- enemies',
-                 stars        <- stars',
-                 farAsteroids <- farAsteroids' }
-
+                 stars        <- stars' }
 
 
 tooClose ship thing = 

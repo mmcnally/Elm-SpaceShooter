@@ -27,7 +27,7 @@ tooFar ship {x, y} =
     else False
 
 --filterFarAways: Ship {} -> [Asteroid] -> [Asteroid]
-filterFarAways ship things = filter (tooFar ship) things
+--filterFarAways ship things = filter (tooFar ship) things
 
 
 partitionFarAways: Ship {} -> [A a] -> ([A a], [A a])

@@ -25,8 +25,7 @@ update realWorld input state =
                                      state.ship 
                                      state.time 
                                      state.frameRate 
-                                     (fst state.randoms) 
-                                     state.farAsteroids
+                                     (fst state.randoms)
 
         -- updates an enemy ship to give it the current
         -- coordinates of the player's ship
@@ -57,18 +56,15 @@ update realWorld input state =
 
         randoms' = Randoms.update state.randoms
 
-        --farAsteroids' = Asteroid.updateFarAway state.farAsteroids 
-        --                                       state.asteroids 
-        --                                       state.ship
-        --                                       state.frameRate
-    in {state | ship <- ship',
+        
+    in {state | ship      <- ship',
                 asteroids <- asteroids',
-                enemies <- enemies',
-                time <- time',
-                bullets <- bullets',
+                enemies   <- enemies',
+                time      <- time',
+                bullets   <- bullets',
                 frameRate <- frameRate',
-                stars <- stars',
-                randoms <- randoms' }
+                stars     <- stars',
+                randoms   <- randoms' }
 
     --collisionDetection state
 

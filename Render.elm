@@ -22,13 +22,15 @@ render state =
         frameRate = [toForm <| asText <| state''.frameRate]
         background = [Background.renderBackground]
         stars = (map Star.renderStars) state''.stars
-        --farAsteroids = (map Asteroid.renderFarAway) state''.farAsteroids
-        forms = stars ++ 
+        viewThing = [move (state.ship.x, state.ship.y) <| 
+                                   outlined (solid gray) <|
+                                           square 400 ]
+        forms = stars ++
                 farForms ++
-                enemyForms ++ 
-                asteroidForms ++ 
-                --farAsteroids ++ 
-                shipForm ++ 
-                bulletForms
+                enemyForms ++
+                asteroidForms ++
+                shipForm ++
+                bulletForms ++
+                viewThing
         fixPosition = (-state''.ship.x, -state''.ship.y)
     in  background ++ (map (move  fixPosition) forms) ++ frameRate

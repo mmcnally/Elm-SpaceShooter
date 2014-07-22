@@ -18,8 +18,8 @@ initialStar = { x = 0,
 -- set of stars that appear on the screen at the start of the game
 initialStars: [Star]
 initialStars  = 
-    let randoms = fst <| listOf (floatRange (0, 1000)) 31 (generator 5)
-    in initialHelper 30 [] randoms 1
+    let randoms = fst <| listOf (floatRange (0, 1000)) 21 (generator 5)
+    in initialHelper 20 [] randoms 1
 
 -- helper function for initialStars
 initialHelper: Float -> [Star] -> [Float] -> Float -> [Star]
@@ -62,8 +62,8 @@ createStar ship time randoms =
 maxDistance = 2000
 
 --decides if star is too far away from the player's ship
-closeEnough: Star -> Ship {} -> Bool
-closeEnough star ship =
+closeEnough: Ship {} -> Star -> Bool
+closeEnough ship star =
     if (abs (ship.x - star.x)) < maxDistance && 
        (abs (ship.y - star.y)) < maxDistance
     then True
@@ -72,7 +72,7 @@ closeEnough star ship =
 
 -- deletes stars that are too far away from the player's ship
 deleteStars: [Star] -> Ship {} -> [Star]
-deleteStars stars ship = filter (flip closeEnough ship) stars
+deleteStars stars ship = filter (closeEnough ship) stars
 
 
 

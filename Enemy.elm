@@ -25,7 +25,8 @@ enemy = { x = 0,
           playerY = 0,
           damage = 0,
           --bullets = [],
-          intel = 10 }
+          intel = 10,
+          viewSize = 0}
 
 
 -- calculates angle for an enemyship so that

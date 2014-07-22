@@ -19,7 +19,7 @@ defaultBullet = {x = 0,
                 vx = 0, 
                 vy = 0,
              speed = 0,
-              size = 0,
+              size = 7.5,
              angle = 0,
          birthtime = 0,
          center = (0, -2.5) }

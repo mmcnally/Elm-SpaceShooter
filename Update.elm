@@ -3,11 +3,13 @@ import Playground (..)
 import Playground.Input (..)
 import Keyboard.Keys as Keys
 import GameState (..)
+import Asteroid (Asteroid)
 import Asteroid
 import Ship (Ship)
 import Ship
 import Enemy
 import GameAI
+import Bullet (Bullet)
 import Bullet
 import Background
 
@@ -42,13 +44,13 @@ update realWorld input state =
                 time <- time',
                 bullets <- bullets',
                 frameRate <- frameRate',
---
-     --collisionDetection state
---
---detectCollision: GameState -> GameState
---detectCollision state = 
---    map collisionDetection state.bullets
---
---collisionDetection: Bullet -> [Asteroid] -> GameState
---collisionDetection bullet asteroids = 
                 stars <- stars' }
+
+    --collisionDetection state
+
+-- map: (a -> b) -> [Bullet] -> [function [Asteroid] -> GameState]
+-- a: Bullet
+-- (collisionDetection bullet): function' [Asteroids] -> Gamestate
+-- map collisitonDetection
+
+

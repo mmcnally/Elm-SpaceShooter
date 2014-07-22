@@ -80,15 +80,15 @@ tooFar ship roid =
     then True
     else False
 
-filterFarAways: Ship {} -> [Asteroid] -> [Asteroid]
-filterFarAways ship roids = filter (tooFar ship) roids
+--filterFarAways: Ship {} -> [Asteroid] -> [Asteroid]
+--filterFarAways ship roids = filter (tooFar ship) roids
 
 -- updates all asteroids
 update: [Asteroid] -> Ship {} -> Float -> Float -> [Float] -> [Asteroid] -> [Asteroid]
 update roids ship time frameRate randoms farAways =
-    let newRoids = filterFarAways ship farAways
-        --roids' = deleteOldRoids roids ship
-        roids' = (filterFarAways ship roids) ++ newRoids
+    let --newRoids = filterFarAways ship farAways
+        roids' = deleteOldRoids roids ship
+        --roids' = (filterFarAways ship roids) ++ newRoids
         roids'' = addRoid roids' ship time randoms farAways
     in  updateAll roids'' frameRate
 
@@ -104,13 +104,13 @@ render {x, y} =
                 (10, -5), 
                 (5,0)] |> filled gray |> move (x, y)
 
-updateFarAway: [Asteroid] -> [Asteroid] -> Ship {} -> Float -> [Asteroid]
-updateFarAway farAways roids ship frameRate = 
-    let farAways' = snd <| partition (tooFar ship) (roids ++ farAways)
-        farAways'' = deleteOldRoids farAways' ship
-    in updateAll farAways'' frameRate
+--updateFarAway: [Asteroid] -> [Asteroid] -> Ship {} -> Float -> [Asteroid]
+--updateFarAway farAways roids ship frameRate = 
+--    let farAways' = snd <| partition (tooFar ship) (roids ++ farAways)
+--        farAways'' = deleteOldRoids farAways' ship
+--    in updateAll farAways'' frameRate
 
 -- renders far away asteroids
-renderFarAway: Asteroid -> Form
-renderFarAway {x, y} = 
-    move (x, y) <| filled gray <| circle 2
+--renderFarAway: Asteroid -> Form
+--renderFarAway {x, y} = 
+--    move (x, y) <| filled gray <| circle 2

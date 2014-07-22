@@ -57,10 +57,10 @@ update realWorld input state =
 
         randoms' = Randoms.update state.randoms
 
-        farAsteroids' = Asteroid.updateFarAway state.farAsteroids 
-                                               state.asteroids 
-                                               state.ship
-                                               state.frameRate
+        --farAsteroids' = Asteroid.updateFarAway state.farAsteroids 
+        --                                       state.asteroids 
+        --                                       state.ship
+        --                                       state.frameRate
     in {state | ship <- ship',
                 asteroids <- asteroids',
                 enemies <- enemies',
@@ -68,8 +68,7 @@ update realWorld input state =
                 bullets <- bullets',
                 frameRate <- frameRate',
                 stars <- stars',
-                randoms <- randoms',
-                farAsteroids <- farAsteroids'}
+                randoms <- randoms' }
 
     --collisionDetection state
 

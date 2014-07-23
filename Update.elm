@@ -23,45 +23,47 @@ update realWorld input state =
 
 updateAll : RealWorld -> Input -> GameState -> GameState
 updateAll realWorld input state =
-    let ship' = Ship.update input state.ship state.frameRate
+    let state' = Menu.update realWorld input state
 
-        asteroids' = Asteroid.update state.asteroids 
-                                     state.ship 
-                                     state.time 
-                                     state.frameRate 
-                                     (fst state.randoms)
+        ship' = Ship.update input state'.ship state'.frameRate
+
+        asteroids' = Asteroid.update state'.asteroids 
+                                     state'.ship 
+                                     state'.time 
+                                     state'.frameRate 
+                                     (fst state'.randoms)
 
         -- updates an enemy ship to give it the current
         -- coordinates of the player's ship
-        updateEnemies ship = { ship | playerX <- state.ship.x,
-                                      playerY <- state.ship.y }
+        updateEnemies ship = { ship | playerX <- state'.ship.x,
+                                      playerY <- state'.ship.y }
 
         frameRate' = case input of
                        Passive t -> 1 / (1000 / (60 * t))
-                       otherwise -> state.frameRate
+                       otherwise -> state'.frameRate
 
-        stars' = Star.update state.stars 
-                             state.ship 
-                             state.time 
-                             (fst state.randoms)
+        stars' = Star.update state'.stars 
+                             state'.ship 
+                             state'.time 
+                             (fst state'.randoms)
 
-        enemies' = Enemy.updateAll (map updateEnemies state.enemies) 
-                                   state.frameRate 
-                                   state.time 
-                                   state.ship 
-                                   (fst state.randoms)
+        enemies' = Enemy.updateAll (map updateEnemies state'.enemies) 
+                                   state'.frameRate 
+                                   state'.time 
+                                   state'.ship 
+                                   (fst state'.randoms)
 
         bullets' = Bullet.update input 
-                                 state.bullets
-                                 state.ship
-                                 state.frameRate
+                                 state'.bullets
+                                 state'.ship
+                                 state'.frameRate
 
-        time' = state.time + 1 * frameRate'
+        time' = state'.time + 1 * frameRate'
 
-        randoms' = Randoms.update state.randoms
+        randoms' = Randoms.update state'.randoms
 
         
-    in {state | ship      <- ship',
+    in {state' | ship      <- ship',
                 asteroids <- asteroids',
                 enemies   <- enemies',
                 time      <- time',

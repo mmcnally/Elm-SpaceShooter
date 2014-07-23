@@ -2,8 +2,9 @@ module Menu where
 import Text (..)
 import Mouse (..)
 import GameState (..)
-import PlayGround (..)
-import PlayGround.Input (..)
+import Playground (..)
+import Playground.Input (..)
+
 
 render: [Form]
 render = 
@@ -14,5 +15,12 @@ render =
                      height 40 (toText "Start Game") ]
     in background ++ text
 
-update: GameState -> Input -> GameState
-update state input = state
+update: RealWorld -> Input -> GameState -> GameState
+update realWorld input state  = 
+    let x = realWorld.mouse.x
+        y = realWorld.mouse.y
+    in case input of 
+      Click -> if | (x < 100 && x > -100 && y < 170 && y > 125) -> 
+                                            { state | isPlaying <- True }
+                  | otherwise -> state
+      otherwise -> state

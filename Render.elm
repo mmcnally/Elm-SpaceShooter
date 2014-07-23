@@ -8,9 +8,16 @@ import Star
 import Background
 import Console
 import Viewer
+import Menu
 
-render : GameState -> [Form]
-render state = 
+render: GameState -> [Form]
+render state = if | state.gameOver == True -> [toForm <| asText "Game Over"]
+                  | state.isPlaying == False -> Menu.render
+                  | otherwise -> renderAll state
+                    
+
+renderAll : GameState -> [Form]
+renderAll state = 
     let state' = Console.renderFilter state
         farforms_state'' = Viewer.renderAll state'
         farForms = fst farforms_state''

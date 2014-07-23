@@ -14,11 +14,15 @@ import Bullet
 import Background
 import Randoms
 import Star
+import Menu
 
+update realWorld input state = 
+    if | state.gameOver == True -> state
+       | state.isPlaying == False -> Menu.update realWorld input state
+       | otherwise -> updateAll realWorld input state
 
-
-update : RealWorld -> Input -> GameState -> GameState
-update realWorld input state =
+updateAll : RealWorld -> Input -> GameState -> GameState
+updateAll realWorld input state =
     let ship' = Ship.update input state.ship state.frameRate
 
         asteroids' = Asteroid.update state.asteroids 

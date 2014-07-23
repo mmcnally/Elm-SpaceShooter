@@ -3,6 +3,7 @@ import GameState (..)
 import Enemy (..)
 import Ship (..)
 import Asteroid (..)
+import Bullet (..)
 
 type A a = { a | x: Float, y: Float }
 
@@ -14,9 +15,15 @@ renderAll state =
         asteroidsPartition = partitionFarAways state.ship state.asteroids
         asteroids' = (fst asteroidsPartition)
         asteroidForms = map render (snd asteroidsPartition)
+        bulletsPartition = partitionFarAways state.ship state.bullets
+        bullets' = (fst bulletsPartition)
+        bulletForms = map renderBullets (snd bulletsPartition)
+        stars' = filter (tooFar state.ship) state.stars
         state' = { state | enemies   <- enemies',
-                           asteroids <- asteroids' }
-    in (enemyForms ++ asteroidForms, state')
+                           asteroids <- asteroids',
+                           bullets   <- bullets',
+                           stars     <- stars' }
+    in (enemyForms ++ asteroidForms ++ bulletForms, state')
 
 
 --tooFar: Ship {} -> Asteroid -> Bool
@@ -36,3 +43,6 @@ partitionFarAways ship things = partition (tooFar ship) things
 
 render: A a -> Form
 render {x, y} = move (x,y) <| filled orange <| circle 4
+
+renderBullets: A a -> Form
+renderBullets {x, y} = move (x,y) <| filled orange <| circle 2

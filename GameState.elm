@@ -16,7 +16,7 @@ type GameState = { ship : Ship {},
                    frameRate: Float,
                    stars: [Star],
                    randoms: ([Float], Generator Standard),
-                   isPlaying: Bool,
+                   isPlaying: (Bool, Int),
                    gameOver: Bool }
 
 initialState: GameState
@@ -30,5 +30,5 @@ initialState = { ship = initialShip,
                  frameRate = 0.0,
                  stars = initialStars,
                  randoms = initialRandoms,
-                 isPlaying = False,
+                 isPlaying = (False, -1),
                  gameOver = False }

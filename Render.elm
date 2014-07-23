@@ -12,7 +12,7 @@ import Menu
 
 render: GameState -> [Form]
 render state = if | state.gameOver == True -> [toForm <| asText "Game Over"]
-                  | state.isPlaying == False -> Menu.render
+                  | (fst state.isPlaying) == False -> Menu.render state
                   | otherwise -> renderAll state
                     
 

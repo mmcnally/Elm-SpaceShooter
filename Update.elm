@@ -18,7 +18,7 @@ import Menu
 
 update realWorld input state = 
     if | state.gameOver == True -> state
-       | state.isPlaying == False -> Menu.update realWorld input state
+       | (fst state.isPlaying) == False -> Menu.update realWorld input state
        | otherwise -> updateAll realWorld input state
 
 updateAll : RealWorld -> Input -> GameState -> GameState

@@ -19,6 +19,7 @@ render state = if | state.gameOver == True -> [toForm <| asText "Game Over"]
 renderAll : GameState -> [Form]
 renderAll state = 
     let state' = Console.renderFilter state
+        consoleForms = [Console.renderConsole state']
         farforms_state'' = Viewer.renderAll state'
         farForms = fst farforms_state''
         state'' = snd farforms_state''
@@ -40,4 +41,4 @@ renderAll state =
                 bulletForms ++
                 viewThing
         fixPosition = (-state''.ship.x, -state''.ship.y)
-    in  background ++ (map (move  fixPosition) forms) ++ frameRate
+    in  background ++ (map (move  fixPosition) forms) ++ frameRate ++ consoleForms

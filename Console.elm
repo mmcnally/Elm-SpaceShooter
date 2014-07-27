@@ -1,5 +1,6 @@
 module Console where
 import GameState (..)
+import Radar
 
 
 -- only allow objects withing 800 x 600 view to render
@@ -15,10 +16,15 @@ renderFilter state =
 
 
 renderConsole: GameState -> Form
-renderConsole state = toForm <|
+renderConsole state = 
+    let radar = Radar.render state
+        console =     toForm <|
                       collage 1400 1000 [ 
-                                move (525, 0) <| filled purple <| rect 250 1000,
-                                move (-525, 0) <| filled purple <| rect 250 1000 ]
+                                move (525, 0) <| filled darkPurple <| rect 250 1000,
+                                move (-525, 0) <| filled darkPurple <| rect 250 1000,
+                                move (525, 0) radar ]
+    in console
+        
 
 
 --decides if thing is close enough to be rendered

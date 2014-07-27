@@ -8,9 +8,9 @@ import Keyboard.Keys as Keys
 
 render: GameState -> [Form]
 render state = 
-    let menuBackground = [filled darkBlue <| rect 300 400]
+    let menuBackground = [filled darkPurple <| rect 300 400]
         num = snd state.isPlaying
-        color = if num == 0 then green else blue
+        color = if num == 0 then darkOrange else purple
         background = [filled black <| rect 1500 1500]
         startTextBackground = [move (0, 150) <| filled color <| rect 200 50]
         startText = [move (0, 150) <| 

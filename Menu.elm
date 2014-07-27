@@ -8,16 +8,17 @@ import Keyboard.Keys as Keys
 
 render: GameState -> [Form]
 render state = 
-    let background = [filled blue <| rect 300 400]
+    let menuBackground = [filled darkBlue <| rect 300 400]
         num = snd state.isPlaying
-        color = if num == 0 then green else darkBlue
+        color = if num == 0 then green else blue
+        background = [filled black <| rect 1500 1500]
         startTextBackground = [move (0, 150) <| filled color <| rect 200 50]
         startText = [move (0, 150) <| 
                             toForm <| 
                           centered <| 
                      height 40 (toText "Start Game") ]
        
-    in background ++ startTextBackground ++ startText
+    in background ++ menuBackground ++ startTextBackground ++ startText
 
 update: RealWorld -> Input -> GameState -> GameState
 update realWorld input state  = 

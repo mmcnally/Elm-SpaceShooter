@@ -89,13 +89,13 @@ collisionDetection state =
     in
     collisionDetection'' state' state'.bullets [] state'.enemies state'.enemies [] 
 
-collisionDetection': GameState -> [Bullet] -> [Asteroid] -> [Asteroid] -> [Asteroid] -> [Bullet] -> GameState
-collisionDetection'  modifiedState modifiableBullets prevAsteroids uncheckedAsteroids currentAsteroids finalBullets = 
-
+collisionDetection': GameState -> [Bullet] -> [Asteroid] -> [Asteroid] -> 
+                                [Asteroid] ->   [Bullet] -> GameState
+collisionDetection'  modifiedState modifiableBullets prevAsteroids 
+                     uncheckedAsteroids currentAsteroids finalBullets = 
     let theBullets = modifiableBullets
         theAsteroids = uncheckedAsteroids
-    in
-    case theBullets of
+    in case theBullets of
         -- All Bullets checked
         [] -> { modifiedState | bullets <- finalBullets,
                                 asteroids <- currentAsteroids }
@@ -105,22 +105,42 @@ collisionDetection'  modifiedState modifiableBullets prevAsteroids uncheckedAste
             case theAsteroids of
               [] -> let newFinalBullets = (head theBullets) :: finalBullets
                     in
-                      collisionDetection' modifiedState (tail theBullets) [] currentAsteroids currentAsteroids newFinalBullets 
+                      collisionDetection' modifiedState 
+                                          (tail theBullets) 
+                                          [] 
+                                          currentAsteroids 
+                                          currentAsteroids 
+                                          newFinalBullets 
                                           
               -- Bullet evaluation
               otherwise ->
               -- Bullet not overlapping particular asteroid
                   if not (overlap (head theBullets) (head theAsteroids))
                   then
-                     collisionDetection' modifiedState theBullets ((head theAsteroids) :: prevAsteroids) (tail theAsteroids) currentAsteroids finalBullets 
+                     collisionDetection' modifiedState 
+                                         theBullets 
+                                         ((head theAsteroids) :: prevAsteroids) 
+                                         (tail theAsteroids) 
+                                         currentAsteroids 
+                                         finalBullets 
                   -- Bullet is overlapping particular asteroid
                   else
                       let newCurrentAsteroids = (prevAsteroids ++ (tail theAsteroids))
                       in
-                      collisionDetection' modifiedState (tail modifiableBullets) [] newCurrentAsteroids newCurrentAsteroids finalBullets 
+                      collisionDetection' modifiedState 
+                                          (tail modifiableBullets) 
+                                          [] 
+                                          newCurrentAsteroids 
+                                          newCurrentAsteroids 
+                                          finalBullets 
 
 collisionDetection'': GameState -> [Bullet] -> [EnemyShip {}] -> [EnemyShip {}] -> [EnemyShip {}] -> [Bullet] -> GameState
-collisionDetection''  modifiedState modifiableBullets prevEnemies uncheckedEnemies currentEnemies finalBullets = 
+collisionDetection''  modifiedState 
+                      modifiableBullets 
+                      prevEnemies 
+                      uncheckedEnemies 
+                      currentEnemies 
+                      finalBullets = 
 
     let theBullets = modifiableBullets
         theEnemies = uncheckedEnemies
@@ -135,19 +155,34 @@ collisionDetection''  modifiedState modifiableBullets prevEnemies uncheckedEnemi
             case theEnemies of
               [] -> let newFinalBullets = (head theBullets) :: finalBullets
                     in
-                      collisionDetection'' modifiedState (tail theBullets) [] currentEnemies currentEnemies newFinalBullets 
+                      collisionDetection'' modifiedState 
+                                           (tail theBullets) 
+                                           [] 
+                                           currentEnemies 
+                                           currentEnemies 
+                                           newFinalBullets 
                                           
               -- Bullet evaluation
               otherwise ->
               -- Bullet not overlapping particular asteroid
                   if not (overlap' (head theBullets) (head theEnemies))
                   then
-                     collisionDetection'' modifiedState theBullets ((head theEnemies) :: prevEnemies) (tail theEnemies) currentEnemies finalBullets 
+                     collisionDetection'' modifiedState 
+                                          theBullets 
+                                          ((head theEnemies) :: prevEnemies) 
+                                          (tail theEnemies) 
+                                          currentEnemies 
+                                          finalBullets 
                   -- Bullet is overlapping particular asteroid
                   else
                       let newCurrentEnemies = (prevEnemies ++ (tail theEnemies))
                       in
-                      collisionDetection'' modifiedState (tail modifiableBullets) [] newCurrentEnemies newCurrentEnemies finalBullets 
+                      collisionDetection'' modifiedState 
+                                           (tail modifiableBullets) 
+                                           [] 
+                                           newCurrentEnemies 
+                                           newCurrentEnemies 
+                                           finalBullets 
 
 overlap: Location a -> Location b -> Bool
 overlap = 
@@ -159,9 +194,9 @@ overlap' =
 
 distance: (Float, Float) -> (Float, Float) -> Float
 distance shapeOne shapeTwo = 
-    let divisor = ((fst shapeTwo) - (fst shapeOne))^2 + ((snd shapeTwo) - (snd shapeOne))^2 
-    in
-    sqrt divisor
+    let divisor = ((fst shapeTwo) - (fst shapeOne))^2 + 
+                  ((snd shapeTwo) - (snd shapeOne))^2 
+    in sqrt divisor
 
 inDistance: Float -> Location a -> Location b -> Bool
 inDistance d shape1 shape2 =

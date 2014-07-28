@@ -1,6 +1,9 @@
 module Radar where
 import GameState (..)
 
+update: GameState -> GameState
+update state = state
+
 render: GameState -> Form
 render state = 
     let outlineColor = charcoal

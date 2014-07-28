@@ -85,9 +85,19 @@ updateAll realWorld input state =
 
 collisionDetection: GameState -> GameState
 collisionDetection state = 
-    let state' = collisionDetection' state state.bullets [] state.asteroids state.asteroids []
+    let state' = collisionDetection' state 
+                                     state.bullets 
+                                     [] 
+                                     state.asteroids 
+                                     state.asteroids 
+                                     []
     in
-    collisionDetection'' state' state'.bullets [] state'.enemies state'.enemies [] 
+    collisionDetection'' state' 
+                         state'.bullets 
+                         [] 
+                         state'.enemies 
+                         state'.enemies 
+                         [] 
 
 collisionDetection': GameState -> [Bullet] -> [Asteroid] -> [Asteroid] -> 
                                 [Asteroid] ->   [Bullet] -> GameState

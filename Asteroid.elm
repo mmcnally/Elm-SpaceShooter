@@ -51,7 +51,7 @@ createRoid ship time randoms =
            center <- (0 + x, -5 + y)}
 
 
-maxRoids = 50
+maxRoids = 100
 
 -- adds a new asteroid to the list
 addRoid: [Asteroid] -> Ship {} -> Float -> [Float] -> [Asteroid]

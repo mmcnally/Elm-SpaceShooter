@@ -16,6 +16,8 @@ import Randoms
 import Star
 import Menu
 
+type Location a = { a | center : (Float, Float) }
+
 update realWorld input state = 
     if | state.gameOver == True -> state
        | (fst state.isPlaying) == False -> Menu.update realWorld input state
@@ -63,17 +65,66 @@ updateAll realWorld input state =
         randoms' = Randoms.update state'.randoms
 
         
-    in {state' | ship      <- ship',
-                asteroids <- asteroids',
-                enemies   <- enemies',
-                time      <- time',
-                bullets   <- bullets',
-                frameRate <- frameRate',
-                stars     <- stars',
-                randoms   <- randoms' }
-
-    --collisionDetection state
+        state'' = { state' | ship <- ship',
+                    asteroids <- asteroids',
+                    enemies   <- enemies',
+                    time      <- time',
+                    bullets   <- bullets',
+                    frameRate <- frameRate',
+                    stars     <- stars',
+                    randoms   <- randoms' }
+          in
+          collisionDetection state''
 
 -- map: (a -> b) -> [Bullet] -> [function [Asteroid] -> GameState]
 -- a: Bullet
 -- (collisionDetection bullet): function' [Asteroids] -> Gamestate
+
+collisionDetection: GameState -> GameState
+collisionDetection state = 
+    collisionDetection' state state.bullets [] state.asteroids state.asteroids []
+
+collisionDetection': GameState -> [Bullet] -> [Asteroid] -> [Asteroid] -> [Asteroid] -> [Bullet] -> GameState
+collisionDetection'  modifiedState modifiableBullets prevAsteroids uncheckedAsteroids currentAsteroids finalBullets = 
+
+    let theBullets = modifiableBullets
+        theAsteroids = uncheckedAsteroids
+    in
+    case theBullets of
+        -- All Bullets checked
+        [] -> { modifiedState | bullets <- finalBullets,
+                                asteroids <- currentAsteroids }
+
+        -- Particular Bullet is not colliding with Asteroid
+        otherwise -> 
+            case theAsteroids of
+              [] -> let newFinalBullets = (head theBullets) :: finalBullets
+                    in
+                      collisionDetection' modifiedState (tail theBullets) [] currentAsteroids currentAsteroids newFinalBullets 
+                                          
+              -- Bullet evaluation
+              otherwise ->
+              -- Bullet not overlapping particular asteroid
+                  if not (overlap (head theBullets) (head theAsteroids))
+                  then
+                     collisionDetection' modifiedState theBullets ((head theAsteroids) :: prevAsteroids) (tail theAsteroids) currentAsteroids finalBullets 
+                  -- Bullet is overlapping particular asteroid
+                  else
+                      let newCurrentAsteroids = (prevAsteroids ++ (tail theAsteroids))
+                      in
+                      collisionDetection' modifiedState (tail modifiableBullets) [] newCurrentAsteroids newCurrentAsteroids finalBullets 
+
+overlap: Location a -> Location b -> Bool
+overlap = 
+    inDistance 12.5 
+        
+
+distance: (Float, Float) -> (Float, Float) -> Float
+distance shapeOne shapeTwo = 
+    let divisor = ((fst shapeTwo) - (fst shapeOne))^2 + ((snd shapeTwo) - (snd shapeOne))^2 
+    in
+    sqrt divisor
+
+inDistance: Float -> Location a -> Location b -> Bool
+inDistance d shape1 shape2 =
+    (distance (shape1.center) (shape2.center) ) < d

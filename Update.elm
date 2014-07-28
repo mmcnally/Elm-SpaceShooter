@@ -56,4 +56,3 @@ update realWorld input state =
 -- map: (a -> b) -> [Bullet] -> [function [Asteroid] -> GameState]
 -- a: Bullet
 -- (collisionDetection bullet): function' [Asteroids] -> Gamestate
--- map collisitonDetection

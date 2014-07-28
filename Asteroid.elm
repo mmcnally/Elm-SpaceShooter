@@ -25,7 +25,6 @@ initialAsteroid = { x = 0,
 -- applies physics to one asteroid
 physics : Asteroid -> Float -> Asteroid
 physics asteroid frameRate =
-
     let moveX = asteroid.x + frameRate * asteroid.vx
         moveY = asteroid.y + frameRate * asteroid.vy
     in
@@ -52,10 +51,11 @@ createRoid ship time randoms =
            center <- (0 + x, -5 + y)}
 
 
+maxRoids = 50
 
 -- adds a new asteroid to the list
 addRoid: [Asteroid] -> Ship {} -> Float -> [Float] -> [Asteroid]
-addRoid roids ship time randoms = if (length roids) < 50
+addRoid roids ship time randoms = if (length roids) < maxRoids
                           then (createRoid ship time randoms)::roids
                           else roids
 
@@ -63,26 +63,53 @@ addRoid roids ship time randoms = if (length roids) < 50
 --
 -- decides if an asteroid is close enough to player's
 -- ship to not be deleted
-closeEnough: Asteroid -> Ship {} -> Bool
-closeEnough roid ship = 
-    if (abs (ship.x - roid.x)) < 1200 && (abs (ship.y - roid.y)) < 1200
+closeEnough: Ship {} -> Asteroid -> Bool
+closeEnough ship roid = 
+    if (abs (ship.x - roid.x)) < 2000 && (abs (ship.y - roid.y)) < 2000
     then True
     else False
 
 -- deletes asteroids that are too far from the
 -- player's ship
 deleteOldRoids: [Asteroid] -> Ship {} -> [Asteroid]
-deleteOldRoids roids ship = filter (flip closeEnough ship) roids
+deleteOldRoids roids ship = filter (closeEnough ship) roids
 
+--tooFar: Ship {} -> Asteroid -> Bool
+--tooFar ship roid = 
+--    if (abs (ship.x - roid.x)) < 200 && (abs (ship.y - roid.y)) < 200
+--    then True
+--    else False
+
+--filterFarAways: Ship {} -> [Asteroid] -> [Asteroid]
+--filterFarAways ship roids = filter (tooFar ship) roids
 
 -- updates all asteroids
 update: [Asteroid] -> Ship {} -> Float -> Float -> [Float] -> [Asteroid]
 update roids ship time frameRate randoms =
-    let roids' = addRoid roids ship time randoms
-        roids'' = deleteOldRoids roids' ship
+    let roids' = deleteOldRoids roids ship
+        --roids' = (filterFarAways ship roids) ++ newRoids
+        roids'' = addRoid roids' ship time randoms
     in  updateAll roids'' frameRate
 
 render : Asteroid -> Form
 render {x, y} = 
     let size = 10
-    in polygon [(-5,0), (-10, -5), (-10, -10), (-5, -15), (5, -15), (10, -10), (10, -5), (5,0)] |> filled gray |> move (x, y)
+    in polygon [(-5,0),
+                (-10, -5),
+                (-10, -10),
+                (-5, -15),
+                (5, -15),
+                (10, -10),
+                (10, -5), 
+                (5,0)] |> filled gray |> move (x, y)
+
+--updateFarAway: [Asteroid] -> [Asteroid] -> Ship {} -> Float -> [Asteroid]
+--updateFarAway farAways roids ship frameRate = 
+--    let farAways' = snd <| partition (tooFar ship) (roids ++ farAways)
+--        farAways'' = deleteOldRoids farAways' ship
+--    in updateAll farAways'' frameRate
+
+-- renders far away asteroids
+--renderFarAway: Asteroid -> Form
+--renderFarAway {x, y} = 
+--    move (x, y) <| filled gray <| circle 2

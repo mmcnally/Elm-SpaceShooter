@@ -24,7 +24,8 @@ enemy = { x = 0,
           playerY = 0,
           damage = 0,
           --bullets = [],
-          intel = 10 }
+          intel = 10,
+          viewSize = 0}
 
 
 -- calculates angle for an enemyship so that
@@ -76,7 +77,7 @@ physics ship frameRate=
               y <- ship'.y + frameRate * (ship'.vy * ship'.speed) }
                
 -- max number of enemies allowed on screen
-maxEnemies = 25
+maxEnemies = 10
 
 -- predicate for filter function in deleteOldEnemies
 --

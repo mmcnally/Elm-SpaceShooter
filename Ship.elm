@@ -11,7 +11,8 @@ type Ship a = { a | x : Float,
                     size : Float,
                     angle: Float,
                     accelerate: Float,
-                    damage : Int }
+                    damage : Int,
+                    viewSize: Float }
                    -- bullets: [Bullet]}
               
 type ShipColor = { body : Color, window : Color, body2 : Color }
@@ -30,7 +31,8 @@ enemy = { x = 0,
           size = 10,
           angle = 0,
           accelerate = 0,
-          damage = 0 }
+          damage = 0,
+          viewSize = 0 }
           -- bullets = [] }
 
 initialShip : Ship {}
@@ -43,7 +45,8 @@ initialShip = { x = 0,
                 size = 20,
                 angle = 0,
                 accelerate = 0,
-                damage = 0 }
+                damage = 0,
+                viewSize = 200 }
                 -- bullets = [] }
 
 render : Ship a -> [Form]

@@ -30,6 +30,7 @@ updateAll : RealWorld -> Input -> GameState -> GameState
 updateAll realWorld input state =
     let state' = Menu.update realWorld input state
 
+        
         ship' = Ship.update input state'.ship state'.frameRate
 
         asteroids' = Asteroid.update state'.asteroids 

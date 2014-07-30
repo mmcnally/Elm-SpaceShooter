@@ -15,15 +15,16 @@ renderFilter state =
                  stars        <- stars' }
 
 
-renderConsole: GameState -> Form
+renderConsole: GameState -> [Form]
 renderConsole state = 
-    let radar = Radar.render state
-        console =     toForm <|
-                      collage 1400 1000 [ 
-                                move (525, 0) <| filled darkPurple <| rect 250 1000,
-                                move (-525, 0) <| filled darkPurple <| rect 250 1000,
-                                move (525, 0) radar ]
-    in console
+    let radarBackground = Radar.renderBackground
+        radarForms = map (Radar.render state.ship.x state.ship.y) state.radarForms
+        console = 
+            [toForm <|
+            collage 1400 1000 [ 
+                         move (525, 0) <| filled darkPurple <| rect 250 1000,
+                         move (-525, 0) <| filled darkPurple <| rect 250 1000] ]
+    in console ++ radarBackground ++ radarForms
         
 
 

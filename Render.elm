@@ -18,8 +18,8 @@ render state = if | state.gameOver == True -> [toForm <| asText "Game Over"]
 
 renderAll : GameState -> [Form]
 renderAll state = 
-    let state' = Console.renderFilter state
-        consoleForms = [Console.renderConsole state']
+    let consoleForms = Console.renderConsole state
+        state' = Console.renderFilter state
         farforms_state'' = Viewer.renderAll state'
         farForms = fst farforms_state''
         state'' = snd farforms_state''

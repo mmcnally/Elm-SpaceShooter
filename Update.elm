@@ -16,6 +16,7 @@ import Background
 import Randoms
 import Star
 import Menu
+import Radar
 
 type Location a = { a | center : (Float, Float) }
 type Location' a = {a | x: Float,
@@ -30,7 +31,6 @@ updateAll : RealWorld -> Input -> GameState -> GameState
 updateAll realWorld input state =
     let state' = Menu.update realWorld input state
 
-        
         ship' = Ship.update input state'.ship state'.frameRate
 
         asteroids' = Asteroid.update state'.asteroids 
@@ -68,15 +68,19 @@ updateAll realWorld input state =
 
         randoms' = Randoms.update state'.randoms
 
-        
+        radarForms' = Radar.update state'.asteroids
+                                   state'.enemies
+                                   state'.bullets
+
         state'' = { state' | ship <- ship',
-                    asteroids <- asteroids',
-                    enemies   <- enemies',
-                    time      <- time',
-                    bullets   <- bullets',
-                    frameRate <- frameRate',
-                    stars     <- stars',
-                    randoms   <- randoms' }
+                    asteroids  <- asteroids',
+                    enemies    <- enemies',
+                    time       <- time',
+                    bullets    <- bullets',
+                    frameRate  <- frameRate',
+                    stars      <- stars',
+                    randoms    <- randoms',
+                    radarForms <- radarForms'}
           in
           collisionDetection state''
 

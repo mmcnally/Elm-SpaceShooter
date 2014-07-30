@@ -7,6 +7,7 @@ import Star (..)
 import Generator (..)
 import Generator.Standard (..)
 import Randoms (..)
+import Radar (..)
 
 type GameState = { ship : Ship {},
                    asteroids : [Asteroid],
@@ -17,7 +18,8 @@ type GameState = { ship : Ship {},
                    stars: [Star],
                    randoms: ([Float], Generator Standard),
                    isPlaying: (Bool, Int),
-                   gameOver: Bool }
+                   gameOver: Bool,
+                   radarForms: [Coordinate {}] }
 
 initialState: GameState
 initialState = { ship = initialShip,
@@ -31,4 +33,5 @@ initialState = { ship = initialShip,
                  stars = initialStars,
                  randoms = initialRandoms,
                  isPlaying = (False, -1),
-                 gameOver = False }
+                 gameOver = False,
+                 radarForms = []}

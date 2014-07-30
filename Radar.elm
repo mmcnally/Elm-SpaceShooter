@@ -2,8 +2,11 @@ module Radar where
 import Asteroid (..)
 import Enemy (..)
 import Bullet (..)
+import Ship (..)
 
 type Coordinate a = { a | x: Float, y: Float }
+
+radarSize = 100
 
 emptyCoordinate: Coordinate {}
 emptyCoordinate = { x = 0, y = 0 }
@@ -11,14 +14,23 @@ emptyCoordinate = { x = 0, y = 0 }
 makeCoordinate: Coordinate a -> Coordinate {}
 makeCoordinate {x, y} = { x = x, y = y }
 
+tooFar: Ship {} -> Coordinate {} -> Bool
+tooFar ship coordinate =  
+    let xMove = (coordinate.x - ship.x) / 20
+        yMove = (coordinate.y - ship.y) / 20
+    in if sqrt ((xMove ^ 2) + (yMove ^ 2)) > (radarSize - 1)
+       then False
+       else True
 
 
-update: [Asteroid] -> [EnemyShip {}] -> [Bullet] -> [Coordinate {}]
-update roids enemies bullets =
+update: [Asteroid] -> [EnemyShip {}] -> [Bullet] -> Ship {} -> [Coordinate {}]
+update roids enemies bullets ship =
     let roids' = map makeCoordinate roids
         enemies' = map makeCoordinate enemies
         bullets' = map makeCoordinate bullets
-    in roids' ++ enemies' ++ bullets'
+        coordinates = roids' ++ enemies' ++ bullets'
+        coordinates' = filter (tooFar ship) coordinates
+    in coordinates'
 
 renderBackground: [Form]
 renderBackground = 
@@ -29,7 +41,7 @@ renderBackground =
             let form = 
               toForm <|
               collage 1500 1000 [
-                    move (525, -180) <| filled backgroundColor <| circle 100,
+                    move (525, -180) <| filled backgroundColor <| circle radarSize,
                     move (525, -180) <| filled blue (circle 3),
                     move (525, -180) <| outlined (solid outlineColor) (circle 10),
                     move (525, -180) <| outlined (solid outlineColor) (circle 20),
@@ -50,6 +62,7 @@ render shipX shipY coordinate = renderPoint shipX shipY coordinate
 
 renderPoint: Float -> Float -> Coordinate {} -> Form
 renderPoint shipX shipY coordinate = 
-    let xMove = (shipX - coordinate.x) / 20
-        yMove = (shipY - coordinate.y) / 20
+    let xMove = (coordinate.x - shipX) / 20
+        yMove = (coordinate.y - shipY) / 20
     in move (525 + xMove , -180 + yMove) <| filled gray <| circle 1
+       

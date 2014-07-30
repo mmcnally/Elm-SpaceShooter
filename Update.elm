@@ -71,6 +71,7 @@ updateAll realWorld input state =
         radarForms' = Radar.update state'.asteroids
                                    state'.enemies
                                    state'.bullets
+                                   state'.ship
 
         state'' = { state' | ship <- ship',
                     asteroids  <- asteroids',

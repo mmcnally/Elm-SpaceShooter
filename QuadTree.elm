@@ -51,3 +51,27 @@ getLeaf qtree (x, y) =
                 | y <= (top - height) && x < (left + width) -> getLeaf bl (x, y)
                 | y <= (top - height) && x >= (left + width) -> getLeaf br (x, y)
                 | otherwise -> []
+
+toList: QuadTree v -> [v] -> [v]
+toList qtree list = 
+    case qtree of
+      Leaf _ vs -> vs ++ list
+      Branch _ tl tr bl br ->
+          let topLeft = toList tl []
+              topRight = toList tr []
+              bottomLeft = toList bl []
+              bottomRight = toList br []
+          in topLeft ++ topRight ++ bottomLeft ++ bottomRight ++ list
+
+--main = asText toList 
+
+
+stupidTree = empty { left = -500, right =  500, top = 500, bottom = -500 } (100, 100)
+
+
+tree = insert stupidTree 1 (0, 100)
+tree' = insert tree 2 (400, 300)
+tree'' = insert tree' 3 (32, 43)
+tree''' = insert tree'' 4 (-233, 433)
+
+main = asText <| toList tree''' []

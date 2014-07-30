@@ -20,9 +20,11 @@ renderAll : GameState -> [Form]
 renderAll state = 
     let consoleForms = Console.renderConsole state
         state' = Console.renderFilter state
-        farforms_state'' = Viewer.renderAll state'
-        farForms = fst farforms_state''
-        state'' = snd farforms_state''
+        -- partitions objects into a list of close objects
+        -- and a list of far away objects
+        farforms_state = Viewer.renderAll state'
+        farForms = fst farforms_state
+        state'' = snd farforms_state
         shipForm = Ship.render state''.ship
         asteroidForms = map Asteroid.render state''.asteroids
         enemyForms = (map Enemy.render) state''.enemies
@@ -30,6 +32,7 @@ renderAll state =
         frameRate = [toForm <| asText <| state''.frameRate]
         background = [Background.renderBackground]
         stars = (map Star.renderStars) state''.stars
+        -- view rectangle
         viewThing = [move (state.ship.x, state.ship.y) <| 
                                    outlined (solid gray) <|
                                            square 400 ]

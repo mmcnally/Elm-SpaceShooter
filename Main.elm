@@ -1,4 +1,3 @@
-
 import Playground (..)
 import GameState (initialState)
 import Render (render)

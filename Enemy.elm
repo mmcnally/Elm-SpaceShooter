@@ -1,7 +1,6 @@
 module Enemy where
 import Ship (..)
 import GameAI (..)
-import Asteroid
 import Randoms (..)
 
 

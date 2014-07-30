@@ -33,16 +33,15 @@ tooFar ship {x, y} =
     then True
     else False
 
---filterFarAways: Ship {} -> [Asteroid] -> [Asteroid]
---filterFarAways ship things = filter (tooFar ship) things
-
-
+-- partitions a list of things into a list of things that
+-- are close and a list of things that are far away
 partitionFarAways: Ship {} -> [A a] -> ([A a], [A a])
 partitionFarAways ship things = partition (tooFar ship) things
-
 
 render: A a -> Form
 render {x, y} = move (x,y) <| filled orange <| circle 4
 
+
+-- renders a bullet
 renderBullets: A a -> Form
 renderBullets {x, y} = move (x,y) <| filled orange <| circle 2

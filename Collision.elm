@@ -2,7 +2,8 @@ module Collision where
 import GameState (..)
 import Bullet (Bullet)
 import Asteroid (Asteroid)
-import Enemy (EnemyShip)
+import Enemy (..)
+import QuadTree (..)
 
 type Location a = { a | center : (Float, Float) }
 type Location' a = {a | x: Float,
@@ -20,8 +21,8 @@ collisionDetection state =
     collisionDetection'' state' 
                          state'.bullets 
                          [] 
-                         state'.enemies 
-                         state'.enemies 
+                         (treeToList state'.enemies [])
+                         (treeToList state'.enemies [])
                          [] 
 
 collisionDetection': GameState -> [Bullet] -> [Asteroid] -> [Asteroid] -> 
@@ -79,11 +80,14 @@ collisionDetection''  modifiedState
 
     let theBullets = modifiableBullets
         theEnemies = uncheckedEnemies
+        coordinates = map toCoordinate currentEnemies
     in
     case theBullets of
         -- All Bullets checked
         [] -> { modifiedState | bullets <- finalBullets,
-                                enemies <- currentEnemies }
+                                enemies <- (insertList basicEmpty 
+                                                       coordinates 
+                                                       currentEnemies) }
 
         -- Particular Bullet is not colliding with Asteroid
         otherwise -> 

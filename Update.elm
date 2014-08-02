@@ -14,6 +14,7 @@ import Star
 import Menu
 import Radar
 import Collision (..)
+import QuadTree (..)
 
 
 
@@ -31,11 +32,7 @@ updateAll realWorld input state =
                                      state'.time 
                                      state'.frameRate 
                                      (fst state'.randoms)
-
-        -- updates an enemy ship to give it the current
-        -- coordinates of the player's ship
-        updateEnemies ship = { ship | playerX <- state'.ship.x,
-                                      playerY <- state'.ship.y }
+       
         frameRate' = case input of
                        Passive t -> 1 / (1000 / (60 * t))
                        otherwise -> state'.frameRate
@@ -43,7 +40,7 @@ updateAll realWorld input state =
                              state'.ship 
                              state'.time 
                              (fst state'.randoms)
-        enemies' = Enemy.updateAll (map updateEnemies state'.enemies) 
+        enemies' = Enemy.updateAll state'.enemies
                                    state'.frameRate 
                                    state'.time 
                                    state'.ship 
@@ -67,4 +64,5 @@ updateAll realWorld input state =
                     stars      <- stars',
                     randoms    <- randoms',
                     radarForms <- radarForms'}
-          in collisionDetection state''
+    --in state''   
+    in collisionDetection state''

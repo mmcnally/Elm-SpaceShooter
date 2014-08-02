@@ -8,10 +8,11 @@ import Generator (..)
 import Generator.Standard (..)
 import Randoms (..)
 import Radar (..)
+import QuadTree (..)
 
 type GameState = { ship : Ship {},
                    asteroids : [Asteroid],
-                   enemies : [EnemyShip {}],
+                   enemies : QuadTree (EnemyShip {}),
                    bullets : [Bullet],
                    time: Float,
                    frameRate: Float,
@@ -24,9 +25,7 @@ type GameState = { ship : Ship {},
 initialState: GameState
 initialState = { ship = initialShip,
                  asteroids = [],
-                 enemies = [ {enemy | x <- 50, y <- 50, speed <- 1.0, playerX <- 50},
-                             {enemy | x <- -100, y <- 200, speed <- 0.4 },
-                             {enemy | x <- 100, y <- -150, speed <- 0.1 }],
+                 enemies = basicEmpty,
                  bullets = [],
                  time = 0,
                  frameRate = 0.0,

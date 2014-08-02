@@ -4,13 +4,15 @@ import Enemy (..)
 import Ship (..)
 import Asteroid (..)
 import Bullet (..)
+import QuadTree (..)
 
 type A a = { a | x: Float, y: Float }
 
 renderAll: GameState -> ([Form], GameState)
 renderAll state = 
-    let enemiesPartition = partitionFarAways state.ship state.enemies
+    let enemiesPartition = partitionFarAways state.ship (treeToList state.enemies [])
         enemies' = (fst enemiesPartition)
+        enemyCoordinates = map toCoordinate enemies'
         enemyForms = map render (snd enemiesPartition)
         asteroidsPartition = partitionFarAways state.ship state.asteroids
         asteroids' = (fst asteroidsPartition)
@@ -19,7 +21,9 @@ renderAll state =
         bullets' = (fst bulletsPartition)
         bulletForms = map renderBullets (snd bulletsPartition)
         stars' = filter (tooFar state.ship) state.stars
-        state' = { state | enemies   <- enemies',
+        state' = { state | enemies   <- (insertList basicEmpty 
+                                                    enemyCoordinates 
+                                                    enemies'),
                            asteroids <- asteroids',
                            bullets   <- bullets',
                            stars     <- stars' }

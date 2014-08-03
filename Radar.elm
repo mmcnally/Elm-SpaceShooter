@@ -27,6 +27,8 @@ tooFar ship coordinate =
 update: [Asteroid] -> QuadTree (EnemyShip {}) -> [Bullet] -> Ship {} -> [Coordinate {}]
 update roids enemies bullets ship =
     let roids' = map makeCoordinate roids
+        -- can't improve this function until other things are
+        -- in quadtree form, since quadtrees don't work in lists
         enemies' = treeToList (treeMap makeCoordinate enemies) []
         bullets' = map makeCoordinate bullets
         coordinates = roids' ++ enemies' ++ bullets'
@@ -59,7 +61,6 @@ renderBackground =
 render: Float -> Float -> Coordinate {} -> Form
 render shipX shipY coordinate = renderPoint shipX shipY coordinate
   
-
 
 renderPoint: Float -> Float -> Coordinate {} -> Form
 renderPoint shipX shipY coordinate = 

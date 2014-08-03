@@ -10,11 +10,11 @@ renderFilter: GameState -> GameState
 renderFilter state = 
     let pred = closeEnough state.ship
         asteroids' = filter pred state.asteroids
-        enemies' = filter pred (treeToList state.enemies [])
-        enemyCoordinates = map toCoordinate enemies'
+        enemies' = treeFilter pred state.enemies
+        --enemyCoordinates = map toCoordinate enemies'
         stars' = filter pred state.stars
     in { state | asteroids    <- asteroids',
-                 enemies      <- (insertList basicEmpty enemyCoordinates enemies'),
+                 enemies      <- enemies',
                  stars        <- stars' }
 
 

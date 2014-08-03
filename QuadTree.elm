@@ -96,10 +96,47 @@ treeMap function qtree =
               bottomRight = treeMap function br
           in Branch bb topLeft topRight bottomLeft bottomRight
 
---treeFilter: (QuadTree v -> Bool) -> QuadTree v -> QuadTree v
---treeFilter predicate qtree = 
+treeFilter: (v -> Bool) -> QuadTree v -> QuadTree v
+treeFilter predicate qtree =
+    case qtree of
+         Leaf bb vs ->
+             let vs' = filter predicate vs
+             in Leaf bb vs'
+         Branch bb tl tr bl br -> 
+             let topLeft = treeFilter predicate tl
+                 topRight = treeFilter predicate tr
+                 bottomLeft = treeFilter predicate bl
+                 bottomRight = treeFilter predicate br
+             in Branch bb topLeft topRight bottomLeft bottomRight
+
+treePartition: (v -> Bool) -> QuadTree v -> QuadTree v -> (QuadTree v, QuadTree v)
+treePartition predicate qtree newTree = 
+    case qtree of
+      Leaf bb vs -> 
+          let vsPartition = partition (predicate) vs
+              correct = fst vsPartition
+              incorrect = snd vsPartition
+          in ((Leaf bb correct), (Leaf bb incorrect))
+      Branch bb tl tr bl br ->
+          let topLeft = treePartition predicate tl newTree
+              ctl = fst topLeft
+              itl = snd topLeft
+              topRight = treePartition predicate tr newTree
+              ctr = fst topRight
+              itr = snd topRight
+              bottomLeft = treePartition predicate bl newTree
+              cbl = fst bottomLeft
+              ibl = snd bottomLeft
+              bottomRight = treePartition predicate br newTree
+              cbr = fst bottomRight
+              ibr = snd bottomRight
+          in ((Branch bb ctl ctr cbl cbr), (Branch bb itl itr ibl ibr))
+      
     
 
+--
+-- TEST FUNCTIONS
+--
 
 stupidTree = empty { left = -500, right =  500, top = 500, bottom = -500 } (100, 100)
 
@@ -107,5 +144,11 @@ tree = treeInsert stupidTree (0, 100) 1
 tree' = treeInsert tree (400, 300) 2
 tree'' = treeInsert tree' (32, 43) 3
 tree''' = treeInsert tree'' (-233, 433) 4
+tree'''' = insertList tree''' [(100, 100), (232, 4), (23, 234)] [200, 500, 401]
 
---main = asText <| treeToList tree''' []
+--fake predicate for test function
+pd v = if v > 100 
+       then True
+       else False
+
+--main = asText <| treePartition  pd tree'''' basicEmpty

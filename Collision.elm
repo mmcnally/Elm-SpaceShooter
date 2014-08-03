@@ -3,6 +3,7 @@ import GameState (..)
 import Bullet (Bullet)
 import Asteroid (Asteroid)
 import Enemy (EnemyShip)
+import ScoreBoard (..)
 
 type Location a = { a | center : (Float, Float) }
 type Location' a = {a | x: Float,
@@ -61,13 +62,14 @@ collisionDetection'  modifiedState modifiableBullets prevAsteroids
                   -- Bullet is overlapping particular asteroid
                   else
                       let newCurrentAsteroids = (prevAsteroids ++ (tail theAsteroids))
+                          newState = targetHit 1 modifiedState
                       in
-                      collisionDetection' modifiedState 
-                                          (tail modifiableBullets) 
-                                          [] 
-                                          newCurrentAsteroids 
-                                          newCurrentAsteroids 
-                                          finalBullets 
+                        collisionDetection' newState 
+                                            (tail modifiableBullets) 
+                                            [] 
+                                            newCurrentAsteroids 
+                                            newCurrentAsteroids 
+                                            finalBullets 
 
 collisionDetection'': GameState -> [Bullet] -> [EnemyShip {}] -> [EnemyShip {}] -> [EnemyShip {}] -> [Bullet] -> GameState
 collisionDetection''  modifiedState 

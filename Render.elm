@@ -9,6 +9,7 @@ import Background
 import Console
 import Viewer
 import Menu
+import ScoreBoard (..)
 
 render: GameState -> [Form]
 render state = if | state.gameOver == True -> [toForm <| asText "Game Over"]
@@ -30,6 +31,7 @@ renderAll state =
         enemyForms = (map Enemy.render) state''.enemies
         bulletForms = (map Bullet.render) state''.bullets
         frameRate = [toForm <| asText <| state''.frameRate]
+        postScore = renderScore state
         background = [Background.renderBackground]
         stars = (map Star.renderStars) state''.stars
         -- view rectangle
@@ -44,4 +46,4 @@ renderAll state =
                 bulletForms ++
                 viewThing
         fixPosition = (-state''.ship.x, -state''.ship.y)
-    in  background ++ (map (move  fixPosition) forms) ++ frameRate ++ consoleForms
+    in  background ++ (map (move  fixPosition) forms) ++ consoleForms ++ postScore

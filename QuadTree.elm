@@ -11,6 +11,8 @@ data QuadTree v = Leaf BoundingBox [v]
                 -- In order: top left, top right, bottom left, bottom right
                 | Branch BoundingBox (QuadTree v) (QuadTree v) (QuadTree v) (QuadTree v)
 
+-- creates empty QuadTree based based on 
+-- inputted bounding box and section size
 empty : BoundingBox -> (Float, Float) -> QuadTree v
 empty {left, right, top, bottom} (width, height) =
     let h = (top - bottom)
@@ -26,18 +28,34 @@ empty {left, right, top, bottom} (width, height) =
                          -- Bottom Right
                          (empty (BoundingBox (right - w/2) right (bottom + h/2) bottom) (width, height))
 
-insert : QuadTree v -> v -> (Float, Float) -> QuadTree v
-insert qtree value (x, y) = 
+-- creates empty QuadTree with bounding box of 2000 px in each direction
+basicEmpty: QuadTree v
+basicEmpty = empty { left = -2000, right = 2000, top = 2000, bottom = -2000 } 
+                   (100, 100)
+
+
+treeInsert : QuadTree v -> (Float, Float) -> v -> QuadTree v
+treeInsert qtree (x, y) value = 
     case qtree of
       Leaf box vs -> Leaf box (value::vs)
       Branch {left, right, top, bottom} tl tr bl br ->
           let height = (top - bottom)/2
               width = (right - left)/2
-          in if | y > (top - height) && x < (left + width) -> insert tl value (x, y)
-                | y > (top - height) && x >= (left + width) -> insert tr value (x, y)
-                | y <= (top - height) && x < (left + width) -> insert bl value (x, y)
-                | y <= (top - height) && x >= (left + width) -> insert br value (x, y)
+          in if | y > (top - height) && x < (left + width) -> treeInsert tl (x, y) value
+                | y > (top - height) && x >= (left + width) -> treeInsert tr (x, y) value
+                | y <= (top - height) && x < (left + width) -> treeInsert bl (x, y) value
+                | y <= (top - height) && x >= (left + width) -> treeInsert br (x, y) value
                 | otherwise -> qtree
+
+insertList: QuadTree v -> [(Float, Float)] -> [v] -> QuadTree v
+insertList qtree xys values = 
+    case xys of
+      [] -> qtree
+      otherwise -> 
+          insertList (treeInsert qtree (head xys) (head values))
+                     (tail xys)
+                     (tail values)
+    
 
 getLeaf : QuadTree v -> (Float, Float) -> [v]
 getLeaf qtree (x, y) = 
@@ -52,26 +70,85 @@ getLeaf qtree (x, y) =
                 | y <= (top - height) && x >= (left + width) -> getLeaf br (x, y)
                 | otherwise -> []
 
-toList: QuadTree v -> [v] -> [v]
-toList qtree list = 
+treeToList: QuadTree v -> [v] -> [v]
+treeToList qtree list = 
     case qtree of
       Leaf _ vs -> vs ++ list
       Branch _ tl tr bl br ->
-          let topLeft = toList tl []
-              topRight = toList tr []
-              bottomLeft = toList bl []
-              bottomRight = toList br []
+          let topLeft = treeToList tl []
+              topRight = treeToList tr []
+              bottomLeft = treeToList bl []
+              bottomRight = treeToList br []
           in topLeft ++ topRight ++ bottomLeft ++ bottomRight ++ list
 
---main = asText toList 
 
+
+treeMap: (v -> m) -> QuadTree v -> QuadTree m
+treeMap function qtree = 
+    case qtree of
+      Leaf bb vs -> 
+          let vs' = map (function) vs
+          in Leaf bb vs'
+      Branch bb tl tr bl br ->
+          let topLeft = treeMap function tl
+              topRight = treeMap function tr
+              bottomLeft = treeMap function bl
+              bottomRight = treeMap function br
+          in Branch bb topLeft topRight bottomLeft bottomRight
+
+treeFilter: (v -> Bool) -> QuadTree v -> QuadTree v
+treeFilter predicate qtree =
+    case qtree of
+         Leaf bb vs ->
+             let vs' = filter predicate vs
+             in Leaf bb vs'
+         Branch bb tl tr bl br -> 
+             let topLeft = treeFilter predicate tl
+                 topRight = treeFilter predicate tr
+                 bottomLeft = treeFilter predicate bl
+                 bottomRight = treeFilter predicate br
+             in Branch bb topLeft topRight bottomLeft bottomRight
+
+treePartition: (v -> Bool) -> QuadTree v -> QuadTree v -> (QuadTree v, QuadTree v)
+treePartition predicate qtree newTree = 
+    case qtree of
+      Leaf bb vs -> 
+          let vsPartition = partition (predicate) vs
+              correct = fst vsPartition
+              incorrect = snd vsPartition
+          in ((Leaf bb correct), (Leaf bb incorrect))
+      Branch bb tl tr bl br ->
+          let topLeft = treePartition predicate tl newTree
+              ctl = fst topLeft
+              itl = snd topLeft
+              topRight = treePartition predicate tr newTree
+              ctr = fst topRight
+              itr = snd topRight
+              bottomLeft = treePartition predicate bl newTree
+              cbl = fst bottomLeft
+              ibl = snd bottomLeft
+              bottomRight = treePartition predicate br newTree
+              cbr = fst bottomRight
+              ibr = snd bottomRight
+          in ((Branch bb ctl ctr cbl cbr), (Branch bb itl itr ibl ibr))
+      
+    
+
+--
+-- TEST FUNCTIONS
+--
 
 stupidTree = empty { left = -500, right =  500, top = 500, bottom = -500 } (100, 100)
 
+tree = treeInsert stupidTree (0, 100) 1
+tree' = treeInsert tree (400, 300) 2
+tree'' = treeInsert tree' (32, 43) 3
+tree''' = treeInsert tree'' (-233, 433) 4
+tree'''' = insertList tree''' [(100, 100), (232, 4), (23, 234)] [200, 500, 401]
 
-tree = insert stupidTree 1 (0, 100)
-tree' = insert tree 2 (400, 300)
-tree'' = insert tree' 3 (32, 43)
-tree''' = insert tree'' 4 (-233, 433)
+--fake predicate for test function
+pd v = if v > 100 
+       then True
+       else False
 
-main = asText <| toList tree''' []
+--main = asText <| treePartition  pd tree'''' basicEmpty

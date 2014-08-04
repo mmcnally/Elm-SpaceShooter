@@ -2,7 +2,7 @@ module Enemy where
 import Ship (..)
 import GameAI (..)
 import Randoms (..)
-
+import QuadTree (..)
 
 enemyShipColor = { shipColor | body <- red,
                                body2 <- orange } 
@@ -26,7 +26,6 @@ enemy = { x = 0,
           --bullets = [],
           intel = 10,
           viewSize = 0 }
-
 
 -- calculates angle for an enemyship so that
 -- it's facing the player's ship
@@ -57,8 +56,8 @@ slowAngle newAngle ship =
 
 -- physics for enemy ships
 -- modifies coordinates and angle
-physics: EnemyShip {} -> Float -> EnemyShip {}
-physics ship frameRate=
+physics: Float -> EnemyShip {} -> EnemyShip {}
+physics frameRate ship =
  let slopeNumerator = ship.playerY - ship.y
      slopeDenominator = ship.playerX - ship.x
      slope = slopeNumerator / slopeDenominator
@@ -94,26 +93,46 @@ deleteOldEnemies: [EnemyShip {}] -> Ship {} -> [EnemyShip {}]
 deleteOldEnemies enemies ship = filter (flip closeEnough ship) enemies
 
 -- adds one enemy with random speed
-addEnemy: [EnemyShip {}] -> Float -> Ship{} -> [Float] -> [EnemyShip {}]
+addEnemy: QuadTree (EnemyShip {}) -> Float -> Ship {} -> [Float] -> 
+                                                         QuadTree (EnemyShip {})
 addEnemy enemies time ship randoms = 
     let xy = randomOutOfScreen 700 1500 300 1500 time ship randoms
         x = xy.x
         y = xy.y
-    in if | (length enemies) < maxEnemies ->
-              { enemy | x <- x,
-                        y <- y,
-                    speed <- randomFloat (time * 0.34), 
-                    intel <- randomNum 1 100 (time * 4.12) }::enemies
+   -- in if | (length enemies) < maxEnemies ->
+    in if | (floor time) `mod` 60 == 0 ->
+               let newEnemy = { enemy | x <- x,
+                                        y <- y,
+                                    speed <- randomFloat (time * 0.34), 
+                                    intel <- randomNum 1 100 (time * 4.12) }
+                   newTree = treeInsert enemies (newEnemy.x, newEnemy.y) newEnemy
+               in newTree
           | otherwise -> enemies
 
 -- updates list of enemy ships to orient and move them
-updateAll: [EnemyShip {}] -> Float -> Float -> Ship {} -> [Float] -> [EnemyShip {}]
-updateAll enemies frameRate time ship randoms = 
-    let enemies' = addEnemy enemies time ship randoms
-        enemies'' = deleteOldEnemies enemies' ship
-    in  map (flip physics frameRate) enemies''
+updateAll: QuadTree (EnemyShip {}) -> 
+                           Float -> 
+                           Float -> 
+                         Ship {} -> 
+                         [Float] -> 
+                         QuadTree (EnemyShip {})
+updateAll enemiesTree frameRate time ship randoms = 
+    let enemies' = treeMap (updateEnemies ship) enemiesTree
+        enemies'' = addEnemy enemies' time ship randoms
+        --enemies''' = deleteOldEnemies enemies'' ship
+        enemies''' = treeMap (physics frameRate) enemies''
+        --coordinates = treeMap toCoordinate enemies'''
+        --qtree = insertList basicEmpty coordinates enemies'''
+    in enemies'''
         
+-- updates an enemy ship to give it the current
+-- coordinates of the player's ship
+--updateEnemies: En
+updateEnemies ship enemy = { enemy | playerX <- ship.x,
+                                     playerY <- ship.y }
 
+toCoordinate: EnemyShip {} -> (Float, Float)
+toCoordinate enemy = (enemy.x, enemy.y)
 
 -- draws an enemy ship to the screen
 -- ship drawn as 3 grouped polygons

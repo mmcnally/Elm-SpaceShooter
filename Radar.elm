@@ -3,6 +3,7 @@ import Asteroid (..)
 import Enemy (..)
 import Bullet (..)
 import Ship (..)
+import QuadTree (..)
 
 type Coordinate a = { a | x: Float, y: Float }
 
@@ -23,10 +24,12 @@ tooFar ship coordinate =
        else True
 
 
-update: [Asteroid] -> [EnemyShip {}] -> [Bullet] -> Ship {} -> [Coordinate {}]
+update: [Asteroid] -> QuadTree (EnemyShip {}) -> [Bullet] -> Ship {} -> [Coordinate {}]
 update roids enemies bullets ship =
     let roids' = map makeCoordinate roids
-        enemies' = map makeCoordinate enemies
+        -- can't improve this function until other things are
+        -- in quadtree form, since quadtrees don't work in lists
+        enemies' = treeToList (treeMap makeCoordinate enemies) []
         bullets' = map makeCoordinate bullets
         coordinates = roids' ++ enemies' ++ bullets'
         coordinates' = filter (tooFar ship) coordinates
@@ -58,7 +61,6 @@ renderBackground =
 render: Float -> Float -> Coordinate {} -> Form
 render shipX shipY coordinate = renderPoint shipX shipY coordinate
   
-
 
 renderPoint: Float -> Float -> Coordinate {} -> Form
 renderPoint shipX shipY coordinate = 

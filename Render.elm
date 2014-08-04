@@ -1,6 +1,6 @@
 module Render where
 import GameState (..)
-import Ship
+import Ship 
 import Asteroid
 import Enemy
 import Bullet
@@ -10,6 +10,7 @@ import Console
 import Viewer
 import Menu
 import ScoreBoard (..)
+import QuadTree (..)
 
 render: GameState -> [Form]
 render state = if | state.gameOver == True -> [toForm <| asText "Game Over"]
@@ -28,8 +29,8 @@ renderAll state =
         state'' = snd farforms_state
         shipForm = Ship.render state''.ship
         asteroidForms = map Asteroid.render state''.asteroids
-        enemyForms = (map Enemy.render) state''.enemies
-        bulletForms = (map Bullet.render) state''.bullets
+        enemyForms = treeToList (treeMap Enemy.render state''.enemies) []
+        bulletForms = map Bullet.render state''.bullets
         frameRate = [toForm <| asText <| state''.frameRate]
         postScore = renderScore state
         background = [Background.renderBackground]

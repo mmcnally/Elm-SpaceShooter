@@ -89,8 +89,8 @@ closeEnough enemy ship =
     else False
 
 -- deletes far away enemies
-deleteOldEnemies: [EnemyShip {}] -> Ship {} -> [EnemyShip {}]
-deleteOldEnemies enemies ship = filter (flip closeEnough ship) enemies
+deleteOldEnemies: QuadTree (EnemyShip {}) -> Ship {} -> QuadTree (EnemyShip {})
+deleteOldEnemies enemies ship = treeFilter (flip closeEnough ship) enemies
 
 -- adds one enemy with random speed
 addEnemy: QuadTree (EnemyShip {}) -> Float -> Ship {} -> [Float] -> 
@@ -100,7 +100,7 @@ addEnemy enemies time ship randoms =
         x = xy.x
         y = xy.y
    -- in if | (length enemies) < maxEnemies ->
-    in if | (floor time) `mod` 60 == 0 ->
+    in if | (floor time) `mod` 100000 == 0 ->
                let newEnemy = { enemy | x <- x,
                                         y <- y,
                                     speed <- randomFloat (time * 0.34), 
@@ -119,11 +119,11 @@ updateAll: QuadTree (EnemyShip {}) ->
 updateAll enemiesTree frameRate time ship randoms = 
     let enemies' = treeMap (updateEnemies ship) enemiesTree
         enemies'' = addEnemy enemies' time ship randoms
-        --enemies''' = deleteOldEnemies enemies'' ship
-        enemies''' = treeMap (physics frameRate) enemies''
+        enemies''' = deleteOldEnemies enemies'' ship
+        enemies'''' = treeMap (physics frameRate) enemies'''
         --coordinates = treeMap toCoordinate enemies'''
         --qtree = insertList basicEmpty coordinates enemies'''
-    in enemies'''
+    in enemies''''
         
 -- updates an enemy ship to give it the current
 -- coordinates of the player's ship
@@ -131,8 +131,9 @@ updateAll enemiesTree frameRate time ship randoms =
 updateEnemies ship enemy = { enemy | playerX <- ship.x,
                                      playerY <- ship.y }
 
-toCoordinate: EnemyShip {} -> (Float, Float)
-toCoordinate enemy = (enemy.x, enemy.y)
+--HOW DO YOU DO THIS TYPE?
+--toCoordinate: a -> (Float, Float)
+toCoordinate {x, y} = (x, y)
 
 -- draws an enemy ship to the screen
 -- ship drawn as 3 grouped polygons

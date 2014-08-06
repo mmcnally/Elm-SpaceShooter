@@ -11,7 +11,7 @@ import Radar (..)
 import QuadTree (..)
 
 type GameState = { ship : Ship {},
-                   asteroids : [Asteroid],
+                   asteroids : QuadTree Asteroid,
                    enemies : QuadTree (EnemyShip {}),
                    bullets : [Bullet],
                    time: Float,
@@ -24,7 +24,7 @@ type GameState = { ship : Ship {},
 
 initialState: GameState
 initialState = { ship = initialShip,
-                 asteroids = [],
+                 asteroids = basicEmpty,
                  enemies = basicEmpty,
                  bullets = [],
                  time = 0,

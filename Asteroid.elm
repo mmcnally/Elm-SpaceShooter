@@ -4,6 +4,7 @@ import Ship (..)
 import Generator (..)
 import Generator.Standard(..)
 import GameAI (..)
+import QuadTree (..)
 
 type Asteroid = { x : Float,
                   y : Float,
@@ -23,8 +24,8 @@ initialAsteroid = { x = 0,
                     center = (0, -5) }
 
 -- applies physics to one asteroid
-physics : Asteroid -> Float -> Asteroid
-physics asteroid frameRate =
+physics : Float -> Asteroid -> Asteroid
+physics frameRate asteroid =
     let moveX = asteroid.x + frameRate * asteroid.vx
         moveY = asteroid.y + frameRate * asteroid.vy
     in
@@ -33,8 +34,8 @@ physics asteroid frameRate =
                  center <- (0 + moveX, -5 + moveY) }
 
 -- applies physics to each asteroid
-updateAll : [Asteroid] -> Float -> [Asteroid]
-updateAll roids frameRate = map (flip physics frameRate) roids
+updateAll : QuadTree Asteroid -> Float -> QuadTree Asteroid
+updateAll roids frameRate = treeMap (physics frameRate) roids
 
 -- creates a new random asteroid
 createRoid: Ship {} -> Float -> [Float] -> Asteroid
@@ -54,10 +55,13 @@ createRoid ship time randoms =
 maxRoids = 50
 
 -- adds a new asteroid to the list
-addRoid: [Asteroid] -> Ship {} -> Float -> [Float] -> [Asteroid]
-addRoid roids ship time randoms = if (length roids) < maxRoids
-                          then (createRoid ship time randoms)::roids
-                          else roids
+addRoid: QuadTree Asteroid -> Ship {} -> Float -> [Float] -> QuadTree Asteroid
+addRoid roids ship time randoms = 
+    if (floor time) `mod` 100 == 0
+    then 
+        let newRoid = createRoid ship time randoms
+        in treeInsert roids (newRoid.x, newRoid.y) newRoid
+    else roids
 
 -- predicate for filter function in deleteOldRoids
 --
@@ -71,30 +75,24 @@ closeEnough ship roid =
 
 -- deletes asteroids that are too far from the
 -- player's ship
-deleteOldRoids: [Asteroid] -> Ship {} -> [Asteroid]
-deleteOldRoids roids ship = filter (closeEnough ship) roids
-
---tooFar: Ship {} -> Asteroid -> Bool
---tooFar ship roid = 
---    if (abs (ship.x - roid.x)) < 200 && (abs (ship.y - roid.y)) < 200
---    then True
---    else False
-
---filterFarAways: Ship {} -> [Asteroid] -> [Asteroid]
---filterFarAways ship roids = filter (tooFar ship) roids
+deleteOldRoids: QuadTree Asteroid -> Ship {} -> QuadTree Asteroid
+deleteOldRoids roids ship = treeFilter (closeEnough ship) roids
 
 -- updates all asteroids
-update: [Asteroid] -> Ship {} -> Float -> Float -> [Float] -> [Asteroid]
+update: QuadTree Asteroid -> Ship {} -> Float -> Float -> [Float] -> 
+                                                          QuadTree Asteroid
 update roids ship time frameRate randoms =
-    let roids' = deleteOldRoids roids ship
-        --roids' = (filterFarAways ship roids) ++ newRoids
-        roids'' = addRoid roids' ship time randoms
-    in  updateAll roids'' frameRate
+    let roids' = addRoid roids ship time randoms
+        roids'' = deleteOldRoids roids' ship
+        roids''' = fixTree getCoor roids''
+    in  updateAll roids''' frameRate
+
+getCoor: Asteroid -> (Float, Float)
+getCoor roid = roid.center
 
 render : Asteroid -> Form
 render {x, y} = 
-    let size = 10
-    in polygon [(-5,0),
+       polygon [(-5,0),
                 (-10, -5),
                 (-10, -10),
                 (-5, -15),
@@ -102,14 +100,3 @@ render {x, y} =
                 (10, -10),
                 (10, -5), 
                 (5,0)] |> filled gray |> move (x, y)
-
---updateFarAway: [Asteroid] -> [Asteroid] -> Ship {} -> Float -> [Asteroid]
---updateFarAway farAways roids ship frameRate = 
---    let farAways' = snd <| partition (tooFar ship) (roids ++ farAways)
---        farAways'' = deleteOldRoids farAways' ship
---    in updateAll farAways'' frameRate
-
--- renders far away asteroids
---renderFarAway: Asteroid -> Form
---renderFarAway {x, y} = 
---    move (x, y) <| filled gray <| circle 2

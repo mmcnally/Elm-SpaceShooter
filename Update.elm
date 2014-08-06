@@ -33,9 +33,10 @@ updateAll realWorld input state =
                                      state'.frameRate 
                                      (fst state'.randoms)
        
-        frameRate' = case input of
-                       Passive t -> 1 / (1000 / (60 * t))
-                       otherwise -> state'.frameRate
+        frameRate' = 
+            case input of
+              Passive t -> 1 / (1000 / (60 * t))
+              otherwise -> state'.frameRate
         stars' = Star.update state'.stars 
                              state'.ship 
                              state'.time 
@@ -65,4 +66,4 @@ updateAll realWorld input state =
                     randoms    <- randoms',
                     radarForms <- radarForms'}
     --in state''   
-    in collisionDetection state''
+    in colDet state''

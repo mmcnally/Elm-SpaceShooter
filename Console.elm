@@ -9,7 +9,7 @@ import Enemy (..)
 renderFilter: GameState -> GameState
 renderFilter state = 
     let pred = closeEnough state.ship
-        asteroids' = filter pred state.asteroids
+        asteroids' = treeFilter pred state.asteroids
         enemies' = treeFilter pred state.enemies
         --enemyCoordinates = map toCoordinate enemies'
         stars' = filter pred state.stars

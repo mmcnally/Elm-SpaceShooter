@@ -24,9 +24,9 @@ tooFar ship coordinate =
        else True
 
 
-update: [Asteroid] -> QuadTree (EnemyShip {}) -> [Bullet] -> Ship {} -> [Coordinate {}]
+update: QuadTree Asteroid -> QuadTree (EnemyShip {}) -> [Bullet] -> Ship {} -> [Coordinate {}]
 update roids enemies bullets ship =
-    let roids' = map makeCoordinate roids
+    let roids' = treeToList (treeMap makeCoordinate roids) []
         -- can't improve this function until other things are
         -- in quadtree form, since quadtrees don't work in lists
         enemies' = treeToList (treeMap makeCoordinate enemies) []

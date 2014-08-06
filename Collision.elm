@@ -2,6 +2,7 @@ module Collision where
 import GameState (..)
 import Bullet (Bullet)
 import Asteroid (..)
+import ScoreBoard (..)
 import Enemy (..)
 import QuadTree (..)
  
@@ -66,13 +67,14 @@ collisionDetection' modifiedState modifiableBullets prevAsteroids
                   -- Bullet is overlapping particular asteroid
                   else
                       let newCurrentAsteroids = (prevAsteroids ++ (tail theAsteroids))
+                          newState = targetHit 1 modifiedState
                       in
-                      collisionDetection' modifiedState 
-                                          (tail modifiableBullets) 
-                                          [] 
-                                          newCurrentAsteroids 
-                                          newCurrentAsteroids 
-                                          finalBullets 
+                        collisionDetection' newState 
+                                            (tail modifiableBullets) 
+                                            [] 
+                                            newCurrentAsteroids 
+                                            newCurrentAsteroids 
+                                            finalBullets 
 
 collisionDetection'': GameState -> [Bullet] -> [EnemyShip {}] -> [EnemyShip {}] -> [EnemyShip {}] -> [Bullet] -> GameState
 collisionDetection''  modifiedState 

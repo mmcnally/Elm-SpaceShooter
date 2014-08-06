@@ -9,6 +9,7 @@ import Background
 import Console
 import Viewer
 import Menu
+import ScoreBoard (..)
 import QuadTree (..)
 
 render: GameState -> [Form]
@@ -31,6 +32,7 @@ renderAll state =
         enemyForms = treeToList (treeMap Enemy.render state''.enemies) []
         bulletForms = map Bullet.render state''.bullets
         frameRate = [toForm <| asText <| state''.frameRate]
+        postScore = renderScore state
         background = [Background.renderBackground]
         stars = (map Star.renderStars) state''.stars
         -- view rectangle
@@ -45,4 +47,4 @@ renderAll state =
                 bulletForms ++
                 viewThing
         fixPosition = (-state''.ship.x, -state''.ship.y)
-    in  background ++ (map (move  fixPosition) forms) ++ frameRate ++ consoleForms
+    in  background ++ (map (move  fixPosition) forms) ++ consoleForms ++ postScore

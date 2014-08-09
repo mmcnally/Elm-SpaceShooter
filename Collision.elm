@@ -225,6 +225,6 @@ checkRoidsLeft bullet roids remainingRoids found =
 -- false otherwise
 roidFarEnough: Bullet -> Asteroid -> Bool
 roidFarEnough bullet roid =
-    let xdif = (abs (bullet.x - roid.x)) > 0.5
-        ydif = (abs (bullet.y - roid.y)) > 0.5
-    in xdif && ydif
+    let xdif = (abs (bullet.x - roid.x)) > 12.5
+        ydif = (abs (bullet.y - roid.y)) > 12.5
+    in xdif || ydif

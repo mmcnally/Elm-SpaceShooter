@@ -1,10 +1,12 @@
 module QuadTree where
 
+hi = 5
 
 type BoundingBox = { left : Float,
                      right : Float,
                      top : Float,
                      bottom : Float }
+
 type XY a = { a | x: Float, y: Float }
 
 data QuadTree v = Leaf BoundingBox [v] 
@@ -33,7 +35,6 @@ empty {left, right, top, bottom} (width, height) =
 basicEmpty: QuadTree v
 basicEmpty = empty { left = -2000, right = 2000, top = 2000, bottom = -2000 } 
                    (500, 500)
-
 
 -- inserts a value of some sort with an (x, y) location
 -- into the correct part of the tree, and returns the modified tree
@@ -274,7 +275,7 @@ main = flow down [ asText (treeToList tree' []),
                    asText tree']
 -}
 
---main = asText <| tree''''
+main = asText <| tree''''
 
 --main = asText <| treePartition  pred tree'''' basicEmpty
 treeToString: QuadTree v -> [Element] -> [Element]

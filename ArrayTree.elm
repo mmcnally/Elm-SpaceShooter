@@ -12,28 +12,24 @@ basicEmpty = repeat 1600 []
 advancedEmpty: Array [Int]
 advancedEmpty = initialize 1600 (\n -> [n])
 
+-- finds the index that hold items with
+-- the given coordinates and returns it
 findIndex: (Float, Float) -> Int
 findIndex (x, y) = 
     let getFirstQuadIndex startingValue = 
             let yIndex = abs <| (floor (y / 101)) * 20
-                --yIndex' = if y == 0 then 20 else yIndex
-                -- yIndex'' = if
                 xIndex = abs <| truncate <| x / 101
             in (380 - yIndex) + xIndex + startingValue
         getSecondQuadIndex startingValue = 
             let yIndex = abs <| (floor  (y / 101)) * 20
-                --yIndex' = if y == 0 then 20 else yIndex
-                --yIndex'' = if yIndex' == 0 then 20 else yIndex'
                 xIndex = abs <| truncate <| x / 101
             in (380 - yIndex) + (19 - xIndex) + startingValue
         getThirdQuadIndex startingValue = 
             let yIndex = abs <| (truncate (y / 101)) * 20
-                --yIndex' = fixY yIndex
                 xIndex = abs <| truncate <| x / 101
             in yIndex + (19 - xIndex) + startingValue
         getFourthQuadIndex startingValue = 
             let yIndex = abs <| (truncate (y / 101)) * 20
-                --yIndex' = fixY yIndex
                 xIndex = abs <| truncate <| x / 101
             in yIndex + xIndex + startingValue
                 -- Quadrant I
@@ -46,7 +42,9 @@ findIndex (x, y) =
                    | x > 0 && y < 0 -> getFourthQuadIndex 1200
     in index
     
-
+-- inserts one element with given coordinates into
+-- the correct section of the tree and returns the
+-- modified tree
 treeInsert: Array [v] -> (Float, Float) -> v -> Array [v]
 treeInsert tree (x, y) value =
     let index = findIndex (x, y)
@@ -55,6 +53,9 @@ treeInsert tree (x, y) value =
            (value::thingsInIndex)
            tree
 
+-- inserts a list of values with a list of their 
+--coordinates into the correct section(s) of the 
+--tree and returns the modified tree
 insertList: Array [v] -> [(Float, Float)] -> [v] -> Array [v]
 insertList tree xys values = 
     case xys of
@@ -64,16 +65,21 @@ insertList tree xys values =
                      (tail xys)
                      (tail values)
 
+-- finds the section that corresponds to the coordinates
+-- and returns the contents of the section as a list
 getSection: Array [v] -> (Float, Float) -> [v]
 getSection tree (x, y) = 
     let index = findIndex (x, y)
     in getOrElse [] index tree
 
+-- finds the section that corresponds to the coordinates
+-- and replaces the contents with the inputted list of values
 editSection: Array [v] -> (Float, Float) -> [v] -> Array [v]
 editSection tree (x, y) values = 
     let index = findIndex (x, y)
     in set index values tree
 
+-- returns the contents of the tree as a list
 treeToList: Array [v] -> [v]
 treeToList tree = makeList tree [] 0
 
@@ -85,6 +91,8 @@ makeList  tree list index =
                   (list ++ (getOrElse [] index tree))
                   (index + 1)
 
+--fixTree getCoor tree = 
+    
 
 
 

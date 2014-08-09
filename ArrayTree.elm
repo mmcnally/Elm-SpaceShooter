@@ -68,13 +68,35 @@ getSection: Array [v] -> (Float, Float) -> [v]
 getSection tree (x, y) = 
     let index = findIndex (x, y)
     in getOrElse [] index tree
-    
+
+editSection: Array [v] -> (Float, Float) -> [v] -> Array [v]
+editSection tree (x, y) values = 
+    let index = findIndex (x, y)
+    in set index values tree
+
+treeToList: Array [v] -> [v]
+treeToList tree = makeList tree [] 0
+
+-- helper function for treeToList      
+makeList  tree list index =
+    if index > 1599
+    then list
+    else makeList tree
+                  (list ++ (getOrElse [] index tree))
+                  (index + 1)
+
+
+
 
 --
 -- TEST CODE BELOW
 --
 
 tree =  treeInsert basicEmpty (2000, -2000) 9999999
-tree' = getSection tree (1990, -1990)
-main = asText <| tree'
+--tree' = getSection tree (1990, -1990)
+tree' = editSection tree (-2000, 2000) [1, 2, 3, 4]
+tree'' = treeToList tree'
+
+
+main = asText <| tree''
 

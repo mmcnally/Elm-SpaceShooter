@@ -17,20 +17,20 @@ advancedEmpty = initialize 1600 (\n -> [n])
 findIndex: (Float, Float) -> Int
 findIndex (x, y) = 
     let getFirstQuadIndex startingValue = 
-            let yIndex = abs <| (floor (y / 101)) * 20
+            let yIndex = abs <| (floor (y / 100.01)) * 20
                 xIndex = abs <| truncate <| x / 101
             in (380 - yIndex) + xIndex + startingValue
         getSecondQuadIndex startingValue = 
-            let yIndex = abs <| (floor  (y / 101)) * 20
-                xIndex = abs <| truncate <| x / 101
+            let yIndex = abs <| (floor  (y / 100.01)) * 20
+                xIndex = abs <| truncate <| x / 100.01
             in (380 - yIndex) + (19 - xIndex) + startingValue
         getThirdQuadIndex startingValue = 
-            let yIndex = abs <| (truncate (y / 101)) * 20
-                xIndex = abs <| truncate <| x / 101
+            let yIndex = abs <| (truncate (y / 100.01)) * 20
+                xIndex = abs <| truncate <| x / 100.01
             in yIndex + (19 - xIndex) + startingValue
         getFourthQuadIndex startingValue = 
-            let yIndex = abs <| (truncate (y / 101)) * 20
-                xIndex = abs <| truncate <| x / 101
+            let yIndex = abs <| (truncate (y / 100.01)) * 20
+                xIndex = abs <| truncate <| x / 100.01
             in yIndex + xIndex + startingValue
                 -- Quadrant I
         index = if | x >= 0 && y >= 0 -> getFirstQuadIndex 400
@@ -91,8 +91,67 @@ makeList  tree list index =
                   (list ++ (getOrElse [] index tree))
                   (index + 1)
 
---fixTree getCoor tree = 
-    
+{-
+
+-- checks values in tree to make sure that they're in the correct
+-- section and moves them to the right section if they aren't
+fixTree: (v -> (Float, Float)) -> Array [v] -> Array [v]
+fixTree getCoor tree = 
+    let partition = fixTreeHelper getCoor tree rejects
+        pureTree = fst partition
+        rejects = snd partition
+        coordinates = map getCoor rejects
+    in insertList pureTree coordinates rejects
+
+
+-}
+indexToCoor: Float -> { yMin: Float, yMax: Float, xMin: Float, xMax: Float }    
+indexToCoor index = 
+    -- Quadrant II
+    if | index < 400 ->
+           let yMax = toFloat <| 2000 - ((truncate (index / 20)) * 100)
+               yMin = yMax - 100
+               correctLine = (truncate index) `mod` 20
+               xMin = toFloat <| -2000 + (correctLine * 100)
+               xMax = xMin + 100
+           in { yMin = yMin, yMax = yMax, xMin = xMin, xMax = xMax }
+    -- Quadrant I
+        | index < 800 ->
+           let index' = index - 400
+               yMax = toFloat <| 2000 - ((truncate (index' / 20)) * 100)
+               yMin = yMax - 100
+               correctLine = (truncate index') `mod` 20
+               xMin = toFloat <| correctLine * 100
+               xMax = xMin + 100
+           in { yMin = yMin, yMax = yMax, xMin = xMin, xMax = xMax }
+    -- Quadrant III
+        | index < 1200 ->
+           let index' = index - 800
+               yMax = toFloat <| -1 * ((truncate (index' / 20)) * 100)
+               yMin = yMax - 100
+               correctLine = (truncate index') `mod` 20
+               xMin = toFloat <| -2000 + (correctLine * 100)
+               xMax = xMin + 100
+           in { yMin = yMin, yMax = yMax, xMin = xMin, xMax = xMax }
+    -- Quadrant IV
+        | index < 1600 ->
+           let index' = index - 1200
+               yMax = toFloat <| -1 * ((truncate (index' / 20)) * 100)
+               yMin = yMax - 100
+               correctLine = (truncate index') `mod` 20
+               xMin = toFloat <| correctLine * 100
+               xMax = xMin + 100
+           in { yMin = yMin, yMax = yMax, xMin = xMin, xMax = xMax }
+        | otherwise -> { yMin = 0, yMax = 0, xMin = 0, xMax = 0}
+           
+           
+{-
+fixTreeHelper: (v -> (Float, Float)) -> Array [v] -> [v]
+fixTreeHelper getCoor tree rejects = 
+    let pred
+-}
+
+
 
 
 
@@ -100,11 +159,10 @@ makeList  tree list index =
 -- TEST CODE BELOW
 --
 
-tree =  treeInsert basicEmpty (2000, -2000) 9999999
+--tree =  treeInsert advancedEmpty (0, 2000) 9999999
 --tree' = getSection tree (1990, -1990)
-tree' = editSection tree (-2000, 2000) [1, 2, 3, 4]
-tree'' = treeToList tree'
+--tree' = editSection tree (-1, 2) [1, 2, 3, 4]
+--tree'' = treeToList tree'
 
-
-main = asText <| tree''
+main = asText <| indexToCoor 1599
 

@@ -7,7 +7,7 @@ type BoundingBox = { left : Float,
                      top : Float,
                      bottom : Float }
 
-type XY a = { a | x: Float, y: Float }
+--type XY a = { a | x: Float, y: Float }
 
 data QuadTree v = Leaf BoundingBox [v] 
                 -- Bounding Box encompasses all 4 QuadTrees

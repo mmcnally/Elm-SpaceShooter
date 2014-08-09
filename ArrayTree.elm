@@ -12,8 +12,8 @@ basicEmpty = repeat 1600 []
 advancedEmpty: Array [Int]
 advancedEmpty = initialize 1600 (\n -> [n])
 
-treeInsert: Array [v] -> (Float, Float) -> v -> Array [v]
-treeInsert tree (x, y) value =
+findIndex: (Float, Float) -> Int
+findIndex (x, y) = 
     let getFirstQuadIndex startingValue = 
             let yIndex = abs <| (floor (y / 101)) * 20
                 --yIndex' = if y == 0 then 20 else yIndex
@@ -44,12 +44,37 @@ treeInsert tree (x, y) value =
                    | x < 0 && y < 0 -> getThirdQuadIndex 800
                 -- Quadrant IV
                    | x > 0 && y < 0 -> getFourthQuadIndex 1200
+    in index
+    
+
+treeInsert: Array [v] -> (Float, Float) -> v -> Array [v]
+treeInsert tree (x, y) value =
+    let index = findIndex (x, y)
         thingsInIndex = getOrElse [] index tree                               
     in set index 
            (value::thingsInIndex)
            tree
-                   
 
+insertList: Array [v] -> [(Float, Float)] -> [v] -> Array [v]
+insertList tree xys values = 
+    case xys of
+      [] -> tree
+      otherwise -> 
+          insertList (treeInsert tree (head xys) (head values))
+                     (tail xys)
+                     (tail values)
 
+getSection: Array [v] -> (Float, Float) -> [v]
+getSection tree (x, y) = 
+    let index = findIndex (x, y)
+    in getOrElse [] index tree
+    
 
---main = asText <| treeInsert advancedEmpty (2000, -2000) 9999999
+--
+-- TEST CODE BELOW
+--
+
+tree =  treeInsert basicEmpty (2000, -2000) 9999999
+tree' = getSection tree (1990, -1990)
+main = asText <| tree'
+

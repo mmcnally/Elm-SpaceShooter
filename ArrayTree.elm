@@ -1,5 +1,6 @@
 module ArrayTree where
 import Array (..)
+import List
 
 --type ArrayTree v = Array v
 
@@ -50,8 +51,8 @@ treeInsert tree (x, y) value =
     let index = findIndex (x, y)
         thingsInIndex = getOrElse [] index tree                               
     in set index 
-           (value::thingsInIndex)
-           tree
+                 (value::thingsInIndex)
+                 tree
 
 -- inserts a list of values with a list of their 
 --coordinates into the correct section(s) of the 
@@ -91,20 +92,48 @@ makeList  tree list index =
                   (list ++ (getOrElse [] index tree))
                   (index + 1)
 
-{-
 
 -- checks values in tree to make sure that they're in the correct
 -- section and moves them to the right section if they aren't
 fixTree: (v -> (Float, Float)) -> Array [v] -> Array [v]
 fixTree getCoor tree = 
-    let partition = fixTreeHelper getCoor tree rejects
+    let partition = fixTreeHelper getCoor tree [] 0
         pureTree = fst partition
         rejects = snd partition
-        coordinates = map getCoor rejects
-    in insertList pureTree coordinates rejects
+        coordinates = List.map getCoor rejects
+        newTree = insertList pureTree coordinates rejects
+    in newTree
 
 
--}
+fixTreeHelper: (v -> (Float, Float)) -> Array [v] -> [v] -> Int -> (Array [v], [v])
+fixTreeHelper getCoor tree rejects index = 
+    let pred v = 
+            let valueCoor = getCoor v
+                coor = indexToCoor (toFloat index)
+                underTop = (snd valueCoor) < coor.yMax
+                aboveBottom = (snd valueCoor) > coor.yMin
+                checkLeft = (fst valueCoor) > coor.xMax
+                checkRight = (fst valueCoor) < coor.xMin
+            in underTop && aboveBottom && checkLeft && checkRight
+        vs = (getOrElse [] index tree)
+        vsPartition = partition (pred) vs
+        correct = fst vsPartition
+        incorrect = snd vsPartition
+        tree' = set index correct tree
+    in if index < 1600
+       then fixTreeHelper getCoor
+                          tree'
+                          (rejects ++ incorrect)
+                          (index + 1)
+       else (tree, rejects)
+            
+                
+
+
+
+
+-- take in an index and returns the bounding coordinates of the section:
+-- minimum y value, maximum y value, minimum x value, maximum x value
 indexToCoor: Float -> { yMin: Float, yMax: Float, xMin: Float, xMax: Float }    
 indexToCoor index = 
     -- Quadrant II
@@ -145,11 +174,9 @@ indexToCoor index =
         | otherwise -> { yMin = 0, yMax = 0, xMin = 0, xMax = 0}
            
            
-{-
-fixTreeHelper: (v -> (Float, Float)) -> Array [v] -> [v]
-fixTreeHelper getCoor tree rejects = 
-    let pred
--}
+
+
+
 
 
 

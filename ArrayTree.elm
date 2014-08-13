@@ -10,8 +10,13 @@ import List
 basicEmpty: Array [v]
 basicEmpty = repeat 1600 []
 
+
+-- identical to the array created by the basicEmpty function
+-- except that it adds the index to the beginning of the list 
+-- in each element
 advancedEmpty: Array [Int]
 advancedEmpty = initialize 1600 (\n -> [n])
+
 
 -- finds the index that hold items with
 -- the given coordinates and returns it
@@ -43,6 +48,7 @@ findIndex (x, y) =
                    | x > 0 && y < 0 -> getFourthQuadIndex 1200
     in index
     
+
 -- inserts one element with given coordinates into
 -- the correct section of the tree and returns the
 -- modified tree
@@ -66,12 +72,14 @@ insertList tree xys values =
                      (tail xys)
                      (tail values)
 
+
 -- finds the section that corresponds to the coordinates
 -- and returns the contents of the section as a list
 getSection: Array [v] -> (Float, Float) -> [v]
 getSection tree (x, y) = 
     let index = findIndex (x, y)
     in getOrElse [] index tree
+
 
 -- finds the section that corresponds to the coordinates
 -- and replaces the contents with the inputted list of values
@@ -80,21 +88,24 @@ editSection tree (x, y) values =
     let index = findIndex (x, y)
     in set index values tree
 
--- returns the contents of the tree as a list
-treeToList: Array [v] -> [v]
-treeToList tree = makeList tree [] 0
 
--- helper function for treeToList      
-makeList  tree list index =
+-- returns the contents of the tree as a list
+-- note: the returned list is a list of lists
+treeToList: Array [v] -> [v]
+treeToList tree = treeToListHelper tree [] 0
+
+-- helper function for treeToList 
+treeToListHelper: Array [v] -> [v] -> Int -> [v]
+treeToListHelper tree list index =
     if index > 1599
     then list
-    else makeList tree
-                  (list ++ (getOrElse [] index tree))
-                  (index + 1)
+    else treeToListHelper tree
+                          (list ++ (getOrElse [] index tree))
+                          (index + 1)
 
 
--- checks values in tree to make sure that they're in the correct
--- section and moves them to the right section if they aren't
+-- checks values in each element of array to make sure that they're 
+-- in the correct section and moves them to the right section if they aren't
 fixTree: (v -> (Float, Float)) -> Array [v] -> Array [v]
 fixTree getCoor tree = 
     let partition = fixTreeHelper getCoor tree [] 0
@@ -104,7 +115,7 @@ fixTree getCoor tree =
         newTree = insertList pureTree coordinates rejects
     in newTree
 
-
+-- helper function for fixTree
 fixTreeHelper: (v -> (Float, Float)) -> Array [v] -> [v] -> Int -> (Array [v], [v])
 fixTreeHelper getCoor tree rejects index = 
     let pred v = 
@@ -132,8 +143,12 @@ fixTreeHelper getCoor tree rejects index =
 
 
 
--- take in an index and returns the bounding coordinates of the section:
--- minimum y value, maximum y value, minimum x value, maximum x value
+-- takes in an index and returns the bounding 
+-- coordinates of the section as a record:
+--                           minimum y value, 
+--                           maximum y value, 
+--                           minimum x value, 
+--                           maximum x value
 indexToCoor: Float -> { yMin: Float, yMax: Float, xMin: Float, xMax: Float }    
 indexToCoor index = 
     -- Quadrant II
@@ -172,12 +187,13 @@ indexToCoor index =
                xMax = xMin + 100
            in { yMin = yMin, yMax = yMax, xMin = xMin, xMax = xMax }
         | otherwise -> { yMin = 0, yMax = 0, xMin = 0, xMax = 0}
-           
-           
+
+         
+-- map function for array trees
 treeMap: (v -> v) -> Array [v] -> Array [v]
 treeMap function tree = treeMapHelper function tree 0
-    
 
+-- helper function for treeMap
 treeMapHelper: (v -> v) -> Array [v] -> Int -> Array [v]
 treeMapHelper function tree index = 
     if | index < 1600 ->
@@ -187,10 +203,11 @@ treeMapHelper function tree index =
            in treeMapHelper function newTree (index + 1)
        | otherwise -> tree
 
-
+-- filter function for array trees
 treeFilter: (v -> Bool) -> Array [v] -> Array [v]
 treeFilter predicate tree = treeFilterHelper predicate tree 0
 
+-- helper function for treeFilter
 treeFilterHelper: (v -> Bool) -> Array [v] -> Int -> Array [v]
 treeFilterHelper predicate tree index = 
     if | index < 1600 ->
@@ -200,13 +217,14 @@ treeFilterHelper predicate tree index =
            in treeFilterHelper predicate newTree (index + 1)
        | otherwise -> tree
 
-
+-- partition function for array trees
 treePartition: (v -> Bool) -> Array [v] -> (Array [v], Array [v])
 treePartition predicate tree = treePartitionHelper predicate 
                                                    tree 
                                                    (basicEmpty, basicEmpty)
                                                    0
 
+-- helper function for treePartition
 treePartitionHelper: (v -> Bool) -> Array [v] -> (Array [v], Array [v]) -> 
                                     Int -> (Array [v], Array [v])
 treePartitionHelper predicate tree newTree index = 
@@ -222,9 +240,15 @@ treePartitionHelper predicate tree newTree index =
        | otherwise -> newTree
 
 
+
+
+
+
 --
 -- TEST CODE BELOW
 --
+{-
+
 
 tree =  treeInsert basicEmpty (0, 2000) (0, 2000)
 tree' = treePartition predicate tree
@@ -248,3 +272,4 @@ predicate v = (snd v) < 1900
 --main = asText <| fixTree getCoor tree'
 main = asText <| tree'
 
+-}

@@ -188,23 +188,43 @@ treeMapHelper function tree index =
        | otherwise -> tree
 
 
+treeFilter: (v -> Bool) -> Array [v] -> Array [v]
+treeFilter predicate tree = treeFilterHelper predicate tree 0
+
+treeFilterHelper: (v -> Bool) -> Array [v] -> Int -> Array [v]
+treeFilterHelper predicate tree index = 
+    if | index < 1600 ->
+           let vs = getOrElse [] index tree
+               vs' = List.filter predicate vs
+               newTree = set index vs' tree
+           in treeFilterHelper predicate newTree (index + 1)
+       | otherwise -> tree
+
+
 
 --
 -- TEST CODE BELOW
 --
 
-tree =  treeInsert basicEmpty (0, 2000) (0, 2000)
+tree =  treeInsert basicEmpty (0, 2000) (0, 1800)
+tree' = treeFilter predicate tree
 --tree' = getSection tree (1990, -1990)
 --tree' = editSection tree (-1, 2) [1, 2, 3, 4]
 --tree'' = treeToList tree'
 --tree' = editSection tree (0, 2000) [(0, 500)]
 getCoor v = (fst v, snd v)
 
-tree' = treeMap function tree
+--tree' = treeMap function tree
+
+
+
 
 function v = 
     let newEnd = (snd v) / 2
     in (fst v, newEnd)
 
-main = asText <| fixTree getCoor tree'
+predicate v = (snd v) < 1900
+
+--main = asText <| fixTree getCoor tree'
+main = asText <| tree'
 

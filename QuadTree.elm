@@ -165,10 +165,10 @@ fixTreeHelper qtree rejects getCoor =
       Leaf bb vs -> 
           let pred bb v = 
                   let coor = getCoor v
-                      underTop = (fst coor) < bb.top
-                      aboveBottom = (fst coor) > bb.bottom
-                      checkLeft = (snd coor) > bb.left
-                      checkRight = (snd coor) < bb.right
+                      underTop = (snd coor) < bb.top
+                      aboveBottom = (snd coor) > bb.bottom
+                      checkLeft = (fst coor) > bb.left
+                      checkRight = (fst coor) < bb.right
                   in underTop && aboveBottom && checkLeft && checkRight
               vsPartition = partition (pred bb) vs
               correct = fst vsPartition

@@ -174,11 +174,18 @@ indexToCoor index =
         | otherwise -> { yMin = 0, yMax = 0, xMin = 0, xMax = 0}
            
            
+treeMap: (v -> v) -> Array [v] -> Array [v]
+treeMap function tree = treeMapHelper function tree 0
+    
 
-
-
-
-
+treeMapHelper: (v -> v) -> Array [v] -> Int -> Array [v]
+treeMapHelper function tree index = 
+    if | index < 1600 ->
+           let vs = getOrElse [] index tree
+               vs' = List.map (function) vs
+               newTree = set index vs' tree
+           in treeMapHelper function newTree (index + 1)
+       | otherwise -> tree
 
 
 
@@ -186,10 +193,18 @@ indexToCoor index =
 -- TEST CODE BELOW
 --
 
---tree =  treeInsert advancedEmpty (0, 2000) 9999999
+tree =  treeInsert basicEmpty (0, 2000) (0, 2000)
 --tree' = getSection tree (1990, -1990)
 --tree' = editSection tree (-1, 2) [1, 2, 3, 4]
 --tree'' = treeToList tree'
+--tree' = editSection tree (0, 2000) [(0, 500)]
+getCoor v = (fst v, snd v)
 
-main = asText <| indexToCoor 1599
+tree' = treeMap function tree
+
+function v = 
+    let newEnd = (snd v) / 2
+    in (fst v, newEnd)
+
+main = asText <| fixTree getCoor tree'
 

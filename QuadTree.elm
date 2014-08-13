@@ -248,7 +248,7 @@ treePartition predicate qtree newTree =
 --
 -- TEST FUNCTIONS
 --
-
+{-
 --stupidTree = empty { left = -500, right =  500, top = 500, bottom = -500 } (100, 100)
 
 base = treeInsert basicEmpty (0, 400) 1
@@ -297,3 +297,4 @@ treeToString qtree elements=
               bottomRight = treeToString br (topRight ++ [plainText "br\n"])
               bottomLeft = treeToString bl (bottomRight ++ [plainText "bl\n"])
           in bottomLeft
+-}

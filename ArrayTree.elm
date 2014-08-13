@@ -201,13 +201,33 @@ treeFilterHelper predicate tree index =
        | otherwise -> tree
 
 
+treePartition: (v -> Bool) -> Array [v] -> (Array [v], Array [v])
+treePartition predicate tree = treePartitionHelper predicate 
+                                                   tree 
+                                                   (basicEmpty, basicEmpty)
+                                                   0
+
+treePartitionHelper: (v -> Bool) -> Array [v] -> (Array [v], Array [v]) -> 
+                                    Int -> (Array [v], Array [v])
+treePartitionHelper predicate tree newTree index = 
+    if | index < 1600 ->
+           let vs = getOrElse [] index tree
+               vsPart = List.partition predicate vs
+               correct = fst vsPart
+               incorrect = snd vsPart
+               correctTree = set index correct (fst newTree)
+               incorrectTree = set index incorrect (snd newTree)
+               newTree' = (correctTree, incorrectTree)
+           in treePartitionHelper predicate tree newTree' (index + 1)
+       | otherwise -> newTree
+
 
 --
 -- TEST CODE BELOW
 --
 
-tree =  treeInsert basicEmpty (0, 2000) (0, 1800)
-tree' = treeFilter predicate tree
+tree =  treeInsert basicEmpty (0, 2000) (0, 2000)
+tree' = treePartition predicate tree
 --tree' = getSection tree (1990, -1990)
 --tree' = editSection tree (-1, 2) [1, 2, 3, 4]
 --tree'' = treeToList tree'

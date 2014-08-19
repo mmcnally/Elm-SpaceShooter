@@ -23,7 +23,6 @@ enemy = { x = 0,
           playerX = 0,
           playerY = 0,
           damage = 0,
-          --bullets = [],
           intel = 10,
           viewSize = 0 }
 
@@ -82,15 +81,15 @@ maxEnemies = 10
 --
 -- decides if an enemy is close enough to player's
 -- ship to not be deleted
-closeEnough: EnemyShip {} -> Ship {} -> Bool
-closeEnough enemy ship = 
+closeEnough: Ship {} -> EnemyShip {} -> Bool
+closeEnough ship enemy = 
     if (abs (ship.x - enemy.x)) < 1200 && (abs (ship.y - enemy.y)) < 1200
     then True
     else False
 
 -- deletes far away enemies
 deleteOldEnemies: QuadTree (EnemyShip {}) -> Ship {} -> QuadTree (EnemyShip {})
-deleteOldEnemies enemies ship = treeFilter (flip closeEnough ship) enemies
+deleteOldEnemies enemies ship = treeFilter (closeEnough ship) enemies
 
 -- adds one enemy with random speed
 addEnemy: QuadTree (EnemyShip {}) -> Float -> Ship {} -> [Float] -> 
@@ -110,12 +109,8 @@ addEnemy enemies time ship randoms =
           | otherwise -> enemies
 
 -- updates list of enemy ships to orient and move them
-updateAll: QuadTree (EnemyShip {}) -> 
-                           Float -> 
-                           Float -> 
-                         Ship {} -> 
-                         [Float] -> 
-                         QuadTree (EnemyShip {})
+updateAll: QuadTree (EnemyShip {}) -> Float -> Float -> 
+                           Ship {} -> [Float] -> QuadTree (EnemyShip {})
 updateAll enemiesTree frameRate time ship randoms = 
     let enemies' = treeMap (updateEnemies ship) enemiesTree
         enemies'' = addEnemy enemies' time ship randoms
@@ -127,7 +122,6 @@ updateAll enemiesTree frameRate time ship randoms =
         
 -- updates an enemy ship to give it the current
 -- coordinates of the player's ship
---updateEnemies: En
 updateEnemies ship enemy = { enemy | playerX <- ship.x,
                                      playerY <- ship.y }
 

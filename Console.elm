@@ -4,7 +4,6 @@ import Radar
 import QuadTree (..)
 import Enemy (..)
 
-
 -- only allow objects withing 800 x 600 view to render
 renderFilter: GameState -> GameState
 renderFilter state = 

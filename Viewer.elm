@@ -10,12 +10,14 @@ type A a = { a | x: Float, y: Float }
 
 renderAll: GameState -> ([Form], GameState)
 renderAll state = 
-    let enemiesPartition = treePartition (tooFar state.ship) state.enemies basicEmpty
+    let enemiesPartition = treePartition (tooFar state.ship) 
+                                                   state.enemies basicEmpty
         enemies' = (fst enemiesPartition)
-        enemyForms = treeToList (treeMap render (snd enemiesPartition)) []
+        enemyForms = treeToList (snd enemiesPartition)
+        enemyForms' = map render enemyForms
         asteroidsPartition = treePartition (tooFar state.ship) state.asteroids basicEmpty
         asteroids' = (fst asteroidsPartition)
-        asteroidForms = treeToList (treeMap render (snd asteroidsPartition)) []
+        asteroidForms = treeToList (treeMap render (snd asteroidsPartition))
         bulletsPartition = partitionFarAways state.ship state.bullets
         bullets' = (fst bulletsPartition)
         bulletForms = map renderBullets (snd bulletsPartition)
@@ -24,7 +26,7 @@ renderAll state =
                            asteroids <- asteroids',
                            bullets   <- bullets',
                            stars     <- stars' }
-    in (enemyForms ++ asteroidForms ++ bulletForms, state')
+    in (enemyForms' ++ asteroidForms ++ bulletForms, state')
 
 
 --tooFar: Ship {} -> Asteroid -> Bool

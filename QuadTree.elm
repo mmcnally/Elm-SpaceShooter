@@ -1,13 +1,9 @@
 module QuadTree where
 
-hi = 5
-
 type BoundingBox = { left : Float,
                      right : Float,
                      top : Float,
                      bottom : Float }
-
---type XY a = { a | x: Float, y: Float }
 
 data QuadTree v = Leaf BoundingBox [v] 
                 -- Bounding Box encompasses all 4 QuadTrees
@@ -136,15 +132,18 @@ editLeaf qtree (x, y) vs' =
                            (editLeaf br (x, y) vs')
                 | otherwise -> qtree
 
-treeToList: QuadTree v -> [v] -> [v]
-treeToList qtree list = 
+treeToList: QuadTree v -> [v]
+treeToList qtree = treeToListHelper qtree []
+   
+treeToListHelper: QuadTree v -> [v] -> [v]
+treeToListHelper qtree list = 
     case qtree of
       Leaf _ vs -> vs ++ list
       Branch _ tl tr bl br ->
-          let topLeft = treeToList tl []
-              topRight = treeToList tr []
-              bottomLeft = treeToList bl []
-              bottomRight = treeToList br []
+          let topLeft = treeToListHelper tl []
+              topRight = treeToListHelper tr []
+              bottomLeft = treeToListHelper bl []
+              bottomRight = treeToListHelper br []
           in topLeft ++ topRight ++ bottomLeft ++ bottomRight ++ list
 
 

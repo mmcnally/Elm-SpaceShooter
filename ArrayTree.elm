@@ -188,7 +188,9 @@ indexToCoor index =
            in { yMin = yMin, yMax = yMax, xMin = xMin, xMax = xMax }
         | otherwise -> { yMin = 0, yMax = 0, xMin = 0, xMax = 0}
 
-         
+       
+-- SEEMS TO HAVE ISSUES WITH TYPES
+-- HOW TO MAKE IT ARRAY [v] -> ARRAY [m]?  
 -- map function for array trees
 treeMap: (v -> v) -> Array [v] -> Array [v]
 treeMap function tree = treeMapHelper function tree 0

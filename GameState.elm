@@ -21,7 +21,8 @@ type GameState = { ship : Ship {},
                    isPlaying: (Bool, Int),
                    gameOver: Bool,
                    radarForms: [Coordinate {}], 
-                   score: Int }
+                   score: Int,
+                   explosions: [(Float, Float)] }
 
 initialState: GameState
 initialState = { ship = initialShip,
@@ -35,4 +36,5 @@ initialState = { ship = initialShip,
                  isPlaying = (False, -1),
                  gameOver = False,
                  radarForms = [], 
-                 score = 0 }
+                 score = 0,
+                 explosions = [] }

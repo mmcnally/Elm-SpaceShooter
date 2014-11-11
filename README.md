@@ -10,6 +10,7 @@ Authors:
 
 
 Game Rules:
+
 up arrow: move forward
 
 down arrow: slow down/move backward
